@@ -34,7 +34,7 @@ module Loomio
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    config.i18n.default_locale = :es
 
     # config.i18n.available_locales = # --> don't use this, make mostly empty yml files e.g. fallback.be.yml
     config.i18n.enforce_available_locales = false
@@ -63,18 +63,6 @@ module Loomio
 
     config.quiet_assets = true
     config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
-
-    # Store avatars on Amazon S3
-    config.paperclip_defaults = {
-      :storage => :fog,
-      :fog_credentials => {
-        :provider => 'AWS',
-        :aws_access_key_id => Rails.application.secrets.aws_access_key_id,
-        :aws_secret_access_key => Rails.application.secrets.aws_secret_access_key
-      },
-      :fog_directory => Rails.application.secrets.aws_bucket,
-      :fog_public => true
-    }
 
     config.active_record.raise_in_transactional_callbacks = true
   end

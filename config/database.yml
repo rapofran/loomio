@@ -5,3 +5,7 @@ development:
 test:
   adapter: postgresql
   database: loomio_test
+
+production:
+  adapter: postgresql
+  database: loomio

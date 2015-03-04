@@ -61,15 +61,7 @@ Loomio::Application.configure do
   config.action_mailer.perform_deliveries = true
 
   # Send emails using SMTP service
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address        => ENV['SMTP_SERVER'],
-    :port           => ENV['SMTP_PORT'],
-    :authentication => :plain,
-    :user_name      => ENV['SMTP_USERNAME'],
-    :password       => ENV['SMTP_PASSWORD'],
-    :domain         => ENV['SMTP_DOMAIN']
-  }
+  config.action_mailer.delivery_method = :sendmail
 
   config.action_mailer.raise_delivery_errors = true
 end
