@@ -8,7 +8,7 @@ class BaseMailer < ActionMailer::Base
 
   add_template_helper(ReadableUnguessableUrlsHelper)
 
-  default :from => "Loomio <notifications@loomio.org>"
+  default :from => "Consenso <notificaciones@partidopirata.com.ar>"
   before_action :utm_hash
 
   protected
@@ -31,6 +31,6 @@ class BaseMailer < ActionMailer::Base
   end
 
   def from_user_via_loomio(user)
-    "\"#{user.name} (Loomio)\" <notifications@loomio.org>"
+    "\"#{user.name} (Consenso)\" <notificaciones@partidopirata.com.ar>"
   end
 end
