@@ -64,6 +64,7 @@ gem 'jquery-fileupload-rails'
 gem 'momentjs-rails'
 gem 'ruby-progressbar'
 gem 'dotenv'# , :require => 'dotenv/rails-now'
+gem 'dotenv-rails'
 gem 'responders', '~> 2.0'
 
 # consider uncommenting these when we want to mess around with json parsing
@@ -98,6 +99,10 @@ group :development do
   #gem 'meta_request'
   gem 'better_errors'
   #gem 'binding_of_caller'
+  gem 'capistrano-rails'
+  gem 'capistrano-passenger'
+  gem 'capistrano3-delayed-job'
+  gem 'capistrano-rbenv'
 end
 
 group :test do
