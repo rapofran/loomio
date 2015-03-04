@@ -30,13 +30,13 @@ ActiveRecord::Schema.define(version: 20150228011519) do
 
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
   add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
-  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_admin_notes_on_resource_type_and_resource_id", using: :btree
+  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "announcement_dismissals", force: :cascade do |t|
     t.integer  "announcement_id"
     t.integer  "user_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "announcement_dismissals", ["announcement_id"], name: "index_announcement_dismissals_on_announcement_id", using: :btree
@@ -47,8 +47,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "locale",     limit: 255, default: "en", null: false
     t.datetime "starts_at",                             null: false
     t.datetime "ends_at",                               null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "attachments", force: :cascade do |t|
@@ -56,15 +56,15 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "filename",   limit: 255
     t.text     "location"
     t.integer  "comment_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "filesize"
   end
 
   add_index "attachments", ["comment_id"], name: "index_attachments_on_comment_id", using: :btree
 
   create_table "blacklisted_passwords", force: :cascade do |t|
-    t.string   "string",     limit: 255
+    t.string   "string"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -73,16 +73,16 @@ ActiveRecord::Schema.define(version: 20150228011519) do
 
   create_table "campaigns", force: :cascade do |t|
     t.string   "showcase_url",  limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "name",          limit: 255, null: false
     t.string   "manager_email", limit: 255, null: false
   end
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "position",               default: 0, null: false
   end
 
@@ -120,7 +120,6 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.datetime "edited_at"
   end
 
-  add_index "comments", ["discussion_id"], name: "index_comments_on_commentable_id", using: :btree
   add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
@@ -130,8 +129,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.integer  "user_id"
     t.string   "email",       limit: 255
     t.text     "message"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "destination", limit: 255, default: "contact@loomio.org"
   end
 
@@ -140,8 +139,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "name",       limit: 255
     t.string   "email",      limit: 255
     t.string   "source",     limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
@@ -156,8 +155,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.datetime "failed_at"
     t.string   "locked_by",  limit: 255
     t.string   "queue",      limit: 255
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
@@ -185,8 +184,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.integer  "read_salient_items_count", default: 0, null: false
   end
 
-  add_index "discussion_readers", ["discussion_id"], name: "index_motion_read_logs_on_discussion_id", using: :btree
-  add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_read_logs_on_user_id_and_discussion_id", using: :btree
+  add_index "discussion_readers", ["discussion_id"], name: "index_discussion_readers_on_discussion_id", using: :btree
+  add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_readers_on_user_id_and_discussion_id", using: :btree
   add_index "discussion_readers", ["user_id"], name: "index_motion_read_logs_on_user_id", using: :btree
 
   create_table "discussion_search_vectors", force: :cascade do |t|
@@ -208,12 +207,12 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.boolean  "is_deleted",                      default: false, null: false
     t.integer  "comments_count",                  default: 0,     null: false
     t.integer  "items_count",                     default: 0,     null: false
-    t.datetime "archived_at"
     t.boolean  "private"
     t.string   "key",                 limit: 255
+    t.datetime "archived_at"
     t.string   "iframe_src",          limit: 255
-    t.datetime "last_activity_at"
     t.integer  "motions_count",                   default: 0
+    t.datetime "last_activity_at"
     t.integer  "last_sequence_id",                default: 0,     null: false
     t.integer  "first_sequence_id",               default: 0,     null: false
     t.datetime "last_item_at"
@@ -256,8 +255,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "name",                limit: 255
     t.text     "description"
     t.string   "admin_email",         limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "status",              limit: 255
     t.integer  "group_id"
     t.boolean  "cannot_contribute"
@@ -299,8 +298,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.text     "recipients"
     t.string   "message_subject",        limit: 255
     t.text     "message_body"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -311,8 +310,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.integer  "parent_id"
     t.boolean  "hide_members",                                   default: false
     t.text     "description"
-    t.integer  "memberships_count",                              default: 0,              null: false
     t.datetime "archived_at"
+    t.integer  "memberships_count",                              default: 0,              null: false
     t.integer  "max_size",                                       default: 1000,           null: false
     t.boolean  "cannot_contribute",                              default: false
     t.integer  "distribution_metric"
@@ -328,16 +327,14 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "key",                                limit: 255
     t.boolean  "can_start_group",                                default: true
     t.integer  "category_id"
-    t.text     "enabled_beta_features"
-    t.string   "subdomain",                          limit: 255
-    t.integer  "theme_id"
     t.boolean  "is_visible_to_public",                           default: false,          null: false
     t.boolean  "is_visible_to_parent_members",                   default: false,          null: false
     t.string   "discussion_privacy_options",         limit: 255,                          null: false
     t.boolean  "members_can_add_members",                        default: false,          null: false
     t.string   "membership_granted_upon",            limit: 255,                          null: false
-    t.boolean  "members_can_edit_discussions",                   default: true,           null: false
-    t.boolean  "motions_can_be_edited",                          default: false,          null: false
+    t.text     "enabled_beta_features"
+    t.string   "subdomain",                          limit: 255
+    t.integer  "theme_id"
     t.string   "cover_photo_file_name",              limit: 255
     t.string   "cover_photo_content_type",           limit: 255
     t.integer  "cover_photo_file_size"
@@ -346,6 +343,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "logo_content_type",                  limit: 255
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
+    t.boolean  "members_can_edit_discussions",                   default: true,           null: false
+    t.boolean  "motions_can_be_edited",                          default: false,          null: false
     t.boolean  "members_can_edit_comments",                      default: true
     t.boolean  "members_can_raise_motions",                      default: true,           null: false
     t.boolean  "members_can_vote",                               default: true,           null: false
@@ -384,8 +383,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "email",        limit: 255
     t.text     "introduction"
     t.integer  "group_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "requestor_id"
     t.integer  "responder_id"
     t.string   "response",     limit: 255
@@ -407,11 +406,11 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.datetime "updated_at"
     t.integer  "inviter_id"
     t.boolean  "email_new_discussions_and_proposals", default: true
-    t.datetime "archived_at"
     t.integer  "inbox_position",                      default: 0
+    t.datetime "archived_at"
     t.boolean  "admin",                               default: false, null: false
-    t.boolean  "is_suspended",                        default: false, null: false
     t.boolean  "following_by_default",                default: false, null: false
+    t.boolean  "is_suspended",                        default: false, null: false
   end
 
   add_index "memberships", ["group_id"], name: "index_memberships_on_group_id", using: :btree
@@ -473,22 +472,22 @@ ActiveRecord::Schema.define(version: 20150228011519) do
   create_table "omniauth_identities", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "email",      limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "provider",   limit: 255
     t.string   "uid",        limit: 255
     t.string   "name",       limit: 255
   end
 
-  add_index "omniauth_identities", ["email"], name: "index_personas_on_email", using: :btree
+  add_index "omniauth_identities", ["email"], name: "index_omniauth_identities_on_email", using: :btree
   add_index "omniauth_identities", ["provider", "uid"], name: "index_omniauth_identities_on_provider_and_uid", using: :btree
-  add_index "omniauth_identities", ["user_id"], name: "index_personas_on_user_id", using: :btree
+  add_index "omniauth_identities", ["user_id"], name: "index_omniauth_identities_on_user_id", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "group_id"
     t.decimal  "amount",                 precision: 8, scale: 2
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "profile_id", limit: 255
   end
 
@@ -497,8 +496,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
   create_table "themes", force: :cascade do |t|
     t.text     "style"
     t.string   "name",                    limit: 255
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "pages_logo_file_name",    limit: 255
     t.string   "pages_logo_content_type", limit: 255
     t.integer  "pages_logo_file_size"
@@ -515,8 +514,8 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.string   "translatable_type", limit: 255
     t.hstore   "fields"
     t.string   "language",          limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "translations", ["translatable_type", "translatable_id"], name: "index_translations_on_translatable_type_and_translatable_id", using: :btree
@@ -530,7 +529,7 @@ ActiveRecord::Schema.define(version: 20150228011519) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                               limit: 255, default: "",         null: false
-    t.string   "encrypted_password",                  limit: 128, default: ""
+    t.string   "encrypted_password",                  limit: 255, default: ""
     t.string   "reset_password_token",                limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -543,12 +542,12 @@ ActiveRecord::Schema.define(version: 20150228011519) do
     t.datetime "updated_at"
     t.string   "name",                                limit: 255
     t.datetime "deactivated_at"
-    t.boolean  "is_admin",                                        default: false
     t.string   "avatar_kind",                         limit: 255, default: "initials", null: false
     t.string   "uploaded_avatar_file_name",           limit: 255
     t.string   "uploaded_avatar_content_type",        limit: 255
     t.integer  "uploaded_avatar_file_size"
     t.datetime "uploaded_avatar_updated_at"
+    t.boolean  "is_admin",                                        default: false
     t.string   "avatar_initials",                     limit: 255
     t.string   "username",                            limit: 255
     t.boolean  "email_followed_threads",                          default: true,       null: false
