@@ -6,7 +6,7 @@ class MarketingController < ApplicationController
       if show_loomio_org_marketing
         render layout: false
       else
-        redirect_to new_user_session_path
+        redirect_to explore_path
       end
     end
   end
