@@ -46,7 +46,6 @@ class Group < ActiveRecord::Base
 
   scope :visible_on_explore_front_page,
         -> { visible_to_public.categorised_any.parents_only.
-             created_earlier_than(2.months.ago).
              active_discussions_since(1.month.ago).
              more_than_n_members(3).
              more_than_n_discussions(3).
