@@ -24,6 +24,15 @@ module ApplicationHelper
     end
   end
 
+  def icon_class_for_volume(volume)
+    case volume.to_sym
+    when :loud then 'fa-envelope'
+    when :normal then 'fa-volume-up'
+    when :quiet then 'fa-volume-down'
+    when :mute then 'fa-volume-off'
+    end
+  end
+
   def time_formatted_relative_to_age(time)
     current_time = Time.zone.now
     if time.to_date == Time.zone.now.to_date
@@ -184,8 +193,12 @@ module ApplicationHelper
     ' help-container' if controller_name == 'help'
   end
 
-  def show_loomio_org_marketing
-    ENV['SHOW_LOOMIO_ORG_MARKETING']
+  def hosted_by_loomio?
+    ENV['HOSTED_BY_LOOMIO']
+  end
+
+  def third_party_install?
+    !hosted_by_loomio?
   end
 
   def site_hostname

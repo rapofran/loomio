@@ -1,15 +1,7 @@
 ga-IE:
-  users:
-    email_preferences:
-      edit:
-        title: Sainroghanna ríomhphoist
-        when_do_you_want_emails: "Seol ríomhphost chugam:"
-        email_missed_yesterday: "\"Inné ar Loomio\" - achoimre laethúil de na himeachtaí nach bhfaca mé"
-        email_when_mentioned: Nuair a luaitear mé
-        email_when_proposal_closing_soon: 24 uair sula dhúntar togra.
-        email_new_discussions_and_proposals: Plé agus tograí nua
-        for_these_groups: "Do na baiclí seo:"
-        submit: Coimeád na sainroghanna
+  email_settings:
+    title: Socruithe ríomhphoist
+    submit: Nuashonraigh na roghanna
   try_it:
     header: Bain triail as Loomio
     explore_groups: Féach baiclí eile ar Loomio
@@ -40,6 +32,8 @@ ga-IE:
     mailer:
       invitation_instructions:
         subject: Thug duine éigin cuireadh duit clárú ina b(h)aicle ar Loomio
+    registrations:
+      sign_up: Cruthaigh cuntas
   error:
     access_denied: Níl cead agat é sin a dhéanamh.
     cant_join_subgroup: Ní féidir leat a bheith páirteach i bhfo-ghrúpa más rud é nach bhfuil tú i do bhall den ghrúpa tuismitheora.
@@ -104,10 +98,12 @@ ga-IE:
     about: Maidir linn
     blog: Blag
     contact: Déan Teagmháil
+    help: Cabhair
     privacy: Príobháideachas
     public_groups: Grúpaí poiblí
     terms: Coinníollacha
   inbox:
+    title: Bosca Isteach
     dropdown-btn: Bosca Isteach
   notifications:
     header: Fógraí
@@ -124,8 +120,6 @@ ga-IE:
   no_group_header: Fáilte go dtí Loomio Beta
   empty_notifications: Níl aon fhógra agat fós.
   see_all_notifications: Féach ar gach fógra
-  profile: Beathaisnéisín
-  email_settings: Socruithe ríomhphoist
   sign_out: Scoir
   sign_in: Logáil isteach
   tagline: "Ag cruthú domhan ina bhfuil sé easca ar gach duine cinneadh a dhéanamh ar rudaí a théann i bhfeidhm orthu. "
@@ -139,6 +133,7 @@ ga-IE:
     change_password: "Déan d'fhocal faire a athrú"
     about_deactivation: Cad is brí le seo?
   group_form:
+    name: Ainm na baiclí
     description: Cur síos
     category: Aicme
     what_can_members_do: Cad is féidir leis na baill a dhéanamh?
@@ -157,7 +152,6 @@ ga-IE:
   no_invitations_button: Níl aon chuireadh fágtha
   number_pending: "%{pending} ar feitheamh"
   add_new_member: Cuir comhalta nua leis
-  get_in_touch_link: déan teagmháil
   subject_error: Cuir ábhar leis le do thoil
   subject_placeholder: Scríobh ábhar
   message_error: Cuir teachtaireacht isteach ann le do thoil
@@ -181,11 +175,17 @@ ga-IE:
   create_group: Cruthaigh grúpa
   start_a_discussion: Cuir tús le plé
   group_description: Cur síos ar an mbaicle
+  networks:
+    approve: Ceadaigh
+    threads: Pléití
+    groups: Baiclí
   group_request:
+    header: Cuir baicle ar bun
     confirmation:
       title: "Tá beagnach críochnaithe agat! Féach do ríomhphoist."
   discussion_items:
     motion_closed:
+      by_user: togra dúnta
       by_expiry: Tá an togra dúnta
   discussion: Plé
   current_decision: An cinneadh reatha
@@ -279,6 +279,7 @@ ga-IE:
   already_have_account: An bhfuil cuntas Loomio agat cheana féin?
   confirm_your_details: Deimhnigh do shonraí
   link_up_your_account: Ceangail do chuntas le
+  log_in: Logáil isteach
   start_group:
     create_account: Cruthaigh cuntas le do thoil
   invitation:
@@ -373,9 +374,6 @@ ga-IE:
     placeholders:
       membership_request:
         introduction: "Scríobh fút féin chun tú féin a chur in iúl agus mínigh cén fáth ar mhaith leat bheith mar chomhalta de %{group_name}."
-      user:
-        email: Seoladh ríomhphoist
-        password: Focal faire
       group_request:
         description: Ba bhreá linn eolas a chur ar do bhaicle agus cén fáth ar mhaith libh feidhm a bhaint as Loomio.
   helpers:
@@ -486,6 +484,8 @@ ga-IE:
   facebook: Facebook
   google: Google
   common:
+    profile: Beathaisnéisín
+    email_settings: Socruithe ríomhphoist
     unread: Neamhléite
     filter: "Scagaire:"
     edited: Curtha in eagar
@@ -504,6 +504,8 @@ ga-IE:
       october: Deireadh Fómhair
       november: Samhain
       december: Nollaig
+    abbr_months:
+      may: Beatlaine
     days:
       monday: Dé Luain
     abbr_days:
@@ -519,8 +521,10 @@ ga-IE:
       sa: Sa
       su: Do
     please_wait: Fan le do thoil
+    privacy: Príobháideachas
     private: Príobháideach
     public: Poiblí
+    email: Seoladh ríomhphoist
     start_group: "Cuir baicle ar bun!"
   group_categories:
     all: Uile

@@ -62,7 +62,7 @@
   }
   #help-header { margin-top: 10px; }
 
-  #get-started {
+  #get-started, #progress-resources, #how-to-contribute {
     list-style: decimal;
     margin: 0 0 30px 20px;
     li {
@@ -103,8 +103,8 @@
 
   .import-contacts-permission { float: right; }
 
-  .deactivation {
-    li { margin-bottom: 10px }
+  .deactivation, #volume-options {
+    li { margin-bottom: 20px }
     font-size: 15px;
     list-style: circle;
     margin-left: 20px;

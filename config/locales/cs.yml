@@ -1,16 +1,7 @@
 cs:
-  users:
-    email_preferences:
-      edit:
-        title: Nastavení emailu
-        when_do_you_want_emails: "Poslat mi e-mail:"
-        email_missed_yesterday: "'Včera na Loomio' - denní souhrn aktivit, které jsem zmeškal"
-        email_when_mentioned: "Pokud jsem  @zmíněný"
-        email_followed_threads: "Pokud je v diskusních vláknech, které sleduji nějaká aktivita."
-        email_when_proposal_closing_soon: 24 hodin před uzavřením návrhu.
-        email_new_discussions_and_proposals: Nové diskuse a návrhy
-        for_these_groups: "Pro tyto skupiny:"
-        submit: Uložit nastavení
+  email_settings:
+    title: Nastavení emailu
+    submit: Aktualizovat nastavení
   explore:
     header: Prozkoumejte veřejné skupiny
   try_it:
@@ -183,7 +174,9 @@ cs:
     about: O nás
     blog: Blog
     contact: Kontakt
+    help: Nápověda
     privacy: Soukromí
+    pricing: Ceník
     public_groups: Veřejné skupiny
     terms: Podmínky
   inbox:
@@ -222,8 +215,6 @@ cs:
   no_group_header: Vítejte na Loomio Beta
   empty_notifications: Nemáte zatím žádná upozornění.
   see_all_notifications: Zobrazit všechna upozornění
-  profile: Profil
-  email_settings: Nastavení emailu
   sign_out: Odhlásit se
   sign_in: Přihlásit se
   honeypot_warning: "Nepovedlo se vytvořit váš účet. Pokud používáte screen reader, ujistěte se prosím, že poslední (skryté) pole ve formuláři je prázdné."
@@ -310,7 +301,6 @@ cs:
   edit_memberships: Upravit členství
   add_new_member: Přidat nového člena
   invite_members_to_group: "Pozvat členy do %{which_group}"
-  get_in_touch_link: spojte se s námi
   email_members_in_group: "E-mailujte členy %{which_group}"
   subject_error: "Prosím, vyplňte předmět"
   subject_placeholder: Napište předmět
@@ -367,7 +357,13 @@ cs:
   start_a_discussion: Zahájit diskuzi
   group_description: Popis skupiny
   edit_group_description: Upravit popis skupiny
+  networks:
+    previous_requests: Předchozí žádosti
+    approve: Schválit
+    threads: Diskuze
+    groups: Skupiny
   group_request:
+    header: Vytvořit skupinu
     commercial_use_option: "ve firmě, formální organizaci nebo na pracovišti"
     please_select_an_option: "Prosím, vyberte jednu z možností"
     confirmation:
@@ -401,6 +397,9 @@ cs:
     filter_followed:
       enable: Zobrazit pouze sledované diskuse
       disable: Zobrazit sledované a nesledované diskuse
+    empty:
+      no_discussions: V žádných vašich skupinách nejsou diskuze.
+      no_discussions_in_group: Tato skupina zatím nemá žádné diskuze.
   discussion_context:
     started_html: "Zahájil(a) <a href='%{link}' class='%{link_class}'>%{who}</a> před %{when}"
     last_edited_html: "Naposledy upravil(a) <a href='%{link}' class='%{link_class}'>%{who}</a> před %{when}"
@@ -674,9 +673,6 @@ cs:
       motion:
         name: Jaké řešení navrhujete?
         description: "Poskytněte dostatek informací, aby každý věděl, co vlastně znamená, když souhlasí nebo nesouhlasí."
-      user:
-        email: E-mail
-        password: Heslo
       group_request:
         description: Rádi bychom se dozvěděli něco o vaší skupině a proč chcete použít Loomio.
   helpers:
@@ -832,6 +828,8 @@ cs:
   google: Google
   persona: Persona
   common:
+    profile: Profil
+    email_settings: Nastavení emailu
     settings: Nastavení
     dashboard: Ovládací panel
     unread: Nepřečteno
@@ -898,6 +896,8 @@ cs:
       am: dop.
       pm: odp.
     please_wait: Prosím vyčkejte
+    privacy: Soukromí
+    private: Soukromá
     permissions: Oprávnění
     public: Veřejnost
     email: E-mail

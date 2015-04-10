@@ -2,8 +2,20 @@ angular.module('loomioApp').factory 'DiscussionRecordsInterface', (BaseRecordsIn
   class DiscussionRecordsInterface extends BaseRecordsInterface
     model: DiscussionModel
 
-    fetchByGroupAndPage: (group, page, success, failure) ->
-      @restfulClient.getCollection group_id: group.id, page: page
+    fetchByGroup: (options = {}) ->
+      @restfulClient.getCollection
+        group_id: options['group_id']
+        from:     options['from']
+        per:      options['per']
 
-    fetchInbox: ->
-      @restfulClient.get 'inbox'
+    fetchInboxByDate: (options = {}) ->
+      @restfulClient.get 'inbox_by_date', options
+
+    fetchInboxByOrganization: (options = {}) ->
+      @restfulClient.get 'inbox_by_organization', options
+
+    fetchInboxByGroup: (options = {}) ->
+      @restfulClient.get 'inbox_by_group', options
+
+    findByDiscussionIds: (ids) ->
+      @collection.chain().find({id: { $in: ids} })

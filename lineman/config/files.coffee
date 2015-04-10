@@ -3,12 +3,11 @@ module.exports = require(process.env["LINEMAN_MAIN"]).config.extend "files",
     dest: "generated/angular/template-cache.js"
 
   sass:
-    app:   ['app/modules/**/*.scss']
+    app:   ['app/components/**/*.scss']
 
   css:
     app:    ['generated/css/main.css']
-    vendor: ['vendor/bower_components/components-font-awesome/css/font-awesome.css',
-             'vendor/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css']
+    vendor: ['vendor/bower_components/components-font-awesome/css/font-awesome.css']
   coffee:
     app: "app/**/*.coffee"
 
@@ -19,8 +18,7 @@ module.exports = require(process.env["LINEMAN_MAIN"]).config.extend "files",
              "vendor/bower_components/ng-file-upload/angular-file-upload-shim.js"
              "vendor/bower_components/angular/angular.js",
              "vendor/bower_components/angular-sanitize/angular-sanitize.js",
-             "vendor/bower_components/angular-route/angular-route.js",
-             "vendor/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js",
+             "node_modules/angular-new-router/dist/router.es5.js",
              "vendor/bower_components/angular-translate/angular-translate.js",
              "vendor/bower_components/angular-translate-loader-url/angular-translate-loader-url.js",
              "vendor/bower_components/angular-bootstrap/ui-bootstrap.js",
@@ -34,6 +32,10 @@ module.exports = require(process.env["LINEMAN_MAIN"]).config.extend "files",
              "vendor/js/private_pub.js",
              "vendor/bower_components/angular-animate/angular-animate.js",
              "vendor/bower_components/lokijs/src/lokijs.js",
-             "vendor/bower_components/angular-inview/angular-inview.js"]
+             "vendor/bower_components/angular-inview/angular-inview.js",
+             "vendor/bower_components/angular-gravatar/build/angular-gravatar.js",
+             "vendor/bower_components/angular-gravatar/build/md5.js",
+             "vendor/bower_components/angular-truncate/src/truncate.js",
+             "vendor/bower_components/angular-scroll/angular-scroll.js"]
     app: ["app/app.js"
           "app/**/*.js"]

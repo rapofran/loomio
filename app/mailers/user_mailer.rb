@@ -3,22 +3,17 @@ class UserMailer < BaseMailer
   helper :motions
   helper :application
 
-  def missed_yesterday(user, time_since = nil, unread = true)
+  def missed_yesterday(user, time_since = nil)
     @recipient = @user = user
     @time_start = time_since || 24.hours.ago
     @time_finish = Time.zone.now
     @time_frame = @time_start...@time_finish
 
-    if unread
-      @discussions = Queries::VisibleDiscussions.new(user: user,
-                                                     groups: user.inbox_groups).
-                                                     unread.
-                                                     last_activity_after(@time_start)
-    else
-      @discussions = Queries::VisibleDiscussions.new(user: user,
-                                                     groups: user.inbox_groups).
-                                                     last_activity_after(@time_start)
-    end
+    @discussions = Queries::VisibleDiscussions.new(user: user,
+                                                   groups: user.inbox_groups).
+                                                   not_muted.
+                                                   unread.
+                                                   last_activity_after(@time_start)
 
     unless @discussions.empty? or @user.inbox_groups.empty?
       @discussions_by_group = @discussions.group_by(&:group)
@@ -52,7 +47,7 @@ class UserMailer < BaseMailer
     locale = locale_fallback(user.try(:locale), inviter.try(:locale))
     I18n.with_locale(locale) do
       mail to: user.email,
-           from: from_user_via_loomio(inviter),
+           from: from_user_via_loomio(inviter || group.admins.first),
            reply_to: inviter.name_and_email,
            subject: t("email.user_added_to_a_group.subject", which_group: group.full_name, who: inviter.name)
     end

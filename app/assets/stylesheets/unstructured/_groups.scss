@@ -2,11 +2,15 @@
 //= depend_on 'default-logo-medium.png'
 //= depend_on 'cover-photo-gradient.png'
 
+.group-max-size-warning, .group-max-size-reached {
+  margin-bottom: 3em;
+}
+
+
 body.groups {
   &.edit, &.new, &.create, &.update {
     .described-label {
       i {
-        /*font-size: 0.9em;*/
         color: $mid-grey;
       }
     }
@@ -36,6 +40,7 @@ body.groups {
         border: 4px solid white;
         top: 146px;
         left: 16px;
+        z-index: 100;
       }
       .group-title {
         position: absolute;
@@ -86,7 +91,6 @@ body.groups {
       margin: -4px;
     }
     .group-description{
-      float: left;
       margin: 16px 0 5px 0;
       width: 100%;
     }
@@ -97,7 +101,6 @@ body.groups {
     }
     .main-content{
       width: 100%;
-      float: left;
     }
     .sidebar {
       width: 220px;
@@ -107,7 +110,6 @@ body.groups {
     #group-actions {
       margin: 20px 0 15px 0;
       .options{margin: 0;}
-
     }
     .heart-icon {color: red;}
     #request-membership {
@@ -162,6 +164,11 @@ body.groups {
       .group-link a:hover { color: $dark-grey; }
     }
 
+    .panel-notifications p { margin: 5px 0 0 0;}
+
+    .notifications-panel {
+      margin-top: 10px
+    }
     .previous-discussions-panel {
       .previous-decision-title {
         &:hover { color: $dark-grey; }

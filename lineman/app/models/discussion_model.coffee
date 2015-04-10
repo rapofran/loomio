@@ -5,20 +5,20 @@ angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
     @indices: ['groupId', 'authorId']
 
     setupViews: ->
-      #@dynamicView('comments')
-      ##@hasMany('comments', discussionId: @id)
-      #@recordStore.comments.addD
-      @commentsView = @recordStore.comments.collection.addDynamicView(@viewName())
-      @commentsView.applyFind(discussionId: @id)
-      @commentsView.applySimpleSort('createdAt')
+      @setupView 'comments'
+      @setupView 'proposals', 'createdAt', true
+      @setupView 'events', 'sequenceId'
 
-      @eventsView = @recordStore.events.collection.addDynamicView(@viewName())
-      @eventsView.applyFind(discussionId: @id)
-      @eventsView.applySimpleSort('sequenceId')
+      @activeProposalView = @recordStore.proposals.collection.addDynamicView("#{@id}-activeProposal")
+      @activeProposalView.applyFind('discussionId': @id)
+      @activeProposalView.applyFind('id': {'$gt': 0})
+      @activeProposalView.applyFind('closedAt': {'$eq': null})
+      @activeProposalView.applySimpleSort('createdAt', true)
 
-      @proposalsView = @recordStore.proposals.collection.addDynamicView(@viewName())
-      @proposalsView.applyFind(discussionId: @id)
-      @proposalsView.applySimpleSort('id')
+      @closedProposalsView = @recordStore.proposals.collection.addDynamicView("#{@id}-closedProposals")
+      @closedProposalsView.applyFind('discussionId': @id)
+      @closedProposalsView.applyFind('closedAt': {'$gt': 0})
+      @closedProposalsView.applySimpleSort('createdAt', true)
 
     translationOptions: ->
       title:     @title
@@ -45,15 +45,21 @@ angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
     proposals: ->
       @proposalsView.data()
 
+    closedProposals: ->
+      @closedProposalsView.data()
+
+    anyClosedProposals: ->
+      _.some(@closedProposals())
+
     activeProposal: ->
-      proposal = _.last(@proposals())
-      if proposal and proposal.isActive()
-        proposal
-      else
-        null
+      _.first(@activeProposalView.data())
 
     hasActiveProposal: ->
       @activeProposal()?
+
+    activeProposalClosingAt: ->
+      proposal = @activeProposal()
+      proposal.closingAt if proposal?
 
     activeProposalClosedAt: ->
       proposal = @activeProposal()
@@ -66,6 +72,9 @@ angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
     reader: ->
       @recordStore.discussionReaders.initialize(id: @id)
 
+    isUnread: ->
+      @unreadActivityCount() > 0
+
     unreadItemsCount: ->
       @itemsCount - @reader().readItemsCount
 
@@ -75,16 +84,11 @@ angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
     unreadCommentsCount: ->
       @commentsCount - @reader().readCommentsCount
 
+    lastInboxActivity: ->
+      @activeProposalClosingAt() or @lastActivityAt
+
+    unreadPosition: ->
+      @reader().lastReadSequenceId + 1
+
     markAsRead: (sequenceId) ->
-      if @reader().lastReadSequenceId < sequenceId
-        @restfulClient.patchMember(@keyOrId(), 'mark_as_read', {sequence_id: sequenceId})
-
-
-    ## time of most recent thing out of last vote, last comment, created at
-    #lastActivityAt: ->
-      #times = []
-      #times.push moment(@activeProposal().lastVoteAt) if @activeProposal()?
-      #times.push moment(@lastCommentAt) if @lastCommentAt?
-      #times.push moment(@createdAt)
-      #_.max(_.compact(times))
-
+      @reader().markAsRead(sequenceId)

@@ -1,15 +1,20 @@
 class API::DiscussionsController < API::RestfulController
-  load_and_authorize_resource only: [:show, :mark_as_read], find_by: :key
+  load_and_authorize_resource only: [:show, :mark_as_read, :set_volume], find_by: :key
   load_resource only: [:create, :update]
 
-  def inbox
-    @discussions = GroupDiscussionsViewer.for(user: current_user)
+  def inbox_by_date
+    load_and_authorize_group if params[:group_id]
+    @discussions = page_collection inbox_threads
+    respond_with_discussions
+  end
 
-    @discussions = @discussions.joined_to_current_motion.
-                                preload(:current_motion, {group: :parent}).
-                                order('motions.closing_at ASC, last_comment_at DESC').
-                                page(params[:page]).per(20)
+  def inbox_by_organization
+    @discussions = grouped inbox_threads.group_by(&:organization_id)
+    respond_with_discussions
+  end
 
+  def inbox_by_group
+    @discussions = grouped inbox_threads.group_by(&:group_id)
     respond_with_discussions
   end
 
@@ -19,35 +24,23 @@ class API::DiscussionsController < API::RestfulController
   end
 
   def show
-    respond_with_resource
-  end
-
-  def mark_as_read
-    # expect sequence id or just
-    event = Event.where(discussion_id: @discussion.id, sequence_id: params[:sequence_id]).first
-
-    if event
-      age_of_last_read_item = event.created_at
-    else
-      age_of_last_read_item = @discussion.created_at
-    end
-
-    dr = DiscussionReader.for(discussion: @discussion, user: current_user)
-
-    dr.viewed!(age_of_last_read_item)
-
-    dw = DiscussionWrapper.new(discussion: @discussion,
-                               discussion_reader: dr)
-
-    render json: dw, serializer: DiscussionWrapperSerializer, root: 'discussion_wrappers'
+    respond_with_discussion
   end
 
   private
 
+  def respond_with_discussion
+    if resource.errors.empty?
+      render json: DiscussionWrapper.new(discussion: resource, discussion_reader: discussion_reader),
+             serializer: DiscussionWrapperSerializer,
+             root: 'discussion_wrappers'
+    else
+      respond_with_errors
+    end
+  end
+
   def respond_with_discussions
-    discussion_wrappers = DiscussionWrapper.new_collection(user: current_user,
-                                                           discussions: @discussions)
-    render json: discussion_wrappers,
+    render json: DiscussionWrapper.new_collection(user: current_user, discussions: @discussions),
            each_serializer: DiscussionWrapperSerializer,
            root: 'discussion_wrappers'
   end
@@ -67,6 +60,25 @@ class API::DiscussionsController < API::RestfulController
       GroupDiscussionsViewer.for(user: current_user, group: @group)
     else
       Queries::VisibleDiscussions.new(user: current_user)
-    end
+    end.order(last_activity_at: :desc)
+  end
+
+  private
+
+  def inbox_threads
+    GroupDiscussionsViewer.for(user: current_user, group: @group, filter: params[:filter])
+                          .not_muted
+                          .where('last_activity_at > ?', params[:from_date] || 3.months.ago)
+                          .joined_to_current_motion
+                          .preload(:current_motion, {group: :parent})
+                          .order('motions.closing_at ASC, last_activity_at DESC')
+  end
+
+  def grouped(discussions)
+    discussions.map { |g, discussions| discussions.first(Integer(params[:per] || 5)) }.flatten
+  end
+
+  def discussion_reader
+    @dr ||= DiscussionReader.for(user: current_user, discussion: @discussion)
   end
 end

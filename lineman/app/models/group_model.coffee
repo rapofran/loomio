@@ -5,15 +5,22 @@ angular.module('loomioApp').factory 'GroupModel', (BaseModel) ->
     @indices: ['parentId']
 
     setupViews: ->
-      @discussionsView = @recordStore.discussions.collection.addDynamicView(@viewName())
-      @discussionsView.applyFind(groupId: @id)
-      @discussionsView.applySimpleSort('createdAt', true)
+      @setupView 'discussions', 'createdAt', true
 
     discussions: ->
       @discussionsView.data()
 
+    organizationDiscussions: ->
+      @recordStore.discussions.find(groupId: { $in: @organizationIds()})
+
+    organizationIds: ->
+      _.pluck(@subgroups(), 'id').concat(@id)
+
     subgroups: ->
-      @recordStore.groups.find(parentId: @id)
+      if @isParent()
+        @recordStore.groups.find(parentId: @id)
+      else
+        []
 
     memberships: ->
       @recordStore.memberships.find(groupId: @id)
@@ -38,7 +45,7 @@ angular.module('loomioApp').factory 'GroupModel', (BaseModel) ->
     adminIds: ->
       _.map @adminMemberships(), (membership) -> membership.userId
 
-    fullName: (separator = '>') ->
+    fullName: (separator = '-') ->
       if @parentId?
         "#{@parentName()} #{separator} #{@name}"
       else

@@ -1,0 +1,12 @@
+%header.lmo-navbar{role: 'navigation'}
+  .lmo-navbar-flexbox
+    .lmo-navbar-logo
+      %a{href: '/dashboard', title: "{{ 'navbar.dashboard' | translate }}", tabindex: 1}
+        .lmo-navbar-logo-image
+    .lmo-navbar-search{role: 'search'}
+      %navbar_search
+    .lmo-navbar-buttons
+      %navbar_notifications{ng-controller: 'NavbarNotificationsController'}
+      %navbar_user_options
+  %thread_lintel
+  %flash{modal: 'false'}

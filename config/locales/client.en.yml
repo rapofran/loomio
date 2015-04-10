@@ -1,14 +1,24 @@
 en:
   common:
-    notifications:
-      email: 'Email'
-      normal: 'Normal'
-      mute: 'Mute'
+    time:
+      am: am
+      pm: pm
+    closing_in: 'Closing in {{time}}'
+    closed_ago: 'Closed {{time}}'
+    volume: 'Volume'
+    notification_volume: 'Notification Volume'
     groups: 'Groups'
     privacy:
       private: 'Private'
       public: 'Public'
       organization: 'Organization'
+    selected: 'Selected'
+    date_range:
+      today: 'Today'
+      yesterday: 'Yesterday'
+      this_week: 'This Week'
+      this_month: 'This Month'
+      older: 'Older'
     action:
       save: 'Save'
       reply: 'Reply'
@@ -21,8 +31,29 @@ en:
       new_thread: "New thread"
       add_subgroup: 'Add subgroup'
 
-    messages:
-      aw_crap: 'We''re sorry, but something went wrong. Please try again'
+  error_page:
+    forbidden: 'You do not have permission to do this.'
+    page_not_found: 'We were unable to find that. It may have been deleted or moved.'
+    internal_server_error: 'We''re sorry, but something went wrong. Please try again.'
+
+  start_proposal_card:
+    title: 'Start a proposal'
+    cta: Ready to make a decision? Start a proposal.
+
+  current_proposal_card:
+    heading: Proposal
+
+  previous_proposals_card:
+    heading: Previous Proposals
+
+  proposal_collapsed:
+    expand: Expand
+
+  volume_levels:
+    loud: 'Loud'
+    normal: 'Normal'
+    quiet: 'Quiet'
+    mute: 'Mute'
 
   inbox:
     clear: 'Clear'
@@ -37,14 +68,37 @@ en:
     sign_in: 'Login'
 
   comment_form:
+    aria_label: 'Add a comment'
+    attachments:
+      aria_label: 'Attach a file'
+      remove_attachment: 'Remove attachment'
     flash_messages:
+      created: 'Your comment was added to the thread'
       update_comment: 'Changes saved'
       destroy_comment: 'You comment has been deleted'
     edit_comment: 'Edit comment'
+    delete_comment: 'Delete comment'
+    cancel_reply: 'Cancel Reply'
+    confirm_delete_message: 'Are you sure you want to delete this comment?'
+    confirm_delete: 'Yes, I am sure'
     in_reply_to: "In reply to <strong>{{name}}</strong>:"
+    submit_button:
+      label: 'Post'
+
 
   navbar:
+    dashboard: 'Go to dashboard'
+    start_thread: 'Start a new thread'
+    notifications: 'Open notifications panel'
+    user_options:
+      label: 'Open user options menu'
+      contact_us: 'Contact us'
+      new_thread: 'New thread'
+      new_group: 'New group'
+      profile: 'Profile'
+      help: 'Help'
     search:
+      close: 'Close search panel'
       placeholder: 'Search for groups or threads'
       loading: 'Loading results...'
       discussions: 'Threads'
@@ -72,10 +126,10 @@ en:
     motion_outcome_updated: "<strong>{{name}}</strong> updated the outcome for the proposal {{proposal}}"
 
   vote_form:
-    have_your_say: 'Have your say'
-    messages:
-      new_vote: 'Your vote counts!'
-      update_vote: 'Successfully changed your position'
+    no_statement: No statement.
+    change_your_vote: Change your vote.
+    have_your_say: Have your say
+    submitted_your_vote: Submitted your vote.
     i_agree: 'I agree'
     i_agree_details: 'I support this and want it to go ahead.'
     i_abstain: 'I abstain'
@@ -88,11 +142,12 @@ en:
     change_position: 'Change position'
     select_position: 'Select position'
     statement_placeholder: 'Share your thoughts with the group.'
+    aria_statement_label: 'Optionally enter a statement to be recorded with your position'
 
   close_proposal_form:
     close_proposal: 'Close proposal'
     helptext: 'Are you sure you want to close this proposal now?'
-    close_proposal_submit: 'Close proposal early'
+    close_proposal_submit: 'Yes, close proposal'
 
   extend_proposal_form:
     title: 'Change close time'
@@ -111,6 +166,7 @@ en:
     title_placeholder: 'Eg: Go to the moon'
     title_label: 'Title'
     closes_at_label: 'Closes at'
+    closes: 'Closes'
     details_label: 'Details'
     details_placeholder: "Give enough detail so everyone knows exactly what it means to agree or disagree or whatever"
 
@@ -140,7 +196,8 @@ en:
     edit_discussion_submit: 'Edit thread'
 
   proposal_expanded:
-    your_position: 'Your Position'
+    collapse: Collapse
+    current_votes: Current votes
     started_by: 'Started by <strong>{{name}}</strong>'
     no_votes_yet: 'Nobody has voted on this proposal yet.'
     only_voter_is_you: 'No other members have voted yet.'
@@ -153,7 +210,7 @@ en:
 
   proposal_position_yes: 'Agree'
   proposal_position_abstain: 'Abstain'
-  proposal_position_no: 'No'
+  proposal_position_no: 'Disagree'
   proposal_position_block: 'Block'
 
   group_page:
@@ -162,21 +219,22 @@ en:
         members: 'This group is now visible only to members'
         parent_members: 'This group is now visible only to members of your organization'
         public: 'This group is now visible to the public'
-      notifications:
-        follow_group: 'You will now receive notifications from all threads in this group'
-        unfollow_group: 'You will now receive notifications only from threads you are participating in'
       leave_group_success: 'You have successfully left this group'
       deactivate_group_success: 'You have successfully deactivated this group'
+    group_logo: 'Group logo'
+    header:
+      aria_label: 'Group page header'
     description: 'Description'
     discussions: 'Threads'
     members: 'Members'
+    member_options: Member options
     subgroups: 'Subgroups'
     invite_people: 'Invite people'
     visibility_label: 'Visibility'
-    notifications_label: 'Notifications'
     options_label: 'Options'
     join_group: 'Join Group'
     options:
+      label: 'Options'
       edit_group: 'Edit Group Settings'
       leave_group: 'Leave Group'
       deactivate_group: 'Deactivate Group'
@@ -189,11 +247,16 @@ en:
       title: 'Leave group'
       question: 'Are you sure you want to leave this group?'
       submit: 'Yes, leave this group'
-    notifications:
-      following: 'Following'
-      following_details: 'You''ll be notified about all activity in this group'
-      not_following: 'Not following'
-      not_following_details: 'You''ll be notified about threads you are participating in'
+    volume:
+      loud: Email whenever there is activity.
+      loud_aria_description: Your notification volume for this group is set to Loud. You will be emailed whenever there is activity.
+      normal: 'Just email important activity: New threads and proposals, outcomes etc.'
+      normal_aria_description: Your notification volume for this group is set to Normal. You will just be emailed important activity, such as when someone starts a new thread, raises a proposal, or sets an outcome.
+      quiet: Don't email about this group. Activity will be displayed on the dashboard.
+      quiet_aria_description: Your notification volume for this group is set to Quiet. You won't be emailed about activity in this group. Group activity will be displayed on your Dashboard.
+      mute: Hide this group from the dashboard and do not notify unless @mentioned.
+      mute_aria_description: Your notification volume for this group is set to Mute. You won't be emailed unless someone mentions you, and group activity will not be displayed on your Dashboard.
+      updated: Group volume updated.
     privacy:
       private: 'This group is only visible to members'
       parent_members: 'This group is visible to members of {{parentGroupName}} and members of {{groupName}}'
@@ -216,16 +279,19 @@ en:
       label: 'Privacy'
       visible_to_members: 'Who can find this group?'
       public_visibility: 'Anyone - list the group publicly'
-      organization_visibility: 'Members of this organization'
+      organization_visibility: "Organization - unlisted to the public, but visible to members of {{parentGroupName}}"
       private_visibility: 'Members only - the group will not be listed'
       membership_granted_upon: 'How do people join?'
       membership_by_request: 'Open - anyone can join the group'
+      membership_by_request_subgroup: 'Open to members of {{parentGroupName}}'
       membership_by_approval: 'By request - anyone can request to join'
+      membership_by_approval_subgroup: 'By request from members of {{parentGroupName}}'
       membership_by_invitation: 'Invitation only - new members must be invited'
       discussion_privacy_options: 'Who can view threads?'
       public_discussions: 'Public threads only'
+      public_discussions_subgroup: 'Anyone in {{parentGroupName}} can see discussions'
       public_or_private_discussions: 'Allow public and private threads'
-      private_discussions: 'Private discussions only'
+      private_discussions: 'Only members can see discussions'
     permissions:
       label: 'Permissions'
       helptext: 'What can members do?'
@@ -259,11 +325,55 @@ en:
     add_coordinator: 'Make Coordinator'
     remove_coordinator: 'Remove Coordinator'
     remove_member: 'Remove'
+    see_more_members: 'See more members'
 
   profile_page:
     my_groups: Groups
 
+  dashboard_page:
+    aria_label: 'Dashboard'
+    options:
+      aria_label: 'Dashboard filtering options'
+    no_threads: No threads to show.
+    view_recent: View all recent threads?
+    load_more: Load more threads
+    filtering:
+      dropdown_heading: Filter dashboard
+      all: Recent Threads
+      all_aria_label: Currently showing recent threads
+      all_description: View recent threads
+      unread: Unread Threads
+      unread_aria_label: Currently showing unread threads
+      unread_description: View only threads you have not read yet
+      proposals: Proposals
+      proposals_aria_label: Currently showing threads with active proposals
+      proposals_description: View only threads with active proposals
+    sorting:
+      dropdown_heading: Sort threads
+      group: By Group
+      group_aria_label: Currently sorting threads by group
+      group_description: Sort threads by group.
+      date: By Date
+      date_aria_label: Currently sorting threads by date
+      date_description: Sort threads by date.
+    aria_thread:
+      title: 'Thread title: {{title}}.'
+      unread: '{{count}} unread items.'
+      current_proposal: 'Current proposal: {{name}}.'
+      you_voted: 'You voted: {{position}}.'
+    threads_from:
+      group: 'Threads from'
+      today: 'Threads from today'
+      yesterday: 'Threads from yesterday'
+      this_week: 'Threads from this week'
+      this_month: 'Threads from this month'
+      older: 'Threads older than a month'
+
   discussion:
+    activity: 'Activity'
+    proposals: 'Proposals'
+    previous_proposals: 'Previous Proposals'
+    load_previous: 'Load earlier activity'
     you_like_this: 'You like this.'
     liked_by_you_and_someone: 'You and {{name}} like this.'
     liked_by_you_and_others: 'Liked by you, {{joinedNames}} and {{name}}.'
@@ -273,10 +383,32 @@ en:
     liked_by_name: 'Liked by {{name}}.'
     liked_by_names_and_name: 'Liked by {{joinedNames}} and {{name}}.'
     started_by: 'Started by <strong>{{name}}</strong>'
-    notifications:
-      email: Activity in this thread will be emailed to you as it happens.
-      normal: This thread will be in your inbox when it has new activity.
-      mute: 'This thread will not be in your inbox, unless you participate or someone mentions you.'
+    volume:
+      loud: Email whenever there is activity in this thread.
+      loud_aria_description: Your notification volume for this thread is set to Loud. This means you will be emailed whenever there is activity in this thread.
+      normal: 'Just email when a proposal is created, about to close, or an outcome is posted.'
+      normal_aria_description: 'Your notification volume for this thread is set to Normal. You will be emailed when a proposal is created, about to close, or an outcome is posted.'
+      quiet: Don't email about this thread.
+      quiet_aria_description: Your notification volume for this thread is set to Quiet. You won't be emailed about this thread unless someone mentions you.
+      mute: Hide this thread from the dashboard and do not notify unless @mentioned.
+      mute_aria_description: Your notification volume for this thread is set to Mute. You won't be emailed about this thread unless someone mentions you, and this thread will be removed from your dashboard.
+      updated: Thread volume updated.
+
+  thread_group:
+    aria_label: 'Group name'
+  thread_context:
+    aria_label: 'Thread context'
+    thread_options: 'Thread options'
+
+  activity_card:
+    new_activity: New Activity
+    attachment_display:
+      aria_label: 'File attached:'
+      image_alt: 'Attached image'
+    new_comment:
+      aria_label: 'Comment by'
+    new_motion:
+      aria_label: 'started a proposal:'
 
   delete_comment_dialog:
     title: 'Delete comment'
@@ -285,6 +417,7 @@ en:
 
   new_comment_item:
     context_menu:
+      aria_label: 'Comment options'
       edit_comment: 'Edit comment'
       delete_comment: 'Delete comment'
     in_reply_to: '<strong>{{author}}</strong> in reply to <strong>{{recipient}}</strong>'

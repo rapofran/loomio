@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_or_visitor
   helper_method :dashboard_or_root_path
   helper_method :subdomain
+  helper_method :show_max_size_warning?
+  helper_method :show_max_size_reached?
 
   before_filter :set_application_locale
   around_filter :user_time_zone, if: :user_signed_in?
@@ -29,7 +31,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def show_max_size_warning?
+    hosted_by_loomio? && @group && @group.approaching_max_size? && !@group.max_size_reached?
+  end
+
+  def show_max_size_reached?
+    hosted_by_loomio? && @group && @group.max_size_reached?
+  end
+
   protected
+  def permitted_params
+    @permitted_params ||= PermittedParams.new(params)
+  end
+
   def using_new_relic?
     ENV['NEW_RELIC_APP_NAME'].present?
   end

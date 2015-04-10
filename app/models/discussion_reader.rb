@@ -1,37 +1,34 @@
 class DiscussionReader < ActiveRecord::Base
+  include HasVolume
 
   belongs_to :user
   belongs_to :discussion
 
-  validates_presence_of :discussion, :user
-  validates_uniqueness_of :user_id, scope: :discussion_id
-
   scope :for_user, -> (user) { where(user_id: user.id) }
 
-  def self.for(user: nil, discussion: nil)
-    if user.is_logged_in?
-      where(user_id: user.id, discussion_id: discussion.id).first_or_initialize do |dr|
-        dr.discussion = discussion
-        dr.user = user
+  def self.for(user: , discussion: )
+    if (!user.nil?) and user.is_logged_in?
+      begin
+        find_or_create_by(user_id: user.id, discussion_id: discussion.id)
+      rescue ActiveRecord::RecordNotUnique
+        retry
       end
     else
       new(discussion: discussion)
     end
   end
 
-  def follow!
-    update_attribute(:following, true)
+  def set_volume_as_required!
+    if user.email_on_participation?
+      set_volume! :loud unless volume_is_loud?
+    end
   end
 
-  def unfollow!
-    update_attribute(:following, false)
-  end
-
-  def following?
-    if self[:following].nil?
-      membership.try(:following_by_default)
+  def volume
+    if persisted?
+      super || membership && membership.volume || 'normal'
     else
-      self[:following]
+      membership.volume
     end
   end
 
@@ -78,10 +75,13 @@ class DiscussionReader < ActiveRecord::Base
 
   def viewed!(age_of_last_read_item = nil)
     return if user.nil?
-    self.last_read_at = age_of_last_read_item || discussion.last_activity_at
-    reset_counts!
-  end
+    read_at = age_of_last_read_item || discussion.last_activity_at
 
+    if self.last_read_at.nil? or (read_at > self.last_read_at)
+      self.last_read_at = read_at
+      reset_counts!
+    end
+  end
 
   def reset_comment_counts
     self.read_comments_count = read_comments.count
@@ -138,8 +138,6 @@ class DiscussionReader < ActiveRecord::Base
   def read_salient_items(time = nil)
     discussion.salient_items.where('events.created_at <= ?', time || last_read_at).chronologically
   end
-
-  # read_salient_items might be what you want in the future
 
   private
   def membership

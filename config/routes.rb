@@ -44,11 +44,15 @@ Loomio::Application.routes.draw do
     resources :events, only: :index
 
     resources :discussions, only: [:show, :index, :create, :update, :destroy] do
-      get :inbox, on: :collection
+      get :inbox_by_date, on: :collection
+      get :inbox_by_organization, on: :collection
+      get :inbox_by_group, on: :collection
+    end
+    resources :discussion_readers, only: :update do
       patch :mark_as_read, on: :member
     end
 
-    resources :motions,     only: [       :index, :create, :update], path: :proposals do
+    resources :motions,     only: [:show, :index, :create, :update], path: :proposals do
       post :close, on: :member
     end
     resources :votes,       only: [       :index, :create, :update] do
@@ -65,6 +69,7 @@ Loomio::Application.routes.draw do
     resources :translations, only: :show
     resources :notifications, only: :index
     resources :search_results, only: :index
+
     resources :contact_messages, only: :create
     namespace :faye do
       post :subscribe
@@ -74,6 +79,7 @@ Loomio::Application.routes.draw do
       get :current
       get :unauthorized
     end
+    resources :users, only: :update
     devise_scope :user do
       resources :sessions, only: [:create, :destroy]
     end
@@ -105,18 +111,28 @@ Loomio::Application.routes.draw do
     match 'unfollow', via: [:get, :post]
   end
 
-  resources :group_requests, only: [:create, :new] do
-    get :confirmation, on: :collection
-  end
-
   resources :invitations, only: [:show, :create, :destroy]
 
   get "/theme_assets/:id", to: 'theme_assets#show', as: 'theme_assets'
 
-  resources :groups, path: 'g', only: [:new, :create, :edit, :update] do
+
+  resources :networks, path: 'n', only: [:show] do
     member do
-      post :follow
-      post :unfollow
+      get :groups
+    end
+    resources :network_membership_requests, path: 'membership_requests', as: 'membership_requests', only: [:create, :new, :index] do
+      member do
+        post :approve
+        post :decline
+      end
+    end
+  end
+
+  get 'start_group' => 'start_group#new'
+  post 'start_group' => 'start_group#create'
+  resources :groups, path: 'g', only: [:create, :edit, :update] do
+    member do
+      post :set_volume
       post :join
       post :add_members
       post :hide_next_steps
@@ -201,8 +217,7 @@ Loomio::Application.routes.draw do
     resources :invitations, only: [:new]
 
     member do
-      post :follow
-      post :unfollow
+      post :set_volume
       post :update_description
       post :update
       post :add_comment
@@ -289,7 +304,6 @@ Loomio::Application.routes.draw do
   post '/translate/:model/:id', to: 'translations#create', as: :translate
 
   get '/users/invitation/accept' => redirect {|params, request|  "/invitations/#{request.query_string.gsub('invitation_token=','')}"}
-  get '/group_requests/:id/start_new_group' => redirect {|params, request|  "/invitations/#{request.query_string.gsub('token=','')}"}
 
   get '/contributions' => redirect('/crowd')
   get '/contributions/thanks' => redirect('/crowd')
@@ -336,19 +350,10 @@ Loomio::Application.routes.draw do
   resources :contact_messages, only: [:new, :create]
   get 'contact(/:destination)', to: 'contact_messages#new'
 
-  #redirect from wall to new group signup
-  namespace :group_requests do
-    get 'selection', action: 'new'
-    get 'subscription', action: 'new'
-    get 'pwyc', action: 'new'
-  end
 
   get '/discussions/:id', to: 'discussions_redirect#show'
   get '/groups/:id',      to: 'groups_redirect#show'
   get '/motions/:id',     to: 'motions_redirect#show'
-
-  get '/users/invitation/accept' => redirect {|params, request|  "/invitations/#{request.query_string.gsub('invitation_token=','')}"}
-  get '/group_requests/:id/start_new_group' => redirect {|params, request|  "/invitations/#{request.query_string.gsub('token=','')}"}
 
   get '/contributions'      => redirect('/crowd')
   get '/contributions/thanks' => redirect('/crowd')

@@ -11,13 +11,8 @@ class API::RestfulController < API::BaseController
     attr_writer :resource_class
   end
 
-  rescue_from StandardError do |e|
-    if [CanCan::AccessDenied, ActionController::UnpermittedParameters].include? e.class
-      render json: {exception: e.class.to_s}, root: false, status: 400
-    else
-      raise e
-    end
-  end
+  rescue_from CanCan::AccessDenied                    do |e| respond_with_standard_error e, 403 end
+  rescue_from ActionController::UnpermittedParameters do |e| respond_with_standard_error e, 400 end
 
   def index
     instantiate_collection
@@ -102,9 +97,11 @@ class API::RestfulController < API::BaseController
   end
 
   def instantiate_collection
-    self.collection = visible_records.page(params[:page])
-                                     .per(params[:per] || default_page_size)
-                                     .to_a
+    self.collection = page_collection(visible_records).to_a
+  end
+
+  def page_collection(collection)
+    collection.offset(params[:from]).limit(params[:per] || default_page_size)
   end
 
   def visible_records
@@ -112,7 +109,7 @@ class API::RestfulController < API::BaseController
   end
 
   def default_page_size
-    10
+    50
   end
 
   def load_resource
@@ -157,6 +154,10 @@ class API::RestfulController < API::BaseController
     else
       respond_with_errors
     end
+  end
+
+  def respond_with_standard_error(error, status)
+    render json: {exception: error.class.to_s}, root: false, status: status
   end
 
   def respond_with_errors

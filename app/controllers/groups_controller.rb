@@ -26,6 +26,7 @@ class GroupsController < GroupBaseController
     redirect_to @group, notice: t(:you_have_joined_group, group_name: @group.name)
   end
 
+  # only to be used to create subgroups
   def create
     @group = Group.new(permitted_params.group)
     authorize!(:create, @group)
@@ -33,24 +34,12 @@ class GroupsController < GroupBaseController
       @group.mark_as_setup!
       @group.add_admin! current_user
       @group.creator = current_user
-      Measurement.increment('groups.create.success')
-      if @group.is_parent?
-        SetupGroup.create_example_discussion(@group)
-      end
       flash[:success] = t("success.group_created")
       redirect_to @group
-    elsif @group.is_subgroup?
+    else
       @subgroup = @group
       render 'groups/add_subgroup'
-    else
-      Measurement.increment('groups.create.error')
-      render 'new'
     end
-  end
-
-  def new
-    @group = Group.new
-    @group.payment_plan = 'undetermined'
   end
 
   def update
@@ -74,16 +63,13 @@ class GroupsController < GroupBaseController
   end
 
   def show
+    @membership = @group.membership_for(current_user) if user_signed_in?
     @discussion = Discussion.new(group_id: @group.id)
 
     @discussions = GroupDiscussionsViewer.for(group: @group, user: current_user)
 
     if sifting_unread?
       @discussions = @discussions.unread
-    end
-
-    if sifting_followed?
-      @discussions = @discussions.following
     end
 
     @discussions = @discussions.joined_to_current_motion.
@@ -124,17 +110,12 @@ class GroupsController < GroupBaseController
     render json: users.map{|u| {name: "#{u.name} #{u.username}", username: u.username, real_name: u.name} }, root: false  
   end
 
-  def follow
+  def set_volume
     membership = @group.membership_for(current_user)
-    membership.follow_by_default!
+    membership.set_volume! params[:volume]
     redirect_to @group
   end
 
-  def unfollow
-    membership = @group.membership_for(current_user)
-    membership.dont_follow_by_default!
-    redirect_to @group
-  end
 
   private
     def ensure_group_is_setup

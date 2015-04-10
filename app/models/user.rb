@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
   require 'net/http'
   require 'digest/md5'
 
+  validates_inclusion_of :dashboard_sort,   in: %w[sort_by_group sort_by_date]
+  validates_inclusion_of :dashboard_filter, in: %w[show_all show_unread show_proposals]
+
   AVATAR_KINDS = %w[initials uploaded gravatar]
   LARGE_IMAGE = 170
   MED_LARGE_IMAGE = 70
@@ -13,7 +16,7 @@ class User < ActiveRecord::Base
   MAX_AVATAR_IMAGE_SIZE_CONST = 10.megabytes
 
   devise :database_authenticatable, :recoverable, :registerable, :rememberable, :trackable, :omniauthable
-  attr_accessor :honeypot, :email_new_discussions_and_proposals_group_ids
+  attr_accessor :honeypot
 
   validates :email, presence: true, uniqueness: true, email: true
   validates_inclusion_of :uses_markdown, in: [true,false]
@@ -34,6 +37,7 @@ class User < ActiveRecord::Base
 
   validates_uniqueness_of :username, allow_blank: true
   validates_length_of :username, maximum: 30, allow_blank: true
+  validates_format_of :username, without: /\s/, message: I18n.t(:'error.username_cannot_contain_whitespace')
 
   validates_length_of :password, minimum: 8, :allow_nil => true
   validates :password, nontrivial_password: true, :allow_nil => true
@@ -43,7 +47,7 @@ class User < ActiveRecord::Base
               :default => 'none'
 
 
-  has_many :contacts
+  has_many :contacts, dependent: :destroy
   has_many :admin_memberships,
            -> { where('memberships.admin = ? AND memberships.is_suspended = ?', true, false) },
            class_name: 'Membership',
@@ -64,7 +68,8 @@ class User < ActiveRecord::Base
            class_name: 'Membership'
 
   has_many :membership_requests,
-           foreign_key: 'requestor_id'
+           foreign_key: 'requestor_id',
+           dependent: :destroy
 
   has_many :groups,
            -> { where archived_at: nil },
@@ -96,10 +101,11 @@ class User < ActiveRecord::Base
 
   has_many :notifications, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :attachments
+  has_many :attachments, dependent: :destroy
 
   has_one :deactivation_response,
-          class_name: 'UserDeactivationResponse'
+          class_name: 'UserDeactivationResponse',
+          dependent: :destroy
 
   before_save :set_avatar_initials,
               :ensure_unsubscribe_token,
@@ -114,16 +120,26 @@ class User < ActiveRecord::Base
   scope :sorted_by_name, -> { order("lower(name)") }
   scope :admins, -> { where(is_admin: true) }
   scope :coordinators, -> { joins(:memberships).where('memberships.admin = ?', true).group('users.id') }
-  scope :email_followed_threads, -> { active.where(email_followed_threads: true) }
-  scope :dont_email_followed_threads, -> { active.where(email_followed_threads: false) }
+
+  # move to ThreadMailerQuery
   scope :email_when_proposal_closing_soon, -> { active.where(email_when_proposal_closing_soon: true) }
-  scope :email_new_discussions_for, -> (group) {
-        active.
-        joins(:memberships).
-        where('memberships.group_id = ?', group.id).
-        where('users.email_new_discussions_and_proposals = ?', true).
-        where('memberships.email_new_discussions_and_proposals = ?', true) }
-  scope :email_new_proposals_for, -> (group) { active.email_new_discussions_for(group) }
+
+  scope :email_proposal_closing_soon_for, -> (group) {
+    active.
+    joins(:memberships).
+    where('memberships.group_id = ?', group.id).
+    where('users.email_when_proposal_closing_soon = ?', true)
+  }
+
+  scope :without, -> (users) {
+    users = Array(users).compact
+
+    if users.size > 0
+      where('users.id NOT IN (?)', users)
+    else
+      all
+    end
+  }
 
   def self.email_taken?(email)
     User.find_by_email(email).present?
@@ -181,16 +197,6 @@ class User < ActiveRecord::Base
 
   def closed_motions
     motions.closed
-  end
-
-  def email_new_discussions_and_proposals_group_ids
-    memberships.where(email_new_discussions_and_proposals: true).pluck(:group_id)
-  end
-
-  def email_new_discussions_and_proposals_group_ids=(ids)
-    group_ids = ids.reject(&:empty?).map(&:to_i)
-    memberships.update_all(email_new_discussions_and_proposals: false)
-    memberships.where(group_id: group_ids).update_all('email_new_discussions_and_proposals = true')
   end
 
   def is_group_admin?(group=nil)
@@ -287,7 +293,7 @@ class User < ActiveRecord::Base
     I18n.t(:inactive_html, path_to_contact: '/contact').html_safe
   end
 
-  def avatar_url(size=nil,avatar_kind=nil)
+  def avatar_url(size=nil)
     size = size ? size.to_sym : :medium
     case size
     when :small
@@ -362,6 +368,10 @@ class User < ActiveRecord::Base
 
   def show_start_group_button?
     !groups.cannot_start_parent_group.any?
+  end
+
+  def is_organisation_coordinator?
+    adminable_groups.parents_only.any?
   end
 
   private

@@ -3,10 +3,12 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel) ->
     @singular: 'proposal'
     @plural: 'proposals'
 
+    initialize: (data) ->
+      @closingAt = moment().add(3, 'days')
+      @updateFromJSON(data)
+
     setupViews: ->
-      @votesView = @recordStore.votes.collection.addDynamicView(@viewName())
-      @votesView.applyFind(proposalId: @id)
-      @votesView.applySimpleSort('id')
+      @setupView 'votes'
 
     serialize: ->
       motion:
@@ -40,7 +42,8 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel) ->
       @author().name
 
     isActive: ->
-      !(@closedAt?)
+      #!(@closedAt? and @closedAt.isValid())
+      !@closedAt? or !@closedAt.isValid()
 
     uniqueVotesByUserId: ->
       votesByUserId = {}

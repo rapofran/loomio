@@ -1,16 +1,7 @@
 eo:
-  users:
-    email_preferences:
-      edit:
-        title: Retpoŝtaj preferoj
-        when_do_you_want_emails: "Retpoŝtu min:"
-        email_missed_yesterday: "'Hieraŭ en Loomio' - ĉiutaga resumo de ĉiaj eble perditaj aktivaĵoj"
-        email_when_mentioned: "Kiam mi estas @menciata"
-        email_followed_threads: Kiam estas aktiveco en fadenoj kiujn mi sekvas.
-        email_when_proposal_closing_soon: 24 horojn antaŭ la fermo de propono.
-        email_new_discussions_and_proposals: Novaj diskutoj kaj proponoj
-        for_these_groups: "Por ĉi tiuj grupoj:"
-        submit: Konservi preferojn
+  email_settings:
+    title: Retpoŝtaj agordoj
+    submit: Ĝisdatigi agordojn
   explore:
     header: Esplori publikajn grupojn
   try_it:
@@ -46,6 +37,8 @@ eo:
     mailer:
       invitation_instructions:
         subject: Iu invitis vin aliĝi al Loomio
+    registrations:
+      sign_up: Krei konton
   error:
     access_denied: Vi ne havas permeson fari ĉi tion
     cant_join_subgroup: Vi ne rajtas aniĝi al subgrupo se vi ne estas membro de la ĉefgrupo
@@ -184,10 +177,13 @@ eo:
     about: Pri
     blog: Blogo
     contact: Kontakti
+    help: Helpo
     privacy: Privateco
+    pricing: Prezo
     public_groups: Publikaj grupoj
     terms: Kondiĉoj
   inbox:
+    title: Poŝtkesto
     dropdown-btn: Poŝtkesto
     empty: "Vi estas ĝisdata! Ne estas komentoj kiujn vi ne vidis."
   notifications:
@@ -219,8 +215,6 @@ eo:
   no_group_header: Bonvenon al Loomio Beta
   empty_notifications: Vi ankoraŭ ne havas ajnan sciigon.
   see_all_notifications: Vidi ĉiujn sciigojn
-  profile: Profilo
-  email_settings: Retpoŝtaj agordoj
   sign_out: Eliri
   sign_in: Ensaluti
   honeypot_warning: "Ne eblis krei vian konton. Se vi uzas ekranlegilon, bonvolu certigi ke la lasta (kaŝita) kampo de la formularo estu sen enhavo."
@@ -347,7 +341,6 @@ eo:
   edit_memberships: Redakti membrecojn
   add_new_member: Aldoni novan memebron
   invite_members_to_group: "Inviti membrojn aliĝi al  %{which_group}"
-  get_in_touch_link: kontaktu
   email_members_in_group: "Sendi retmesaĝon al la membroj en %{which_group}"
   subject_error: Bonvolu aldoni temon
   subject_placeholder: Skribu temon
@@ -412,8 +405,13 @@ eo:
       click_to_unfollow: Klaku por malsekvi grupon
       following_details: Vi estos informata pri ĉiu fadeno en ĉi tiu grupo.
       not_following_details: Vi estos informata pri fadenoj en kiuj vi partoprenas.
+  networks:
+    previous_requests: Antaŭaj petoj
+    approve: Aprobi
+    threads: Diskutoj
+    groups: Grupoj
   group_request:
-    neighbourhood_support_group: ekz. Subtengrupo por la najbararo
+    header: Komenci grupon
     commercial_use_option: "en entrepreno, formala organizo aŭ laborejo"
     non_commercial_use_option: en komunuma grupo aŭ neformala reto
     please_select_an_option: Bonvolu elekti opcion
@@ -775,9 +773,6 @@ eo:
       motion:
         name: Kion vi proponas ke okazu?
         description: Donu sufiĉajn informojn por ke ĉiuj sciu ekzakte kion signifas konsenti aŭ malkonsenti.
-      user:
-        email: Retpoŝto
-        password: Pasvorto
       group_request:
         description: Ni ŝategus aŭdi pri via grupo kaj kial vi volas uzi Loomion.
   helpers:
@@ -865,7 +860,6 @@ eo:
       headline: "La propono de %{author} en %{group} baldaŭ fermiĝos:"
       summary: Resumo
     thread_mailer:
-      unfollow_discussion_html: "<a href='%{unfollow_url}'>Malsekvi</a> por haltigi retpoŝtaĵojn pri ĉi tiu diskuto."
       change_preferences: "Ŝanĝi viajn retpoŝtajn preferojn:"
       new_motion: "%{who} proponis:"
       motion_closing_soon: "Propono fermiĝos en 24 horoj:"
@@ -947,6 +941,8 @@ eo:
   google: Google
   persona: Persona
   common:
+    profile: Profilo
+    email_settings: Retpoŝtaj agordoj
     dashboard: Supervidpanelo
     unread: Nelegitaj
     filter: "Filtrilo:"

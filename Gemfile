@@ -61,9 +61,9 @@ gem 'modernizr-rails'
 gem 'jquery-fileupload-rails'
 gem 'momentjs-rails'
 gem 'ruby-progressbar'
-gem 'dotenv'# , :require => 'dotenv/rails-now'
 gem 'dotenv-rails'
 gem 'responders', '~> 2.0'
+gem 'activerecord_any_of'
 
 # consider uncommenting these when we want to mess around with json parsing
 #gem 'oj'
@@ -74,6 +74,7 @@ group :development, :test do
   gem 'minitest'
   gem 'timecop'
   gem 'pry-rails'
+  gem 'binding_of_caller'
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'rspec-rails'

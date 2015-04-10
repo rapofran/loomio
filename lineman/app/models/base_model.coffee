@@ -27,13 +27,19 @@ angular.module('loomioApp').factory 'BaseModel', ->
       @importData(data, @)
 
     scrapeAttributeNames: (data) ->
-      @constructor.attributeNames = _.map _.keys(data), (key) -> _.camelCase(key)
+      _.each _.keys(data), (key) =>
+        camelKey = _.camelCase(key)
+        unless _.contains @constructor.attributeNames, camelKey
+          @constructor.attributeNames.push camelKey
 
     importData: (data, dest) ->
       _.each _.keys(data), (key) =>
         attributeName = _.camelCase(key)
         if /At$/.test(attributeName)
-          dest[attributeName] = moment(data[key])
+          if moment(data[key]).isValid()
+            dest[attributeName] = moment(data[key])
+          else
+            dest[attributeName] = null
         else
           dest[attributeName] = data[key]
         return
@@ -43,12 +49,29 @@ angular.module('loomioApp').factory 'BaseModel', ->
       @baseSerialize()
 
     baseSerialize: ->
+      wrapper = {}
       data = {}
-      _.each @attributeNames, (attributeName) ->
-        data[_.snakeCase(attributeName)] = this[attributeName]
-      data
+      paramKey = _.snakeCase(@constructor.singular)
+      _.each window.Loomio.permittedParams[paramKey], (attributeName) =>
+        data[_.snakeCase(attributeName)] = @[_.camelCase(attributeName)]
+        true # so if the value is false we don't break the loop
+      wrapper[paramKey] = data
+      wrapper
+
+    addView: (collectionName, viewName) ->
+      @recordStore[collectionName].collection.addDynamicView("#{@id}-#{viewName}")
 
     setupViews: ->
+
+    setupView: (view, sort, desc) ->
+      viewName = "#{view}View"
+      idOption = {}
+      idOption["#{@constructor.singular}Id"] = @id
+
+      @[viewName] = @recordStore[view].collection.addDynamicView(@viewName())
+      @[viewName].applyFind(idOption)
+      @[viewName].applyFind(id: {$gt: 0})
+      @[viewName].applySimpleSort(sort or 'createdAt', desc)
 
     translationOptions: ->
 
@@ -65,6 +88,10 @@ angular.module('loomioApp').factory 'BaseModel', ->
 
     save: ->
       @errors = {}
+      if @processing
+        console.log "save returned, already processing:", @
+        return
+
       @processing = true
       if @isNew()
         @restfulClient.create(@serialize()).then(@saveSuccess, @saveFailure)
@@ -75,11 +102,11 @@ angular.module('loomioApp').factory 'BaseModel', ->
       @processing = true
       @restfulClient.destroy(@keyOrId()).then(@saveSuccess, @saveFailure)
 
-    saveSuccess: (records) ->
+    saveSuccess: (records) =>
       @processing = false
       records
 
-    saveFailure: (errors) ->
+    saveFailure: (errors) =>
       @processing = false
       @errors = errors
       throw errors

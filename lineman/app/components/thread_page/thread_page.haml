@@ -1,0 +1,54 @@
+.loading-wrapper.container.main-container
+  %loading{ng-if: '!threadPage.discussion'}
+  .thread-page{ng-if: 'threadPage.discussion'}
+
+    %section.media.thread-group{role: 'region', aria-label: "{{ 'thread_group.aria_label' | translate }}"}
+      .media-left.thread-group__icon{aria-hidden: 'true'}
+        %img.thread-group-logo{src: "{{threadPage.group.logoUrl()}}"}
+      .media-body.thread-group__name
+        %a{ng_show: 'threadPage.group.parentId', href: '/g/{{threadPage.group.parent().key}}'}
+          {{threadPage.group.parentName()}}
+        %span{ng_show: 'threadPage.group.parentId', aria-label: '-'}> >
+        %a{href: '/g/{{threadPage.group.key}}'}
+          {{threadPage.group.name}}
+
+    %section.thread-context{role: 'region', aria-label: "{{ 'thread_context.aria_label' | translate }}"}
+      .thread-actions.lmo-btn-group.lmo-btn-group-right
+        .lmo-btn-wrapper.dropdown{ng-if: 'threadPage.showContextMenu()'}
+          %button.btn.btn-nude.dropdown-toggle{href:''}
+            .sr-only{translate: 'thread_context.thread_options'}
+            %i.fa.fa-fw.fa-chevron-down.pull-right{aria-hidden: 'true'}
+          .dropdown-menu.dropdown-menu-right
+            %ul.dropdown-menu-items
+              %li.dropdown-menu-item
+                %a.dropdown-menu-item-label{href: '', ng-click: 'threadPage.editDiscussion()', translate: 'common.action.edit', ng-if: 'threadPage.canEditDiscussion()'}
+        .thread-notification-level.lmo-btn-wrapper
+          %notification_volume_dropdown{translate-root: 'discussion', discussion: 'threadPage.discussion'}
+
+      %h1.thread-context__title{in-view: 'threadPage.showLintel(!$inview)'}
+        {{threadPage.discussion.title}}
+      .thread-context__details
+        %span{translate: 'discussion.started_by', translate-value-name: '{{::threadPage.discussion.authorName()}}'}
+        %timeago.nowrap{timestamp: '::threadPage.discussion.createdAt' }>
+        %span{aria-hidden: 'true'}·
+        %span.nowrap.discussion-privacy__is-private{ng-show: 'threadPage.discussion.private'}>
+          %i.fa.fa-lock{aria-hidden: 'true'}>
+          %span{translate: 'common.privacy.private'}
+        %span.nowrap.discussion-privacy__is-public{ng-show: '!threadPage.discussion.private'}>
+          %i.fa.fa-globe{aria-hidden: 'true'}>
+          %span{translate: 'common.privacy.public'}
+
+
+      %article.thread-context__description{btf-markdown: 'threadPage.discussion.description' }
+
+    %start_proposal_card{discussion: 'threadPage.discussion'}
+
+    .wrap{ng-if: 'threadPage.discussion.activeProposal()'}
+      %current_proposal_card{proposal: 'threadPage.discussion.activeProposal()'}
+
+    .wrap{ng-if: 'threadPage.discussion.anyClosedProposals()'}
+      %previous_proposals_card{discussion: 'threadPage.discussion'}
+
+    %activity_card{discussion: 'threadPage.discussion'}
+    %comment_form{discussion: 'threadPage.discussion'}
+
