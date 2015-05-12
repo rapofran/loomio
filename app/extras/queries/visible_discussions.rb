@@ -2,17 +2,11 @@ class Queries::VisibleDiscussions < Delegator
   def initialize(user: nil, groups: nil, group_ids: nil)
     @user = user
 
-    if group_ids.nil?
-      if groups.present?
-        group_ids = Array(groups).map(&:id)
-      elsif user.present?
-        group_ids = user.group_ids
-      end
+    if group_ids.nil? and groups.present?
+      group_ids = Array(groups).map(&:id)
     end
 
     @relation = Discussion.joins(:group).where('groups.archived_at IS NULL').published
-
-
     @relation = self.class.apply_privacy_sql(user: @user, group_ids: group_ids, relation: @relation)
 
     super(@relation)
@@ -55,9 +49,22 @@ class Queries::VisibleDiscussions < Delegator
     self
   end
 
+  def participating
+    join_to_discussion_readers
+    @relation = @relation.where('dv.participating = true')
+    self
+  end
+
   def unread
     join_to_discussion_readers
     @relation = @relation.where('dv.last_read_at IS NULL OR (dv.last_read_at < discussions.last_activity_at)')
+    self
+  end
+
+  def muted
+    join_to_discussion_readers && join_to_memberships
+    @relation = @relation.where('(dv.volume = :mute) OR (dv.volume IS NULL AND m.volume = :mute) ', 
+                                {mute: DiscussionReader.volumes[:mute]})
     self
   end
 
@@ -68,6 +75,17 @@ class Queries::VisibleDiscussions < Delegator
     self
   end
 
+  def recent
+    @relation = @relation.where('last_activity_at > ?', 3.months.ago)
+    self
+  end
+
+  def sorted_by_latest_motions
+    @relation = @relation.joined_to_current_motion
+                         .preload(:current_motion, {group: :parent})
+                         .order('motions.closing_at ASC, last_activity_at DESC')
+    self
+  end
 
   def self.apply_privacy_sql(user: nil, group_ids: [], relation: nil)
     user_group_ids = user.nil? ? [] : user.cached_group_ids
@@ -77,17 +95,12 @@ class Queries::VisibleDiscussions < Delegator
     # or they are a member of the group
     # or user belongs to parent group and permission is inherited
 
-    relation = relation.where("((discussions.private = :false) OR
-                                (discussions.group_id IN (:user_group_ids)) OR
-                                (groups.parent_members_can_see_discussions = TRUE AND groups.parent_id IN (:user_group_ids)))",
-                               false: false,
-                               group_ids: group_ids,
-                               user_group_ids: user_group_ids)
-
-    if group_ids.present?
-      relation = relation.where('discussions.group_id in (:group_ids)', group_ids: group_ids)
-    end
-    relation
+    relation.where('discussions.group_id in (:group_ids) AND
+                   ((discussions.private = false) OR
+                    (discussions.group_id IN (:user_group_ids)) OR
+                    (groups.parent_members_can_see_discussions = TRUE AND groups.parent_id IN (:user_group_ids)))',
+                   group_ids: group_ids,
+                   user_group_ids: user_group_ids)
   end
 
 end

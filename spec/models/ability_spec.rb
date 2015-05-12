@@ -18,7 +18,7 @@ describe "User abilities" do
                                                                                  inviter: other_user) }
   it { should be_able_to(:create, group) }
 
-  context "in relation to a network", focus: true  do
+  context "in relation to a network" do
     before do
       group.add_admin! user
     end
@@ -56,6 +56,12 @@ describe "User abilities" do
       describe "all good" do
         let(:network) { Network.create(name: "Podemos", coordinators: [user]) }
         let(:request) { NetworkMembershipRequest.new(requestor: user, group: group, network: network) }
+
+        before do
+          network
+          request
+          request.group.reload
+        end
 
         it{should be_able_to(:create, request)}
       end
@@ -147,6 +153,26 @@ describe "User abilities" do
           before { group.add_member!(user) }
           it {should be_able_to(:show, group)}
         end
+
+        context "parent_members_can_see_discussions" do
+          let(:discussion) { create(:discussion, group: group, private: true) }
+          before { parent_group.add_member!(user) }
+
+          context "true" do
+            before do
+              group.update_attribute(:parent_members_can_see_discussions, true)
+            end
+            it {should be_able_to(:show, discussion)}
+          end
+
+          context "false" do
+            before do
+              group.update_attribute(:parent_members_can_see_discussions, false)
+            end
+
+            it {should_not be_able_to(:show, discussion)}
+          end
+        end
       end
 
       context "false" do
@@ -207,7 +233,7 @@ describe "User abilities" do
       end
     end
 
-    context "member of group", focus: true do
+    context "member of group" do
       before { group.add_member!(user) }
 
       describe "members_can_start_discussions" do
@@ -436,6 +462,7 @@ describe "User abilities" do
     it { should     be_able_to(:move, user_discussion) }
     it { should     be_able_to(:update, user_discussion) }
     it { should     be_able_to(:show, Discussion) }
+    it { should     be_able_to(:print, Discussion) }
     it { should     be_able_to(:destroy, user_comment) }
     it { should_not be_able_to(:destroy, discussion) }
     it { should_not be_able_to(:destroy, another_user_comment) }
@@ -563,6 +590,7 @@ describe "User abilities" do
     it { should_not be_able_to(:unfollow, group) }
     it { should_not be_able_to(:create, new_discussion) }
     it { should_not be_able_to(:show, discussion) }
+    it { should_not be_able_to(:print, discussion) }
     it { should_not be_able_to(:new_proposal, discussion) }
     it { should_not be_able_to(:create, user_comment) }
     it { should_not be_able_to(:move, discussion) }
@@ -613,12 +641,14 @@ describe "User abilities" do
 
     it { should_not be_able_to(:create, new_discussion) }
     it { should_not be_able_to(:show, private_discussion) }
+    it { should_not be_able_to(:print, private_discussion) }
     it { should_not be_able_to(:new_proposal, private_discussion) }
     it { should_not be_able_to(:create, comment_in_private_discussion) }
     it { should_not be_able_to(:move, private_discussion) }
     it { should_not be_able_to(:destroy, private_discussion) }
 
     it { should     be_able_to(:show, public_discussion) }
+    it { should     be_able_to(:print, public_discussion) }
     it { should_not be_able_to(:new_proposal, public_discussion) }
     it { should_not be_able_to(:create, comment_in_public_discussion) }
     it { should_not be_able_to(:move, public_discussion) }

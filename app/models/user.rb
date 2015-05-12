@@ -5,9 +5,6 @@ class User < ActiveRecord::Base
   require 'net/http'
   require 'digest/md5'
 
-  validates_inclusion_of :dashboard_sort,   in: %w[sort_by_group sort_by_date]
-  validates_inclusion_of :dashboard_filter, in: %w[show_all show_unread show_proposals]
-
   AVATAR_KINDS = %w[initials uploaded gravatar]
   LARGE_IMAGE = 170
   MED_LARGE_IMAGE = 70
@@ -225,15 +222,6 @@ class User < ActiveRecord::Base
 
   def group_membership(group)
     memberships.for_group(group).first
-  end
-
-  def unviewed_notifications
-    notifications.unviewed
-  end
-
-  def mark_notifications_as_viewed!(latest_viewed_id)
-    notifications.where('id <= ?', latest_viewed_id).
-      update_all(:viewed_at => Time.now)
   end
 
   def self.loomio_helper_bot(password: nil)

@@ -5,6 +5,7 @@ Loomio::Application.routes.draw do
     get 'setup_for_add_comment'
     get 'setup_for_like_comment'
     get 'setup_for_vote_on_proposal'
+    get 'setup_all_notifications'
   end
 
   scope '/angular', controller: 'angular', path: 'angular', as: 'angular' do
@@ -18,6 +19,7 @@ Loomio::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   namespace :admin do
+    get 'url_info' => 'base#url_info'
     namespace :stats do
       get :group_activity
       get :daily_activity
@@ -44,9 +46,8 @@ Loomio::Application.routes.draw do
     resources :events, only: :index
 
     resources :discussions, only: [:show, :index, :create, :update, :destroy] do
-      get :inbox_by_date, on: :collection
-      get :inbox_by_organization, on: :collection
-      get :inbox_by_group, on: :collection
+      get :discussions_for_dashboard, on: :collection
+      get :discussions_for_inbox, on: :collection
     end
     resources :discussion_readers, only: :update do
       patch :mark_as_read, on: :member
@@ -67,19 +68,23 @@ Loomio::Application.routes.draw do
       post :vote, on: :member
     end
     resources :translations, only: :show
-    resources :notifications, only: :index
+
+    resources :notifications, only: :index do
+      post :viewed, on: :collection
+    end
+
     resources :search_results, only: :index
 
     resources :contact_messages, only: :create
-    namespace :faye do
+
+    namespace :message_channel do
       post :subscribe
-      get :who_am_i
     end
+
     namespace :sessions do
       get :current
       get :unauthorized
     end
-    resources :users, only: :update
     devise_scope :user do
       resources :sessions, only: [:create, :destroy]
     end
@@ -132,6 +137,7 @@ Loomio::Application.routes.draw do
   post 'start_group' => 'start_group#create'
   resources :groups, path: 'g', only: [:create, :edit, :update] do
     member do
+      get :export
       post :set_volume
       post :join
       post :add_members
@@ -224,6 +230,7 @@ Loomio::Application.routes.draw do
       post :show_description_history
       get :new_proposal
       post :move
+      get :print
     end
   end
 
@@ -238,6 +245,7 @@ Loomio::Application.routes.draw do
 
   resources :comments , only: [:destroy, :edit, :update, :show] do
     post :like, on: :member
+    post :unlike, on: :member
   end
 
   resources :attachments, only: [:create, :new] do
@@ -309,9 +317,11 @@ Loomio::Application.routes.draw do
   get '/contributions/thanks' => redirect('/crowd')
   get '/contributions/callback' => redirect('/crowd')
   get '/crowd' => redirect('https://love.loomio.org/')
-  get '/groups' => redirect('/explore')
 
   get '/dashboard', to: 'dashboard#show', as: 'dashboard'
+
+  # this is a dumb thing
+  get '/groups', to: 'dashboard#show'
 
   constraints(MainDomainConstraint) do
     scope controller: 'pages' do
@@ -343,6 +353,7 @@ Loomio::Application.routes.draw do
 
   scope controller: 'help' do
     get :help
+    get :markdown
   end
 
   get '/detect_locale' => 'detect_locale#show'

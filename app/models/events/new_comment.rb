@@ -16,6 +16,8 @@ class Events::NewComment < Event
       Events::UserMentioned.publish!(comment, mentioned_user)
     end
 
+    DiscussionReader.for(user: comment.author, discussion: comment.discussion).participate!
+
     UsersToEmailQuery.new_comment(comment).find_each do |user|
       ThreadMailer.delay.new_comment(user, event)
     end
@@ -24,11 +26,11 @@ class Events::NewComment < Event
 
   end
 
-  def comment
-    eventable
+  def discussion_key
+    discussion.key
   end
 
-  def message_channel
-    "/discussion-#{comment.discussion.key}" #/#{kind}"
+  def comment
+    eventable
   end
 end

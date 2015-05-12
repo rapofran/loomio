@@ -145,6 +145,7 @@ en:
     added_to_group: "You have been added to %{which_group}."
     close_date_changed: "Close date successfully changed."
     discussion_created: "Discussion successfully created."
+    discussion_updated: "Discussion successfully updated."
     discussion_deleted: "Discussion successfully deleted."
     discussion_moved: "Discussion successfully moved to %{group_name}"
     emails_sending: "Emails sending."
@@ -462,6 +463,7 @@ en:
   approved_by_person: Approved by %{person}
   ignored_by_perosn: Ignored by %{person}
   join_group_btn: Join group
+  membership_by_invitation_only: Membership to this group is by invitation only
   you_have_joined_group: You have joined %{group_name}
   confirm_approve_membership_request: "Are you sure you want to add %{which_user} to the group?"
   cancel_membership_request: "Cancel request"
@@ -499,9 +501,6 @@ en:
   group_subscription: "Group subscription"
 
   groups:
-    max_size_warning_html: "Your group is getting big and will reach the limit of %{size} members soon. Please <a href='%{link}'>contact us</a> to increase the limit."
-    max_size_reached_html: "Your group has reached the limit of %{size} members. <a href='%{link}'>Contact us</a> to add more people to the group."
-
     follow:
       click_to_follow: "Click to follow group"
       click_to_unfollow: "Click to unfollow group"
@@ -633,6 +632,7 @@ en:
 
   discussion_context:
     started_html: "Started %{when} ago by <a href='%{link}' class='%{link_class}'>%{who}</a>"
+    started_print: "Started %{when} by %{who}"
     last_edited_html: "Last edited %{when} ago by <a href='%{link}' class='%{link_class}'>%{who}</a>"
     see_revision_history: "See revision history"
     see_history: "See history"
@@ -666,6 +666,7 @@ en:
   move_discussion_where: "Where would you like to move this discussion to?"
   delete_discussion: "Delete discussion"
   confirm_delete_discussion: "Are you sure you want to permanently delete this discussion?"
+  print_tooltip_info: Print
 
   #
   # DECISIONS / PROPOSALS / MOTIONS
@@ -678,10 +679,13 @@ en:
   change_proposal_close_date: "Change close date"
   change_proposal_close_date_header: "Change the close date for the proposal '%{which}'"
   proposal: Proposal
+  proposals: Proposals
+  closed_at: Closed at
   proposal_close_date_error: "Please give a future close date"
   proposal_closing_when: "Closing in %{when}"
   proposal_closed_when: "Closed %{when} ago"
   proposed_when_by_who: "Proposed by %{who} %{when} ago"
+  proposed_by_who_on: "Proposed by: %{who}, %{when}"
   engagement_on_open_proposal: "%{percent}%% of members have stated their position (%{numerator}/%{denominator})"
   engagement_on_closed_proposal: "%{percent}%% of members stated their position (%{numerator}/%{denominator})"
 
@@ -920,6 +924,13 @@ en:
   inactive_html: "This account has been deactivated. If you have any questions please <a href='%{path_to_contact}'>get in touch</a>."
   create_an_account_html: 'Create a Loomio Beta account'
   log_in: "Log in"
+  password_reset:
+    email_guidelines_html: |
+      <p>Enter the email address for your Loomio account into the field below and you will be sent a password reset link.</p>
+      <p>If you normally sign in via Facebook, Google, Twitter or Persona, enter the email address associated with that account.</p>
+    reset_email_timeframe: It may take up to 5 minutes for the email to arrive. If it doesn't show up, be sure to check your spam folder.
+    length_restriction: Passwords must be at least 8 characters long.
+    forbidden_passwords: Common passwords such as “password” are forbidden to keep your account safe.
 
   join_group:
     log_in: "Log in to join %{group_name}"
@@ -937,8 +948,6 @@ en:
   invitation:
     alternate: "Alternatively, share this link and anyone can ask to join:"
     by_email: "Invite by email"
-    no_invitations_left: "Sorry you don't have any invitations left"
-    no_invitations_left_get_more: "Please email contact@loomio.org and we'll see what we can do to help you"
     invitation_not_found:  'Could not find invitation with that token. Please ask for a new invitation from the sender.'
     invitation_cancelled: 'This invitation has been cancelled. Please contact the sender of the invitation if you believe this was done in error.'
     invitation_already_used: 'This invitation has already been used. Please log in to continue to your group.'
@@ -1000,15 +1009,19 @@ en:
   #
 
   contact_page:
-    contact_us:     'Contact us'
+    contact_us: Contact us
+    faq_prompt_html: "Got a question for the Loomio team? Before contacting us, you might be able to find the answer in our frequently asked questions."
+    contact_information: "If you don't find what you're looking for, you can find our contact information at the bottom of the page."
+    contact_form: Contact form
     labels:
-      name:         'Your name'
-      email:        'Your email address'
-      message:      'Your message'
-      submit:       'Send message'
+      name: Your name
+      email: Your email address
+      message: Your message
+      submit: Send message
     messages:
-      email_html:        "Fill out this form, or send an email to <a href='mailto:%{email}'>%{email}</a>"
-      social_html:       "You can also join us on<br/><a href='%{facebook}' target='_blank'>facebook</a>, <a href='%{google}' target='_blank'>google+</a>, and <a href='%{twitter}' target='_blank'>twitter</a>!"
+      email_html: "Fill out this form, or send an email to <a href='mailto:%{email}'>%{email}</a>"
+      social_html: |
+        You can also join us on<br/><a href='%{facebook}' target='_blank'>facebook</a>, <a href='%{google}' target='_blank'>google+</a>, and <a href='%{twitter}' target='_blank'>twitter</a>!
 
   #
   # FORMS
@@ -1237,6 +1250,7 @@ en:
   about_loomio: "About Loomio"
   ago: "%{quantity_of_time} ago"
   approve: "Approve"
+  attachments: "Attachments:"
   author: "Author"
   back: "Back"
   cancel: "Cancel"
@@ -1418,7 +1432,7 @@ en:
     online_community: "Online community"
     religious_group: "Religious/spiritual"
     event: "Event"
-    open_source_software: "Open source software"
+    open_source_software: "Free and open source software"
     political_initiative: "Political initiative"
     social_enterprise: "Social enterprise"
     social_justice: "Social justice"

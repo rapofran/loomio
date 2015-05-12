@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150410051836) do
+ActiveRecord::Schema.define(version: 20150512034525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,16 +172,17 @@ ActiveRecord::Schema.define(version: 20150410051836) do
   add_index "did_not_votes", ["user_id"], name: "index_did_not_votes_on_user_id", using: :btree
 
   create_table "discussion_readers", force: :cascade do |t|
-    t.integer  "user_id",                              null: false
+    t.integer  "user_id",                                  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "discussion_id",                        null: false
+    t.integer  "discussion_id",                            null: false
     t.datetime "last_read_at"
-    t.integer  "read_comments_count",      default: 0, null: false
-    t.integer  "read_items_count",         default: 0, null: false
-    t.integer  "last_read_sequence_id",    default: 0, null: false
-    t.integer  "read_salient_items_count", default: 0, null: false
+    t.integer  "read_comments_count",      default: 0,     null: false
+    t.integer  "read_items_count",         default: 0,     null: false
+    t.integer  "last_read_sequence_id",    default: 0,     null: false
+    t.integer  "read_salient_items_count", default: 0,     null: false
     t.integer  "volume"
+    t.boolean  "participating",            default: false, null: false
   end
 
   add_index "discussion_readers", ["discussion_id"], name: "index_motion_read_logs_on_discussion_id", using: :btree
@@ -351,7 +352,7 @@ ActiveRecord::Schema.define(version: 20150410051836) do
     t.boolean  "members_can_create_subgroups",                   default: true,           null: false
     t.integer  "creator_id"
     t.boolean  "is_commercial"
-    t.boolean  "is_referral",                                                             null: false
+    t.boolean  "is_referral",                                    default: false,          null: false
   end
 
   add_index "groups", ["archived_at", "id"], name: "index_groups_on_archived_at_and_id", using: :btree
@@ -505,13 +506,13 @@ ActiveRecord::Schema.define(version: 20150410051836) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "event_id"
-    t.datetime "viewed_at"
+    t.boolean  "viewed",     default: false, null: false
   end
 
   add_index "notifications", ["event_id", "user_id"], name: "index_notifications_on_event_id_and_user_id", using: :btree
   add_index "notifications", ["event_id"], name: "index_notifications_on_event_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
-  add_index "notifications", ["viewed_at"], name: "index_notifications_on_viewed_at", using: :btree
+  add_index "notifications", ["viewed"], name: "index_notifications_on_viewed", using: :btree
 
   create_table "omniauth_identities", force: :cascade do |t|
     t.integer  "user_id"
@@ -572,7 +573,7 @@ ActiveRecord::Schema.define(version: 20150410051836) do
   add_index "user_deactivation_responses", ["user_id"], name: "index_user_deactivation_responses_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                            limit: 255, default: "",              null: false
+    t.string   "email",                            limit: 255, default: "",         null: false
     t.string   "encrypted_password",               limit: 128, default: ""
     t.string   "reset_password_token",             limit: 255
     t.datetime "reset_password_sent_at"
@@ -587,29 +588,27 @@ ActiveRecord::Schema.define(version: 20150410051836) do
     t.string   "name",                             limit: 255
     t.datetime "deactivated_at"
     t.boolean  "is_admin",                                     default: false
-    t.string   "avatar_kind",                      limit: 255, default: "initials",      null: false
+    t.string   "avatar_kind",                      limit: 255, default: "initials", null: false
     t.string   "uploaded_avatar_file_name",        limit: 255
     t.string   "uploaded_avatar_content_type",     limit: 255
     t.integer  "uploaded_avatar_file_size"
     t.datetime "uploaded_avatar_updated_at"
     t.string   "avatar_initials",                  limit: 255
     t.string   "username",                         limit: 255
-    t.boolean  "email_when_proposal_closing_soon",             default: false,           null: false
+    t.boolean  "email_when_proposal_closing_soon",             default: false,      null: false
     t.string   "authentication_token",             limit: 255
     t.string   "unsubscribe_token",                limit: 255
-    t.integer  "memberships_count",                            default: 0,               null: false
-    t.boolean  "uses_markdown",                                default: false,           null: false
+    t.integer  "memberships_count",                            default: 0,          null: false
+    t.boolean  "uses_markdown",                                default: false,      null: false
     t.string   "selected_locale",                  limit: 255
     t.string   "time_zone",                        limit: 255
     t.string   "key",                              limit: 255
     t.string   "detected_locale",                  limit: 255
-    t.boolean  "email_missed_yesterday",                       default: true,            null: false
+    t.boolean  "email_missed_yesterday",                       default: true,       null: false
     t.string   "email_api_key",                    limit: 255
-    t.boolean  "email_when_mentioned",                         default: true,            null: false
-    t.boolean  "angular_ui_enabled",                           default: false,           null: false
-    t.boolean  "email_on_participation",                       default: true,            null: false
-    t.string   "dashboard_sort",                               default: "sort_by_group", null: false
-    t.string   "dashboard_filter",                             default: "show_all",      null: false
+    t.boolean  "email_when_mentioned",                         default: true,       null: false
+    t.boolean  "angular_ui_enabled",                           default: false,      null: false
+    t.boolean  "email_on_participation",                       default: true,       null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

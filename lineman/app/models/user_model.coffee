@@ -2,6 +2,7 @@ angular.module('loomioApp').factory 'UserModel', (BaseModel) ->
   class UserModel extends BaseModel
     @singular: 'user'
     @plural: 'users'
+    @indices: ['id']
 
     initialize: (data) ->
       @updateFromJSON(data)
@@ -10,6 +11,9 @@ angular.module('loomioApp').factory 'UserModel', (BaseModel) ->
     setupViews: ->
       @membershipsView = @recordStore.memberships.belongingTo(userId: @id)
       @notificationsView = @recordStore.notifications.belongingTo(userId: @id)
+      @groupsView = @recordStore.groups.belongingTo(id: { $in: @groupIds() })
+      @parentGroupsView = @recordStore.groups.collection.addDynamicView()
+      @parentGroupsView.applyFind(parentId: {$eq: null}).applyFind(id: {$in: @groupIds()})
 
     groupIds: ->
       _.map(@memberships(), 'groupId')
@@ -24,7 +28,10 @@ angular.module('loomioApp').factory 'UserModel', (BaseModel) ->
       @notificationsView.data()
 
     groups: ->
-      @recordStore.groups.where(id: {'$in': @groupIds()})
+      @groupsView.data()
+
+    parentGroups: ->
+      @parentGroupsView.data()
 
     canEditComment: (comment) ->
       @isAuthorOf(comment) && comment.group().membersCanEditComments
