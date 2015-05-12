@@ -48,10 +48,6 @@ class PagesController < ApplicationController
        link: "http://newrelic.com/privacy",
        description: "New relic monitors application performance metrics"},
 
-      {name: "Google analytics",
-       link: "http://www.google.com/intl/en/policies/",
-       description: 'Tracks page views and other usage statistics. Google get user ip addresses and other session metadata and urls of pages being visited which have discussion titles and group names.'},
-
       {name: "Heap Analytics",
        link: "https://heapanalytics.com/privacy",
        description: 'Used to measure how people are interacting with the software and identify points of the user experience that can be improved.'},
