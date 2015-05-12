@@ -3,7 +3,6 @@ class API::BaseController < ActionController::Base
   include ::ProtectedFromForgery
   before_filter :require_authenticated_user
 
-  skip_after_filter :intercom_rails_auto_include
   after_filter :increment_measurement
 
   protected

@@ -17,9 +17,6 @@ class ApplicationController < ActionController::Base
   after_filter :increment_measurement
   after_filter :new_relic_insights, if: :using_new_relic?
 
-  # intercom
-  skip_after_filter :intercom_rails_auto_include
-
   rescue_from ActionView::MissingTemplate do |exception|
     raise exception unless %w[txt text gif png].include?(params[:format])
   end
