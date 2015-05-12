@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   include ReadableUnguessableUrlsHelper
   include ProtectedFromForgery
 
-  helper :analytics_data
   helper :locales
   helper_method :current_user_or_visitor
   helper_method :dashboard_or_root_path

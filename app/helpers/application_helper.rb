@@ -139,14 +139,6 @@ module ApplicationHelper
     !user_signed_in?
   end
 
-  def analytics_scope
-    if Rails.env.production? || Rails.env.staging?
-      unless controller_name == 'searches'
-        yield
-      end
-    end
-  end
-
   def toggle_unread_path
     options = {}
     unless sifting_unread?

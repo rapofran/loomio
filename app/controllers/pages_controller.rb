@@ -48,10 +48,6 @@ class PagesController < ApplicationController
        link: "http://newrelic.com/privacy",
        description: "New relic monitors application performance metrics"},
 
-      {name: "Google analytics",
-       link: "http://www.google.com/intl/en/policies/",
-       description: 'Tracks page views and other usage statistics. Google get user ip addresses and other session metadata and urls of pages being visited which have discussion titles and group names.'},
-
       {name: 'Facebook',
        link: "https://www.facebook.com/about/privacy/",
        description: 'to allow you to login via your Facebook account.'},
