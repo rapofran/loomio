@@ -32,10 +32,6 @@ class PagesController < ApplicationController
        description: 'stores uploaded files and images.',
        link: "http://www.amazon.com/gp/help/customer/display.html?nodeId=468496" },
 
-      {name: "Bing Translate",
-       description: 'Inline comment translation. When translations are requested via the translate button that appears when two users of different languages are communicating, we send specific content to Bing for automatic translation.',
-       link: "http://www.microsoft.com/privacystatement/en-gb/bing/default.aspx"},
-
       {name: "Cloudflare",
        link: "http://www.cloudflare.com/security-policy",
        description: 'Caches web content for faster page loads. Cloudflare and the rest of the internet backbone carry pages when requested. these are encrypted end to end.'},
