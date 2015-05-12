@@ -3,11 +3,7 @@ class MarketingController < ApplicationController
     if user_signed_in?
       redirect_to dashboard_path
     else
-      if third_party_install?
-        redirect_to explore_path
-      else
-        render layout: false
-      end
+      render layout: false
     end
   end
 end

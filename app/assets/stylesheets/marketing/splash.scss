@@ -524,6 +524,18 @@ a:hover { text-decoration: none; }
     background-position: center;
   }
   .mobile-header {
+    a {
+      color: #000;
+    }
+
+    a {
+      color: #fff;
+    }
+
+    p {
+      color: #fff;
+    }
+
     h1 {
       display: none;
       @include screen-size(medium-up) {

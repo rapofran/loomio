@@ -10,7 +10,7 @@ es:
       try_it: Pruébalo
       log_in: Identificarte
       video: Más sobre cómo funciona Loomio
-      try_loomio: Prueba Loomio
+      try_loomio: Ingresa
       try_loomio_beta: Prueba Loomio beta
       more: Más
       top: Arriba
@@ -19,38 +19,38 @@ es:
       privacy: Privacidad
       services: Servicios
     hero:
-      header_html: "Loomio es la forma mas fácil para<br /> <strong>tomar decisiones juntos</strong>. "
-      lead_html: "Loomio empodera organizaciones y comunidades para transformar <strong>discusiones en acción</strong> donde quiera que sus miembros se encuentren."
+      header_html: "Loomio es una herramienta para pensar y resolver problemas juntas. "
+      lead_html: "Es un espacio de trabajo en grupo donde las piratas pueden plantear propuestas y llevarlas a cabo."
     product:
-      header_html: "Cuando escuchamos <strong>todas las voces</strong>, tomamos <strong>mejores decisiones. </strong>"
+      header_html: ""
       step1:
         header: 1. Discutir a fondo las cosas
-        desc: "Empieza una discusión sobre cualquier tema, e invita a las personas adecuadas. Comparte diferentes perspectivas y desarrolla ideas conjuntamente."
+        desc: "En este espacio no tratamos de tener razón, tratamos de entender la perspectiva de las demás para destruir las barreras culturales, tomar decisiones a través del consenso y realizar propuestas para la acción colectiva."
       step2:
-        header: 2. Construir acuerdo
-        desc: "Todo el mundo puede proponer un plan de acción. Cada uno puede estar de acuerdo, abstenerse, estar en desacuerdo, o bloquear –de esa manera podrás ver cómo se siente el grupo y por qué-."
+        header: 2. Consensuar
+        desc: "Entendemos que las piratas somos personas muy diferentes y tratamos de ponernos de acuerdo comprendiendo y respetando esas diferencias. Somos pares, no iguales."
       step3:
-        header: 3. Decidir juntos
-        desc: "Desarrolla la propuesta colectivamente para que funcione para todos. Cada decisión posee una fecha límite, siempre obteniendo un resultado claro."
+        header: 3. Actuar juntas
+        desc: "Desarrolla la propuesta colectivamente para que funcione para todas. Cada decisión posee una fecha límite, siempre obteniendo un resultado claro."
     mobile:
-      lead_html: "<strong>Loomio funciona en cualquier dispositivo, </strong><br />toma decisiones en cualquier lugar y en cualquier momento."
+      lead_html: "<h1>¿Qué <strong>no</strong> es Loomio?</h1>
+      <p><strong>No es un foro de debate.</strong> Preferimos el análisis crítico sobre las opiniones personales. </p>
+      <p><strong>No es un chat.</strong> Preferimos el debate de ideas sobre las discusiones personales. Para chatear con nosotras, podés usar
+      <a href=\"https://webchat.pirateirc.net/?channels=ppar\">IRC</a> :)</p>
+      <p><strong>No es una red social.</strong> Preferimos publicar contenidos que aporten información de calidad para tomar decisiones.</p>"
     quote:
       header:
-        rushkoff_html: "«Loomio <strong>libera el potencial de Internet</strong> para acercar a las personas al consenso en vez de al debate polarizado».<div class=\"attributation\"> (<a href=\"http://rushkoff.com\">Douglas Rushkoff</a>, autor del libro <em>Present Shock</em>).</div>"
-        sifry_html: "«Loomio alcanza un punto óptimo entre <strong>voz individual</strong> y <strong>decisión colectiva</strong>». <div class=\"attributation\">(Micah Sifry, editor de <em><a href=\"http://techpresident.com\">TechPresident</a></em>)</div>"
-    team:
-      header: Acerca de Loomio
-      desc: "Somos un pequeño equipo de desarrolladores de código abierto y activistas de justicia social que trabajamos en Enspiral, en Nueva Zelanda, con una amplia red de amigos, simpatizantes y asesores alrededor del mundo."
+        rushkoff_html: "«Loomio <strong>está piola</strong>».<div class=\"attributation\">(una pirata).</div>"
     ideals:
       community:
-        header: Cooperativa comunitaria
-        desc: "Loomio está diseñado por una cooperativa propiedad de sus trabajadores. Somos una empresa social que trabaja para maximizar un impacto social positivo, sin fines de lucro."
+        header: Presentate
+        desc: "Para poder hablar sobre temas importantes creemos que es necesario conocernos. Un saludo general es un buen comienzo para eso."
       independent:
-        header: Independiente y neutral
-        desc: Tenemos espacio para cualquier grupo que sea independiente de partidos políticos o interés corporativo. Nunca venderemos tu información.
+        header_html: "Leé los <a href=\"http://wiki.partidopirata.com.ar/Declaraci%C3%B3n_de_Principios_Partido_Pirata_Argentino\">Principios Piratas</a>"
+        desc_html: "Para poder tomar decisiones juntas primero debemos aceptar que tenemos valoraciones distintas sobre los aspectos de la vida política (qué es la nación, la sociedad, el trabajo, la familia, la amistad, etc). Para salvar estas diferencias de pensamiento escribimos los <a href=\"http://wiki.partidopirata.com.ar/Declaraci%C3%B3n_de_Principios_Partido_Pirata_Argentino\">Principios Piratas</a>: una serie de ideas generales sobre lo que pensamos que es positivo y perjudicial para una vida feliz en comunidad."
       open:
-        header: Software libre y abierto
-        desc: "El código de Loomio es público y cualquiera puede ejecutarlo, leerlo y aprender de él, modificarlo y redistribuirlo."
+        header_html: "Leé el artículo sobre las <a href=\"http://utopia.partidopirata.com.ar/democracia_directa.html\">Herramientas de Democracia Directa</a>."
+        desc_html: "La herramienta que generalmente nos enseñan para tomar decisiones colectivas es el sufragio, ya sea para votar en elecciones generales, en una asamblea, en una universidad, etc.  Nuestra organización está basada en el consenso, una forma de tomar decisiones distinta a votar. Como consenso no es unanimidad y no se puede medir matemáticamente, nosotras adoptamos la noción de <a href=\"http://wiki.partidopirata.com.ar/DisensoRelevante\">Disenso Relevante</a>.  Este artículo explica la estructura de fondo de nuestra forma de tomar decisiones. "
       gift:
-        header: Economía del regalo
-        desc: Loomio se financia por medio de aquellos que contribuyen de acuerdo a sus recursos. Esto mantiene la plataforma libre de publicidad y accesible a grupos sin recursos financieros.
+        header: "Activá"
+        desc_html: "Una organización horizontal se basa en la premisa de que el poder de decisión está distribuido por igual entre sus miembros. Esto implica que la organización existe mientras las personas se involucren activamente y hagan cosas. Uno de los principios que adoptamos para hacer cosas es la <a href=\"http://wiki.partidopirata.com.ar/Adhocracia\">adhocracia</a>: cada pirata es responsable de sus propias propuestas y de realizarlas junto a otras piratas. Podés participar uniendote a debates y propuestas en curso o proponiendo cosas nuevas."
