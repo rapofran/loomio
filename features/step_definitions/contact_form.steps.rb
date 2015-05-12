@@ -22,9 +22,9 @@ Then(/^I should see a thank you flash message$/) do
   page.should have_content("Thanks! Someone from our team will get back to you shortly!")
 end
 
-Then(/^an email should be sent to @incoming\.intercom\.io$/) do
+Then(/^an email should be sent to contact email$/) do
   @last_email = ActionMailer::Base.deliveries.last
-  @last_email.to.should include "@incoming.intercom.io"
+  @last_email.to.should include ENV['CONTACT_EMAIL']
 end
 
 Then(/^the message should be saved to the database$/) do

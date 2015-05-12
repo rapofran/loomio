@@ -9,6 +9,10 @@ Hostname of the loomio instance. For us it's "www.loomio.org"
 # DEFAULT_SUBDOMAIN
 Groups can have subdomains rather than paths to locate them. ie: plainka.loomio.org rather than www.loomio.org/g/2423d23/palinka. Default subdomain is usually "www".
 
+# CONTACT_EMAIL
+
+Where should contact form emails go.
+
 # DELAY_FAYE
 When sending messages to the FAYE websocket server, use delayed job. This is a dumb hack incase the websocket server is down, so that that error does not break the user experience.
 
@@ -58,9 +62,6 @@ FB_APP_ID_META
 ## Stats / Diagnostics
 AIRBRAKE_API_KEY
 HEAP_APP_ID
-INTERCOM_APP_API_KEY
-INTERCOM_APP_ID
-INTERCOM_APP_SECRET
 METRICS_LISTENER_URL
 METRICS_NAMESPACE
 NEW_RELIC_APP_NAME

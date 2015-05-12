@@ -1,5 +1,5 @@
 class ContactMessageMailer < BaseMailer
-  default :to => "#{ENV["INTERCOM_APP_ID"]}@incoming.intercom.io"
+  default :to => ENV['CONTACT_EMAIL']
   def contact_message_email(contact_message)
     @email = contact_message.email
     @name = contact_message.name
