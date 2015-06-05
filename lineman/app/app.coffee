@@ -9,7 +9,7 @@ angular.module('loomioApp', ['ngNewRouter',
                              'ngAnimate',
                              'angular-inview',
                              'ui.gravatar',
-                             'truncate', 'duScroll']).config ($httpProvider, $locationProvider, $translateProvider, $componentLoaderProvider) ->
+                             'truncate', 'duScroll']).config ($httpProvider, $locationProvider, $translateProvider) ->
 
   # consume the csrf token from the page so form submissions can work
   authToken = $("meta[name=\"csrf-token\"]").attr("content")
@@ -21,16 +21,12 @@ angular.module('loomioApp', ['ngNewRouter',
     useUrlLoader('/api/v1/translations/en').
     preferredLanguage('en')
 
-  $componentLoaderProvider.setTemplateMapping (name) ->
-    snakeName = _.snakeCase(name);
-    'generated/components/' + snakeName + '/' + snakeName + '.html';
-
-angular.module('loomioApp').controller 'AppController', ($scope, $filter, $rootScope, $router, KeyEventService) ->
+angular.module('loomioApp').controller 'AppController', ($scope, $filter, $rootScope, $router, KeyEventService, ScrollService) ->
   $scope.currentComponent = 'nothing yet'
 
-  $scope.$on 'currentComponent', ->
+  $scope.$on 'currentComponent', (event, options = {}) ->
     $scope.pageError = null
-    angular.element(document.querySelector('.main-container'))
+    ScrollService.scrollTo(options['scrollTo'] or 'h1:first')
 
   $scope.$on 'setTitle', (event, title) ->
     angular.element.find('title')[0].text = _.trunc(title, 300) + ' | Loomio'

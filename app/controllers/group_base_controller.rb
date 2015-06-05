@@ -1,6 +1,12 @@
 class GroupBaseController < BaseController
 
   protected
+  def track_visit
+    if user_signed_in?
+      ahoy.track_visit
+      VisitService.record(visit: current_visit, group: @group, user: current_user)
+    end
+  end
 
   def build_discussion_index_caches
     @current_motion_ids = @discussions.map(&:current_motion).compact.map(&:id)
