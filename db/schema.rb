@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 20150523050704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "resource_id",   limit: 255, null: false
@@ -140,7 +139,6 @@ ActiveRecord::Schema.define(version: 20150523050704) do
   end
 
   add_index "comments", ["created_at"], name: "index_comments_on_created_at", using: :btree
-  add_index "comments", ["discussion_id"], name: "index_comments_on_commentable_id", using: :btree
   add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
@@ -207,8 +205,8 @@ ActiveRecord::Schema.define(version: 20150523050704) do
     t.boolean  "starred",                  default: false, null: false
   end
 
-  add_index "discussion_readers", ["discussion_id"], name: "index_motion_read_logs_on_discussion_id", using: :btree
-  add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_readers_on_user_id_and_discussion_id", unique: true, using: :btree
+  add_index "discussion_readers", ["discussion_id"], name: "index_discussion_readers_on_discussion_id", using: :btree
+  add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_readers_on_user_id_and_discussion_id", using: :btree
   add_index "discussion_readers", ["user_id"], name: "index_motion_read_logs_on_user_id", using: :btree
 
   create_table "discussion_search_vectors", force: :cascade do |t|
@@ -371,6 +369,7 @@ ActiveRecord::Schema.define(version: 20150523050704) do
     t.boolean  "hide_members",                                   default: false
     t.text     "description"
     t.datetime "archived_at"
+    t.integer  "memberships_count",                              default: 0,              null: false
     t.integer  "max_size",                                       default: 100,            null: false
     t.boolean  "cannot_contribute",                              default: false
     t.integer  "distribution_metric"
@@ -473,8 +472,8 @@ ActiveRecord::Schema.define(version: 20150523050704) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "inviter_id"
-    t.datetime "archived_at"
     t.integer  "inbox_position", default: 0
+    t.datetime "archived_at"
     t.boolean  "admin",          default: false, null: false
     t.boolean  "is_suspended",   default: false, null: false
     t.integer  "volume",         default: 2,     null: false
@@ -656,7 +655,7 @@ ActiveRecord::Schema.define(version: 20150523050704) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                            limit: 255, default: "",         null: false
-    t.string   "encrypted_password",               limit: 128, default: ""
+    t.string   "encrypted_password",               limit: 255, default: ""
     t.string   "reset_password_token",             limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -669,12 +668,12 @@ ActiveRecord::Schema.define(version: 20150523050704) do
     t.datetime "updated_at"
     t.string   "name",                             limit: 255
     t.datetime "deactivated_at"
-    t.boolean  "is_admin",                                     default: false
     t.string   "avatar_kind",                      limit: 255, default: "initials", null: false
     t.string   "uploaded_avatar_file_name",        limit: 255
     t.string   "uploaded_avatar_content_type",     limit: 255
     t.integer  "uploaded_avatar_file_size"
     t.datetime "uploaded_avatar_updated_at"
+    t.boolean  "is_admin",                                     default: false
     t.string   "avatar_initials",                  limit: 255
     t.string   "username",                         limit: 255
     t.boolean  "email_when_proposal_closing_soon",             default: false,      null: false
