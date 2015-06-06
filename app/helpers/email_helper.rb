@@ -4,7 +4,7 @@ module EmailHelper
     {d: discussion.id, u: user.id, k: user.email_api_key}.each do |key, value|
       pairs << "#{key}=#{value}"
     end
-    pairs.join('&')+"@#{ENV['REPLY_HOSTNAME']}"
+    "loomio+#{pairs.join('&')}@#{ENV['REPLY_HOSTNAME']}"
   end
 
   def reply_to_address_with_group_name(discussion: , user: )
