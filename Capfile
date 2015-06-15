@@ -7,8 +7,8 @@ require 'capistrano/deploy'
 # Includes tasks from other gems included in your Gemfile
 require 'capistrano/rails'
 require 'capistrano/passenger'
-require 'capistrano/rbenv'
 require 'capistrano/delayed-job'
+require 'capistrano/rbenv'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }

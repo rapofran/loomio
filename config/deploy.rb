@@ -10,9 +10,10 @@ set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rben
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 set :rbenv_roles, :all # default value
 
-after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
+  desc "Reiniciar delayed jobs"
   task :restart do
     invoke 'delayed_job:restart'
   end
 end
+after 'deploy:publishing', 'deploy:restart'
