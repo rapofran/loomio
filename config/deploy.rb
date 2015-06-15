@@ -1,7 +1,7 @@
 set :application, 'loomio'
 set :repo_url, 'https://github.com/piratas-ar/loomio'
 set :linked_files, %w{.env}
-set :linked_dirs, %w{public/system}
+set :linked_dirs, %w{public/system log tmp/pids}
 
 set :rbenv_type, :user
 set :rbenv_ruby, '2.2.1'
