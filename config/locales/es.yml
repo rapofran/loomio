@@ -3,7 +3,7 @@ es:
     title: Configuración de correo electrónico
     group_volume: Volumen de los barcos
     group_volume_description: "El Volumen controla cuanto correo electrónico recibes de un barco. Configura el Volumen de todos tus barcos a la vez:"
-    to_change_one_group: "Para cambiar el volumen de solo uno de tus barco, visita la pagina del mismo."
+    to_change_one_group: "Para cambiar el volumen de solo uno de tus barco, visita la página del mismo."
     discussion_activity: Cambiar el volumen de las discusiones cuando participo.
     discussion_activity_description: "Cuando participas en una discusión, la configuración de volumen sera cambiada a \"Alto\", toda actividad futura te será enviada por correo electrónico. "
     yesterday_on_loomio: Recibir un resumen de la actividad de cada día
@@ -48,10 +48,10 @@ es:
       sign_up: Crear cuenta
   error:
     access_denied: No tienes permisos para hacer esto.
-    cant_join_subgroup: No puedes unirte a un subbarco si no eres miembro del barco superior.
+    cant_join_subgroup: No puedes unirte a un subbarco si no eres pirata del barco superior.
     cant_modify_position: Esta propuesta está cerrada.
     cant_state_position: Esta propuesta está cerrada.
-    cant_view_member_profile: No puedes ver el perfil de este miembro porque no perteneces al mismo barco.
+    cant_view_member_profile: No puedes ver el perfil de este pirata porque no perteneces al mismo barco.
     contribution: Inicia sesión para hacer una contribución.
     discussion_not_created: No se pudo crear la discusión.
     discussion_not_moved: "No tienes permisos para trasladar esta discusión a %{destination_group.name}"
@@ -64,7 +64,7 @@ es:
     motion_outcome_not_updated: No es posible actualizar la discusión.
     only_group_coordinator_destroy: "No puedes irte de este barco porque eres el único coordinador. Puedes desactivar tu barco en el panel desplegable de opciones o <a href='%{add_coordinator}'>añadir un nuevo coordinador</a> al barco."
     only_group_coordinator_remove_admin: "El barco debe tener un coordinador. ¿Te gustaría añadir a otro coordinador al barco? "
-    permission_to_invite: No tienes permiso para invitar a nuevos miembros.
+    permission_to_invite: No tienes permiso para invitar a nuevos piratas.
     position_not_updated: Su posición no ha sido actualizada.
     settings_not_updated: Tus ajustes no han sido modificados.
     group_request_already_accepted: "¡Lo siento! Esta invitación no es válida o ya ha sido aceptada."
@@ -73,9 +73,9 @@ es:
     group_already_setup: El barco que estás tratando de configurar ya existe.
     passwords_did_not_match: Las contraseñas no coinciden
     proposal_already_exists: Ya existe una propuesta abierta en esta discusión.
-    user_with_email_address_already_in_group: Un usuario con ese correo electrónico ya es miembro de este barco.
+    user_with_email_address_already_in_group: Un usuario con ese correo electrónico ya es pirata de este barco.
     you_have_already_requested_membership: Ya has solicitado unirte a este barco.
-    you_are_already_a_member_of_this_group: Ya eres miembro de este barco.
+    you_are_already_a_member_of_this_group: Ya eres pirata de este barco.
     not_found: " No ha encontrado el elemento. Pudo haberse eliminado."
   alert:
     duplicate_email: "%{which_email} ya está en el barco."
@@ -84,7 +84,7 @@ es:
     admin_rights_removed: "Los derechos de %{which_user} como coordinador han sido removidos."
     user_added: "%{user_email_or_name} se ha añadido al barco."
     new_user_added: "%{user_email_or_name} se añadirá al barco cuando cree una cuenta en Loomio."
-    member_removed: Miembro eliminado.
+    member_removed: Pirata eliminado.
     membership_approved: Membresía aprobada.
     membership_request_canceled: Solicitud de membresía cancelada.
     membership_request_ignored: Solicitud de membresía ignorada.
@@ -94,11 +94,11 @@ es:
     comment_deleted: Comentario eliminado.
     invitations:
       auto_added:
-        one: 1 miembro añadido
-        other: "%{count} miembros añadidos"
+        one: 1 pirata añadido
+        other: "%{count} piratas añadidos"
       existing_member:
-        one: 1 miembro en este barco
-        other: "%{count} miembros en este barco"
+        one: 1 pirata en este barco
+        other: "%{count} piratas en este barco"
       sent:
         one: 1 invitación enviada
         other: "%{count} invitaciones enviadas"
@@ -122,7 +122,7 @@ es:
     position_not_submitted: Tu posición no pudo enviarse
     proposal_not_created: La propuesta no pudo crearse.
     user_already_admin: "%{which_user} ya es coordinador de este barco."
-    user_already_member: "%{which_user} ya es miembro de este barco."
+    user_already_member: "%{which_user} ya es pirata de este barco."
     user_not_admin: "Lo sentimos, %{which_user} tienes que ser administrador de este barco para acceder."
   success:
     added_to_group: "Te has unido a %{which_group}."
@@ -132,12 +132,12 @@ es:
     discussion_deleted: Discusión eliminada con éxito.
     discussion_moved: "Discusión trasladada con éxito a %{group_name}"
     emails_sending: Enviando correos electrónicos.
-    group_archived: barco archivado con éxito.
-    group_created: barco creado con éxito.
-    members_added: Miembros agregados al barco.
+    group_archived: Barco archivado con éxito.
+    group_created: Barco creado con éxito.
+    members_added: Piratas agregados al barco.
     membership_requested: "Has solicitado unirte a %{which_group}. Se te notificará una vez que tu solicitud haya sido aprobada."
     motion_closed: "Propuesta concluida. Si lo deseas, puedes establecer un resultado abajo y enviarlo a tu barco."
-    motion_outcome_created: "Enhorabuena, has creado un resultado para la propuesta y los miembros del barco han sido notificados."
+    motion_outcome_created: "Enhorabuena, has creado un resultado para la propuesta y los piratas del barco han sido notificados."
     motion_outcome_updated: La decisión ha sido modificada.
     password_updated: Tú contraseña se ha cambiado con éxito.
     position_submitted: Posición enviada
@@ -249,13 +249,13 @@ es:
     message: "<p>Esta es la <strong> página del barco</strong>. A la izquierda se encuentra la lista de todas las discusiones de este barco.</p><p>Cuando quieras que el barco discuta sobre otro tema, empieza una nueva discusión.</p>"
   dashboard_helper_text:
     header: Bienvenido/a a tu página de inicio
-    message: "<p>La página de inicio muestra todas las discusiones actuales de todos los barcos que eres miembro.</p><p>Puedes empezar una discusión haciendo clic en el botón \"Empezar discusión\".</p>"
+    message: "<p>La página de inicio muestra todas las discusiones actuales de todos los barcos que eres pirata.</p><p>Puedes empezar una discusión haciendo clic en el botón \"Empezar discusión\".</p>"
   prompt_visitor_to_authenticate:
     header: Inicia sesión en tu cuenta o únete al barco para participar
-    body: "Si eres miembro de este barco, tendrás que iniciar sesión en tu cuenta para participar"
+    body: "Si eres pirata de este barco, tendrás que iniciar sesión en tu cuenta para participar"
   prompt_user_to_join:
     header: Únete al barco para participar
-    body: "Para comentar o votar, necesitas ser miembro de este barco"
+    body: "Para comentar o votar, necesitas ser pirata de este barco"
   user_profile:
     back: Vuelta a mi perfil
     change_password: Cambia tu contraseña
@@ -269,7 +269,7 @@ es:
       only_coordinator: "Un barco debe tener al menos un coordinador. Tú eres actualmente el único coordinador de los siguientes barcos:"
       instructions: "Con el fin de desactivar su cuenta, es necesario o bien agregar otro coordinador o desactivar los barcos."
       info_title: ¿Qué significa la desactivación de su cuenta?
-      memberships: Usted ya no será listado como miembro en cualquiera de los barcos a los que pertenece actualmente.
+      memberships: Usted ya no será listado como pirata en cualquiera de los barcos a los que pertenece actualmente.
       group_contributions: "Los comentarios, propuestas y debates que ha realizado en los barcos permanecerán, pero vamos a quitar su nombre de estos."
       emails: Dejaremos de mandarte correos relacionados con Loomio.
   start_group_form:
@@ -293,9 +293,9 @@ es:
     category: Categoría
     confirm_all_discussions_will_be_made_private_message: Si continúas las discusiones públicas se harán privadas.
     confirm_all_discussions_will_be_made_public_message: "¿Estás seguro? Si continúas, las discusiones privadas se harán públicas."
-    what_can_members_do: ¿Qué pueden hacer los miembros?
+    what_can_members_do: ¿Qué pueden hacer los piratas?
     members_can:
-      add_members: Invitar y aprobar nuevos miembros
+      add_members: Invitar y aprobar nuevos piratas
       edit_comments: Editar sus comentarios en cualquier momento
       edit_discussions: Editar el contexto de cualquier discusión del barco
       start_discussions: Empezar discusiones
@@ -306,20 +306,20 @@ es:
     visible_to:
       label: ¿Quien puede encontrar este barco?
       public_html: "Cualquiera <span>hacer una lista pública del barco</span>"
-      parent_members_html: "Las personas en %{parent_group_name} <span>no aparecen públicamente en la lista, pero son visibles para los miembros de %{parent_group_name}</span>"
-      members_html: "Solo miembros <span>no hay una lista del barco</span>"
+      parent_members_html: "Las personas en %{parent_group_name} <span>no aparecen públicamente en la lista, pero son visibles para los piratas de %{parent_group_name}</span>"
+      members_html: "Solo piratas <span>no hay una lista del barco</span>"
     membership_granted_upon:
       label: ¿Cómo unirse al barco?
       hidden_parent:
-        request_html: "Abierto <span>a miembros de %{parent_group_name}</span>"
-        approval_html: "Mediante solicitud <span>de miembros de %{parent_group_name}</span>"
+        request_html: "Abierto <span>a piratas de %{parent_group_name}</span>"
+        approval_html: "Mediante solicitud <span>de piratas de %{parent_group_name}</span>"
       request_html: "Simplemente entrando <span>cualquiera puede unirse al barco</span>"
       approval_html: "Mediante solicitud <span>todo el mundo puede solicitar unirse</span>"
-      invitation_html: "Sólo por invitación <span>los nuevos miembros deben ser invitados</span>"
+      invitation_html: "Sólo por invitación <span>los nuevos piratas deben ser invitados</span>"
     parent_members_can_see_discussions:
       label: Privacidad de la discusión
       "true": "Cualquiera en %{parent_group_name} puede ver las discusiones"
-      "false": Solamente los miembros pueden ver las discusiones
+      "false": Solamente los piratas pueden ver las discusiones
     discussion_privacy_options:
       label: ¿Quién puede ver las discusiones?
       hint: Las discusiones públicas pueden ser vistas por cualquiera
@@ -333,8 +333,8 @@ es:
     c1: Cambia la configuración del barco
     c2: Edita el título y el contexto de cualquier discusión.
     c3: Mueve discusiones entre barcos.
-    c4: Invita y aprueba nuevos miembros
-    c5: Envía un email a todos los miembros del barco
+    c4: Invita y aprueba nuevos piratas
+    c5: Envía un email a todos los piratas del barco
     c6: Desactiva un barco.
     c7: Añadir/eliminar otros coordinadores.
     c8: Borrar discusión
@@ -343,7 +343,7 @@ es:
     c11: Empezar discusiones.
     c12: Hacer propuestas.
     c13: Votar en propuestas.
-    members_defaults: "Con los ajustes por defecto, los miembros pueden:"
+    members_defaults: "Con los ajustes por defecto, los piratas pueden:"
     m1: Elimina sus propios comentarios.
     m3: "Edita el título y la descripción de las propuestas que ellos empiezan, hasta que alguien haya determinado su postura."
     m4: "Edita la fecha de cierre de las propuestas, hasta que acaben."
@@ -351,18 +351,18 @@ es:
     m6: "Empieza un subbarco, del que te conviertes en coordinador."
     m7: Editar sus propios comentarios en cualquier momento.
     m8: Hacer propuestas y participar en ellas.
-    optional_restrictions: "Opcionalmente, los coordinadores pueden restringir lo que los miembros pueden hacer."
+    optional_restrictions: "Opcionalmente, los coordinadores pueden restringir lo que los piratas pueden hacer."
   discussion_privacy:
     public: This discussion is public on the web
-    private: Esta discusión es privada para los miembros del barco
+    private: Esta discusión es privada para los piratas del barco
   group_privacy:
     visible_to:
       public: Hay una lista pública del barco.
-      parent_members: "Hay una lista privada del barco. Solo visible para miembros y personas de %{parent_group_name}."
+      parent_members: "Hay una lista privada del barco. Solo visible para piratas y personas de %{parent_group_name}."
       members: Barco oculto. Solo visible para miembros.
       public_html: "Cualquiera <span>hacer una lista pública del barco</span>"
       parent_members_html: "Las personas de %{parent_group_name} <span> no son públicas, pero son visibles para %{parent_group_name}</span>"
-      members_html: "Solo miembros <span>no hay una lista del barco</span>"
+      members_html: "Solo piratas <span>no hay una lista del barco</span>"
   setup_steps_title: "Siguientes pasos:"
   setup_step_1: Echa un vistazo a la discusión de ejemplo
   setup_step_2: " Empieza tu primera discusión"
@@ -372,29 +372,29 @@ es:
   number_pending: "%{pending} pendiente"
   and_number_pending: "y %{pending} pendientes"
   edit_memberships: Editar membresías
-  add_new_member: Adherir Nuevo miembro
-  invite_members_to_group: "Invitar miembros a %{which_group}"
-  email_members_in_group: "Enviar correo electrónico a los miembros de %{which_group}"
+  add_new_member: Adherir Nuevo pirata
+  invite_members_to_group: "Invitar piratas a %{which_group}"
+  email_members_in_group: "Enviar correo electrónico a los piratas de %{which_group}"
   subject_error: Por favor escriba un título
   subject_placeholder: Escriba el título
   message_error: Por favor escriba un mensaje
-  message_placeholder: "Escribe un mensaje a los miembros de %{which_group}."
-  email_group_members: Enviar correo electrónico a los miembros del barco
+  message_placeholder: "Escribe un mensaje a los piratas de %{which_group}."
+  email_group_members: Enviar correo electrónico a los piratas del barco
   edit_group_settings: Editar configuraciones del barco
-  manage_members: Gestionar miembros
+  manage_members: Gestionar piratas
   leave_group: Abandonar barco
   confirm_leave_hidden_group: "¿Seguro que quieres abandonar %{which_group}? También serás removido de todos sus subbarcos."
   confirm_leave_group: "¿Estás seguro de que deseas abandonar el barco %{which_group}?"
   deactivate_group: Desactivar barco
   confirm_deactivate_group: "¡Espera! ¿Estás seguro de que deseas desactivar %{which_group}? Ya no podrás ver el barco. Sin embargo, si cambias de opinión puedes pedirnos que lo reactivemos por ti enviándonos un correo electrónico a contact@loomio.org."
-  invited_users: Miembros invitados
-  members: Miembros
+  invited_users: Piratas invitados
+  members: Piratas
   confirm_remove_user: "¿Estás seguro de que deseas remover del barco a %{which_user}?"
   remove_coordinator: Eliminar coordinador
   confirm_remove_coordinator: "¿Estás seguro de que no quieres que %{which_user} sea ya coordinador de este barco?"
   make_coordinator: Crear coordinador
   confirm_make_coordinator: "¿Estás seguro de que quieres hacer a %{which_user} coordinador de este barco?"
-  confirm_remove_member: ¿Estás seguro que deseas remover a este miembro del barco?
+  confirm_remove_member: ¿Estás seguro que deseas remover a este pirata del barco?
   want_to_invite_html: "¿Quieres <a href='%{link}'> invitar a personas</a> a este barco?"
   membership_requests: Solicitudes de ingreso
   previous_requests: Solicitudes anteriores
@@ -415,9 +415,9 @@ es:
   no_pending_membership_requests: No hay peticiones de membresía pendientes para este barco.
   subgroups: Subbarcos
   create_a_subgroup: Crear un subbarco
-  select_members_to_add: "Seleccionar miembros a adherir a %{which_group}"
-  empty_parent_group: "Por favor, primero adhiera a los miembros del barco superior."
-  invite_members: Invitar a miembros
+  select_members_to_add: "Seleccionar piratas a adherir a %{which_group}"
+  empty_parent_group: "Por favor, primero adhiera a los piratas del barco superior."
+  invite_members: Invitar a piratas
   new_subgroup: Nuevo subbarco
   create_subgroup: Crear subbarco
   creating_subgroup: Creando subbarco
@@ -442,7 +442,7 @@ es:
   networks:
     threads_header: todos los hilos públicos en esta red.
     groups_header: "todos los %{count} barcos en esta red"
-    members_count: "%{count} miembros"
+    members_count: "%{count} piratas"
     membership_requests_header: "Membresías solicitadas para %{network}"
     join_header: Adhiere tu barco a la red
     request_to_join: Solicita unirte a la Red
@@ -533,9 +533,9 @@ es:
       no_public_discussions: No hay discusiones públicas en este barco.
       discussions_are_private: Todas las discusiones en este barco son privadas.
       request_membership_html: "Para ver discusiones privadas, <a href='%{href}'>solicita unirte al barco.</a>"
-      membership_is_invitation_only: Para unirte a este barco necesitas ser invitado por un miembro.
+      membership_is_invitation_only: Para unirte a este barco necesitas ser invitado por un pirata.
       membership_is_invitation_by_admin_only: Para unirte a este barco necesitas ser invitado por un coordinador.
-      log_in_html: "Si eres un miembro, <a href='%{href}'>inicia sesión</a> para ver las discusiones privadas."
+      log_in_html: "Si eres un pirata, <a href='%{href}'>inicia sesión</a> para ver las discusiones privadas."
   discussion_context:
     started_html: "Iniciado hace %{when} por <a href='%{link}' class='%{link_class}'>%{who}</a>"
     last_edited_html: "Última edición hace %{when} por <a href='%{link}' class='%{link_class}'>%{who}</a>"
@@ -579,8 +579,8 @@ es:
   proposal_closing_when: "Cierra en %{when}"
   proposal_closed_when: "Cerró hace %{when}"
   proposed_when_by_who: "Propuesto hace %{when} por %{who}"
-  engagement_on_open_proposal: "%{percent}%% de miembros ha manifestado su posición (%{numerator}/%{denominator})"
-  engagement_on_closed_proposal: "%{percent}%% de miembros ha manifestado su posición (%{numerator}/%{denominator})"
+  engagement_on_open_proposal: "%{percent}%% de piratas ha manifestado su posición (%{numerator}/%{denominator})"
+  engagement_on_closed_proposal: "%{percent}%% de piratas ha manifestado su posición (%{numerator}/%{denominator})"
   state_your_position: Establece tu posición
   positions: Posiciones
   yes_position: Estoy de acuerdo
@@ -591,7 +591,7 @@ es:
   no_details: " Creo que podemos hacerlo mejor, pero si el resto del barco siente que es el mejor curso de acción, entonces yo estoy de acuerdo con que siga adelante."
   block_position: Bloqueo
   block_details: Tengo fuertes objeciones a esta propuesta y no estoy de acuerdo con que siga adelante.
-  not_voted: "[Mostrar los miembros que aun no han decidido]"
+  not_voted: "[Mostrar los piratas que aun no han decidido]"
   outcome_placeholder: ¿Cuál fue el resultado de esta propuesta?
   outcome_submit: Publicar resultado
   position_verbs:
@@ -628,7 +628,7 @@ es:
     have_a_discussion_description: El tema y cualquier otra información relevante se sitúan en la parte superior de la página. Utiliza el cuadro de comentario para agregar tu voz a dicha discusión.
     help: Ayuda
     how_it_works: Cómo funciona
-    invitation_html: "<h2>Redactar una buena invitación</h2>\n<p>La primera pregunta que todo nuevo miembro se hará es «¿A qué se dedica este barco?»</p>\n<p>Piensa en la forma más sencilla con la puedas describir al barco: ¿Qué queréis conseguir juntos? ¿Qué tipo de decisiones tomaréis? ¿Quiénes estarán involucrados?</p>\n<p>Podría ser buena idea hablar primero con tu barco, antes de invitarles a Loomio.</p>\n<p>Las personas querrán saber por qué han sido invitadas, qué se espera de ellas,\ny por qué merece su tiempo aprender a usar una nueva herramienta.</p>\n"
+    invitation_html: "<h2>Redactar una buena invitación</h2>\n<p>La primera pregunta que todo nuevo pirata se hará es «¿A qué se dedica este barco?»</p>\n<p>Piensa en la forma más sencilla con la puedas describir al barco: ¿Qué queréis conseguir juntos? ¿Qué tipo de decisiones tomaréis? ¿Quiénes estarán involucrados?</p>\n<p>Podría ser buena idea hablar primero con tu barco, antes de invitarles a Loomio.</p>\n<p>Las personas querrán saber por qué han sido invitadas, qué se espera de ellas,\ny por qué merece su tiempo aprender a usar una nueva herramienta.</p>\n"
     join_the_community: Únete a la comunidad
     join_the_community_description_html: "Todos son bienvenidos en \"Loomio Community\", donde hablamos de cómo aprovechar la herramienta al máximo y de cómo mejorarla.<br /><br /><a href='https://www.loomio.org/groups/3'>Pulsa aquí para ir al barco \"Loomio Community\" group</a>, donde puedes solicitar membresía."
     images_and_text_formatting: Imagenes y formato de texto
@@ -662,7 +662,7 @@ es:
     header: Precio
     loomio_for_organisations: "Loomio para organizaciones "
     loomio_for_communities: "Loomio para comunidades "
-    communities_deal: "El dinero nunca sera una barrera para personas usando Loomio para hacer mejoras en sus comunidades. Si tu barco no tiene presupuesto para pagar el software, no tienes que pagar la suscripción. Sin embrago, les pediremos ocasionalmente, a los miembros de tu barco una donación voluntaria."
+    communities_deal: "El dinero nunca sera una barrera para personas usando Loomio para hacer mejoras en sus comunidades. Si tu barco no tiene presupuesto para pagar el software, no tienes que pagar la suscripción. Sin embrago, les pediremos ocasionalmente, a los piratas de tu barco una donación voluntaria."
   contribution:
     any_amount: "Cualquier contribución única "
     currency_desc: La suma está en dólares americanos
@@ -732,11 +732,11 @@ es:
     invite_people: Invitar a personas
     invite_to_discussion: Invitar a esta discusión
     invite_to_discussion_info: "Al añadir a personas a esta discusión se les enviará una invitación a tu barco. Cuando la acepten, serán dirigidas a esta discusión."
-    select_members: "Adherir miembros de %{group_name}"
+    select_members: "Adherir piratas de %{group_name}"
     body_editable: "¡Hola, ven a tomar decisiones con nosotros! Estamos usando una herramienta para la toma de decisiones colectiva llamada Loomio.\n"
     body_editable_discussion: "¡Hola, ven y únete a la discusión!\n"
     message_body: Mensaje de invitación
-    invites_more_help2: "<p>Puedes invitar a personas a tu barco en cualquier momento.</p><p>Podrías invitar a todos los miembros del barco de una sola vez, o puedes empezar invitando solo a los que trabajan contigo diariamente.</p>"
+    invites_more_help2: "<p>Puedes invitar a personas a tu barco en cualquier momento.</p><p>Podrías invitar a todos los piratas del barco de una sola vez, o puedes empezar invitando solo a los que trabajan contigo diariamente.</p>"
     invitation_link: Enlace a la invitación
     discussion_link: "Participa en la discusión:"
     link_help: "Haz clic en este enlace para unirte a %{group} en loomio:"
@@ -777,9 +777,9 @@ es:
     edit:
       header: "Editar discusión "
     privacy:
-      will_be_private: La discusión sólo estará visible para miembros del barco
-      will_be_private_to_group: "La discusión sólo estará visible para miembros de %{group_name}."
-      will_be_private_to_parent_group: "La discusión estará visible para miembros de %{parent_group_name} y miembros de %{group_name}."
+      will_be_private: La discusión sólo estará visible para piratas del barco
+      will_be_private_to_group: "La discusión sólo estará visible para piratas de %{group_name}."
+      will_be_private_to_parent_group: "La discusión estará visible para piratas de %{parent_group_name} y piratas de %{group_name}."
       will_be_public: Cualquiera puede ver la discusión.
   motion_history:
     title: Proponer cambios
