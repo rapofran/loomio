@@ -15,22 +15,19 @@ angular.module('loomioApp').factory 'BaseRecordsInterface', (RestfulClient, $q) 
         console.log('request failure!', response)
         throw response
 
-    initialize: (data = {}) ->
-      @baseInitialize(data)
+    build: (data = {}) ->
+      new @model @, data
 
-    baseInitialize: (data = {}) ->
-      if data.key?
-        existingRecord = @find(data.key)
-      else if data.id?
-        existingRecord = @find(data.id)
+    import: (data = {}) ->
+      @baseImport(data)
 
-      if existingRecord? and existingRecord != null
-        existingRecord.updateFromJSON(data)
-        existingRecord
+    baseImport: (data = {}) ->
+      if record = @find(data.key or data.id)
+        record.updateFromJSON(data)
       else
-        record = new @model(@, data)
-        @collection.insert(record)
-        record
+        @collection.insert(record = @build(data))
+
+      record
 
     findOrFetchByKey: (key) ->
       deferred = $q.defer()

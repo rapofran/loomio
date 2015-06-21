@@ -9,9 +9,6 @@ angular.module('loomioApp').directive 'proposalsCard', ->
     Records.proposals.fetchByDiscussion @discussion
     Records.votes.fetchMyVotesByDiscussion @discussion
 
-    @openForm = ->
-      ProposalFormService.openStartProposalModal(@discussion)
-
     @isExpanded = (proposal) ->
       if @selectedProposal?
         proposal.id == @selectedProposal.id
@@ -22,5 +19,6 @@ angular.module('loomioApp').directive 'proposalsCard', ->
       @selectedProposal = proposal
 
     @canStartProposal = =>
-      !@discussion.hasActiveProposal() and CurrentUser.canStartProposals(@discussion)
+      AbilityService.canStartProposal(@discussion)
+
     return

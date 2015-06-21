@@ -1,4 +1,4 @@
-angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $routeParams, $document, $timeout, Records, MessageChannelService, CurrentUser, ScrollService, ModalService, GroupWelcomeModal) ->
+angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $routeParams, Records, CurrentUser, ScrollService, ModalService, MessageChannelService, GroupWelcomeModal, AbilityService) ->
   $rootScope.$broadcast 'currentComponent', {page: 'groupPage'}
 
   $rootScope.$on 'newGroupCreated', ->
@@ -6,9 +6,10 @@ angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $rout
 
   Records.groups.findOrFetchByKey($routeParams.key).then (group) =>
     @group = group
-    $rootScope.$broadcast('setTitle', @group.fullName())
+    $rootScope.$broadcast 'currentComponent', { page: 'groupPage' }
+    $rootScope.$broadcast 'viewingGroup', @group
+    $rootScope.$broadcast 'setTitle', @group.fullName()
     MessageChannelService.subscribeTo("/group-#{@group.key}")
-    ScrollService.scrollTo('h1:first')
   , (error) ->
     $rootScope.$broadcast('pageError', error)
 
@@ -16,11 +17,11 @@ angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $rout
     CurrentUser.membershipFor(@group)?
 
   @joinGroup = ->
-    Records.memberships.initialize(
+    Records.memberships.build(
       group_id: @group.id
       user_id: CurrentUser.id).save()
 
   @showDescriptionPlaceholder = ->
-    CurrentUser.isAdminOf(@group) and !@group.description
+    AbilityService.canAdministerGroup(@group) and !@group.description
   
   return

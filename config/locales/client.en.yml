@@ -7,6 +7,7 @@ en:
     closed_ago: 'Closed {{time}}'
     volume: 'Volume'
     notification_volume: 'Notification Volume'
+    group: 'Group'
     groups: 'Groups'
     privacy:
       private: 'Private'
@@ -19,6 +20,8 @@ en:
       thisweek: 'This Week'
       thismonth: 'This Month'
       older: 'Older'
+    models:
+      proposal: 'Proposal'
     action:
       save: 'Save'
       save_changes: 'Save changes'
@@ -39,10 +42,7 @@ en:
 
   start_proposal_card:
     title: 'Start a proposal'
-    cta: Ready to make a decision? Start a proposal.
-
-  current_proposal_card:
-    heading: Proposal
+    helptext: Ready to make a decision? Proposals let you see how everyone feels about a particular course of action.
 
   proposal_outcome_panel:
     heading: Outcome
@@ -126,6 +126,7 @@ en:
 
   start_menu:
     start_group: 'Start Group'
+    start_subgroup: 'Start Subgroup'
     start_thread: 'Start Thread'
     invite_people: 'Invite People'
 
@@ -323,6 +324,36 @@ en:
       private: 'This group is only visible to members'
       parent_members: 'This group is visible to members of {{parentGroupName}} and members of {{groupName}}'
       public: 'This group is visible on the web'
+    edit_group:
+      title: 'Edit Group Settings'
+      privacy:
+        label: 'Privacy'
+        visible_to_members: 'Who can find this group?'
+        public_visibility: 'Anyone - list the group publicly'
+        organisation_visibility: "Organisation - unlisted to the public, but visible to members of {{parentGroupName}}"
+        private_visibility: 'Members only - the group will not be listed'
+        membership_granted_upon: 'How do people join?'
+        membership_by_request: 'Open - anyone can join the group'
+        membership_by_request_subgroup: 'Open to members of {{parentGroupName}}'
+        membership_by_approval: 'By request - anyone can request to join'
+        membership_by_approval_subgroup: 'By request from members of {{parentGroupName}}'
+        membership_by_invitation: 'Invitation only - new members must be invited'
+        discussion_privacy_options: 'Who can view threads?'
+        public_discussions: 'Public threads only'
+        public_discussions_subgroup: 'Anyone in {{parentGroupName}} can see discussions'
+        public_or_private_discussions: 'Allow public and private threads'
+        private_discussions: 'Only members can see discussions'
+      permissions:
+        label: 'Permissions'
+        helptext: 'What can members do?'
+        members_can_add_members: 'Invite and approve new members'
+        members_can_create_subgroups: 'Create subgroups'
+        members_can_start_discussions: 'Start threads'
+        members_can_edit_discussions: 'Edit the title and context of any thread'
+        members_can_edit_comments: 'Edit their comments at any time'
+        members_can_raise_motions: 'Start proposals'
+        members_can_vote: 'Vote on proposals'
+      submit:  'Update Settings'
 
   group_form:
     messages:
@@ -337,35 +368,6 @@ en:
     description_label: 'Description'
     description_placeholder: 'Describe your group'
     category_label: 'Category'
-    privacy:
-      label: 'Privacy'
-      visible_to_members: 'Who can find this group?'
-      public_visibility: 'Anyone - list the group publicly'
-      organisation_visibility: "Organisation - unlisted to the public, but visible to members of {{parentGroupName}}"
-      private_visibility: 'Members only - the group will not be listed'
-      membership_granted_upon: 'How do people join?'
-      membership_by_request: 'Open - anyone can join the group'
-      membership_by_request_subgroup: 'Open to members of {{parentGroupName}}'
-      membership_by_approval: 'By request - anyone can request to join'
-      membership_by_approval_subgroup: 'By request from members of {{parentGroupName}}'
-      membership_by_invitation: 'Invitation only - new members must be invited'
-      discussion_privacy_options: 'Who can view threads?'
-      public_discussions: 'Public threads only'
-      public_discussions_subgroup: 'Anyone in {{parentGroupName}} can see discussions'
-      public_or_private_discussions: 'Allow public and private threads'
-      private_discussions: 'Only members can see discussions'
-    permissions:
-      label: 'Permissions'
-      helptext: 'What can members do?'
-      members_can_add_members: 'Invite and approve new members'
-      members_can_create_subgroups: 'Create subgroups'
-      members_can_start_discussions: 'Start threads'
-      members_can_edit_discussions: 'Edit the title and context of any thread'
-      members_can_edit_comments: 'Edit their comments at any time'
-      members_can_raise_motions: 'Start proposals'
-      members_can_vote: 'Vote on proposals'
-    edit_group_submit:  'Update Settings'
-    new_group_submit: 'Create Group'
 
   invitation:
     invite_people: 'Invite People'
@@ -373,10 +375,11 @@ en:
     import_contacts_header: 'Connect your address book'
     import_contacts_message: 'Inviting people to Loomio is much easier if you import your contacts from Google.'
     import_contacts: 'Import contacts'
-    instructions: 'Type names or email addresses for people you want to invite'
+    instructions: 'Enter names or email addresses'
     invitation_message: 'Invitation Message'
-    send_invite: 'Send invites'
-    to: 'to'
+    send_invite: 'Send {{count}} invites'
+    to: 'to: '
+    default_message: "Hey there, come make decisions with us! We're using a collaborative decision-making tool called Loomio"
 
   memberships_page:
     members: 'Members'
@@ -390,7 +393,16 @@ en:
     see_more_members: 'See more members'
 
   profile_page:
-    my_groups: Groups
+    messages:
+      updated: 'Profile updated'
+    profile: 'Profile'
+    edit_profile: 'Edit Profile'
+    picture_label: 'Picture'
+    name_label: 'Name'
+    username_label: 'Username'
+    email_label: 'Email'
+    locale_label: 'Language'
+    update_profile: 'Update profile'
 
   dashboard_page:
     aria_label: 'Dashboard'

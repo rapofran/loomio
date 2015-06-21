@@ -1,9 +1,14 @@
 Loomio::Application.routes.draw do
 
-  scope '/angular_support', controller: 'angular_support', path: 'angular_support', as: 'angular_support' do
+  namespace :development do
+    get 'send_email'
+    get 'last_email'
+    get 'setup_group'
+    get 'setup_group_for_invitations'
     get 'setup_discussion'
     get 'setup_discussion_with_comment'
     get 'setup_proposal'
+    get 'setup_proposal_with_vote'
     get 'setup_closed_proposal'
     get 'setup_closed_proposal_with_outcome'
     get 'setup_all_notifications'
@@ -21,6 +26,7 @@ Loomio::Application.routes.draw do
   namespace :admin do
     get 'url_info' => 'base#url_info'
     namespace :stats do
+      get :bad_analytics
       get :group_activity
       get :daily_activity
       get :first_30_days
@@ -46,11 +52,14 @@ Loomio::Application.routes.draw do
     resources :memberships, only: [:index, :create, :update, :destroy] do
       get :autocomplete, on: :collection
       get :my_memberships, on: :collection
+      get :invitables, on: :collection
       patch :make_admin, on: :member
       patch :remove_admin, on: :member
     end
-    resources :invitables, only: :index
     resources :invitations, only: :create
+    resources :users, only: [] do
+      post :update_profile, on: :collection
+    end
     resources :events, only: :index
 
     resources :discussions, only: [:show, :index, :create, :update, :destroy] do
@@ -83,6 +92,10 @@ Loomio::Application.routes.draw do
       post :viewed, on: :collection
     end
 
+    resources :contacts, only: :index do
+      get :import, on: :collection
+    end
+
     resources :search_results, only: :index
 
     resources :contact_messages, only: :create
@@ -99,7 +112,6 @@ Loomio::Application.routes.draw do
       resources :sessions, only: [:create, :destroy]
     end
     get '/attachments/credentials',      to: 'attachments#credentials'
-    get  '/contacts/import',             to: 'contacts#import'
     get  '/contacts/:importer/callback', to: 'contacts#callback'
   end
 

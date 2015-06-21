@@ -4,14 +4,12 @@ angular.module('loomioApp').factory 'CommentModel', (BaseModel) ->
     @plural: 'comments'
     @indices: ['id', 'discussionId', 'authorId']
 
+    defaultValues: ->
+      uses_markdown: true
+      body: ''
+
     initialize: (data) ->
-      @updateFromJSON(data)
-
-      if data.body?
-        @body = data.body
-      else
-        @body = ''
-
+      @baseInitialize(data)
       @newAttachmentIds = []
 
     serialize: ->
@@ -21,9 +19,6 @@ angular.module('loomioApp').factory 'CommentModel', (BaseModel) ->
 
     group: ->
       @discussion().group()
-
-    canBeEditedByAuthor: ->
-      @group().membersCanEditComments or @isMostRecent()
 
     isMostRecent: ->
       _.last(@discussion().comments()) == @
