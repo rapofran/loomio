@@ -281,16 +281,10 @@ es:
     name_error: Se requiere el nombre.
     email: "Tu correo electrónico "
     email_error: No es una dirección de correo electrónico valida.
-<<<<<<< HEAD
     group_name: Nombre del barco
     group_name_error: "Se requiere el nombre del barco. "
-    terms_html: "Al empiezas un barco, aceptas los <a href='%{link}' target='_blank'>términos de servicio</a> de Loomio."
-=======
-    group_name: Nombre del grupo
-    group_name_error: "Se requiere el nombre del grupo. "
     pricing_html: "En 30 días, cuando hayas visto cómo Loomio mejora la forma de organizarse de tu grupo, te pediremos que elijas la <a href='%{link}' target='_blank'>forma de pago</a> que consideres oportuna."
-    terms_html: "Al empiezas un grupo, aceptas los <a href='%{link}' target='_blank'>términos de servicio</a> de Loomio."
->>>>>>> master
+    terms_html: "Al empiezas un barco, aceptas los <a href='%{link}' target='_blank'>términos de servicio</a> de Loomio."
     success:
       header: "¡Ya casi has terminado! Revisa tu correo electrónico. "
       email_delivered: "Hemos enviado un correo electrónico a %{email}. Por favor sigue el link que hay dentro para configurar tu barco"
@@ -592,14 +586,9 @@ es:
   proposal_closing_when: "Cierra en %{when}"
   proposal_closed_when: "Cerró hace %{when}"
   proposed_when_by_who: "Propuesto hace %{when} por %{who}"
-<<<<<<< HEAD
+  proposed_by_who_on: "Propuesto por: %{who}, %{when}"
   engagement_on_open_proposal: "%{percent}%% de piratas ha manifestado su posición (%{numerator}/%{denominator})"
   engagement_on_closed_proposal: "%{percent}%% de piratas ha manifestado su posición (%{numerator}/%{denominator})"
-=======
-  proposed_by_who_on: "Propuesto por: %{who}, %{when}"
-  engagement_on_open_proposal: "%{percent}%% de miembros ha manifestado su posición (%{numerator}/%{denominator})"
-  engagement_on_closed_proposal: "%{percent}%% de miembros ha manifestado su posición (%{numerator}/%{denominator})"
->>>>>>> master
   state_your_position: Establece tu posición
   positions: Posiciones
   yes_position: Estoy de acuerdo
