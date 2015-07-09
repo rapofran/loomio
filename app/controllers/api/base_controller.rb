@@ -1,7 +1,7 @@
 class API::BaseController < ActionController::Base
   include CurrentUserHelper
   include ::ProtectedFromForgery
-  before_filter :require_authenticated_user
+  before_filter :require_authenticated_user, except: :index
 
   after_filter :increment_measurement
 

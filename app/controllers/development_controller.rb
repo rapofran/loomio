@@ -59,6 +59,13 @@ class DevelopmentController < ApplicationController
     redirect_to discussion_url(test_discussion)
   end
 
+  def setup_proposal_closing_soon
+    cleanup_database
+    sign_in patrick
+    test_proposal.update_attribute(:closing_at, 6.hours.from_now)
+    redirect_to discussion_url(test_discussion)
+  end
+
   def setup_closed_proposal_with_outcome
     cleanup_database
     sign_in patrick
@@ -67,6 +74,18 @@ class DevelopmentController < ApplicationController
                                  params: {outcome: 'Were going hiking tomorrow'},
                                  actor: patrick)
     redirect_to discussion_url(test_discussion)
+  end
+
+  def setup_membership_requests
+    cleanup_database
+    sign_in patrick
+    test_group
+    another_test_group
+    10.times do
+      membership_request_from_logged_out
+    end
+    membership_request_from_user
+    redirect_to group_url(test_group)
   end
 
   def setup_all_notifications
@@ -128,7 +147,7 @@ class DevelopmentController < ApplicationController
 
   def patrick
     @patrick ||= User.create!(name: 'Patrick Swayze',
-                              email: 'patrick_swayze@loomio.org',
+                              email: 'patrick_swayze@example.com',
                               username: 'patrickswayze',
                               password: 'gh0stmovie',
                               angular_ui_enabled: true)
@@ -137,14 +156,14 @@ class DevelopmentController < ApplicationController
   def patricks_contact
     if patrick.contacts.empty?
       patrick.contacts.create(name: 'Keanu Reeves',
-                              email: 'keanu@loomio.org',
+                              email: 'keanu@example.com',
                               source: 'gmail')
     end
   end
 
   def jennifer
     @jennifer ||= User.create!(name: 'Jennifer Grey',
-                               email: 'jennifer_grey@loomio.org',
+                               email: 'jennifer_grey@example.com',
                                username: 'jennifergrey',
                                password: 'gh0stmovie',
                                angular_ui_enabled: true)
@@ -152,10 +171,17 @@ class DevelopmentController < ApplicationController
 
   def max
     @max ||= User.create!(name: 'Max Von Sydow',
-                          email: 'max@loomio.org',
+                          email: 'max@example.com',
                           password: 'gh0stmovie',
                           username: 'mingthemerciless',
                           angular_ui_enabled: true)
+  end
+
+  def emilio
+    @emilio ||= User.create!(name: 'Emilio Estevez',
+                            email: 'emilio@loomio.org',
+                            password: 'gh0stmovie',
+                            angular_ui_enabled: true)
   end
 
   def test_group
@@ -164,8 +190,9 @@ class DevelopmentController < ApplicationController
                                   membership_granted_upon: 'approval',
                                   is_visible_to_public: true,
                                   is_visible_to_parent_members: false)
-      @test_group.add_admin! patrick
+      @test_group.add_admin!  patrick
       @test_group.add_member! jennifer
+      @test_group.add_member! emilio
     end
     @test_group
   end
@@ -188,7 +215,7 @@ class DevelopmentController < ApplicationController
 
   def test_proposal
     unless @test_proposal
-      @test_proposal = Motion.new(name: 'lets go hiking',
+      @test_proposal = Motion.new(name: 'lets go hiking to the moon and never ever ever come back!',
                                 closing_at: 3.days.from_now,
                                 discussion: test_discussion)
       MotionService.create(motion: @test_proposal, actor: jennifer)
@@ -210,6 +237,25 @@ class DevelopmentController < ApplicationController
       VoteService.create(vote: @another_test_vote, actor: jennifer)
     end
     @another_test_vote
+  end
+
+  def membership_request_from_logged_out
+    membership_request = MembershipRequest.new(group: test_group,
+                                               name: Faker::Name.name,
+                                               email: Faker::Internet.email,
+                                               introduction: Faker::Hacker.say_something_smart)
+    MembershipRequestService.create(membership_request: membership_request)
+    membership_request
+  end
+
+  def membership_request_from_user
+    unless @membership_request_from_user
+      @membership_request_from_user = MembershipRequest.new(group: test_group,
+                                                            requestor: max,
+                                                            introduction: "I'd like to make decisions with y'all")
+      MembershipRequestService.create(membership_request: @membership_request_from_user)
+    end
+    @membership_request_from_user
   end
 
   def cleanup_database
