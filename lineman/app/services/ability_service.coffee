@@ -3,7 +3,7 @@ angular.module('loomioApp').factory 'AbilityService', (CurrentUser) ->
     canStartProposal: (thread) ->
       thread and
       !thread.hasActiveProposal() and
-      (@canAdministerGroup(thread.group()) or 
+      (@canAdministerGroup(thread.group()) or
        thread.group().membersCanRaiseProposals)
 
     canEditThread: (thread) ->
@@ -66,5 +66,25 @@ angular.module('loomioApp').factory 'AbilityService', (CurrentUser) ->
       (!membership.admin or membership.group().adminIds().length > 1) and
       (membership.user() == CurrentUser or @canAdministerGroup(membership.group()))
 
+    canDeactivateUser: ->
+     _.all CurrentUser.memberships(), (membership) ->
+       !membership.admin or membership.group().hasMultipleAdmins
+
     canManageMembershipRequests: (group) ->
       (group.membersCanAddMembers and CurrentUser.isMemberOf(group)) or @canAdministerGroup(group)
+
+    canViewGroup: (group) ->
+      group.visibleToPublic() or
+      CurrentUser.isMemberOf(group) or
+      (group.visibleToOrganisation() and CurrentUser.isMemberOf(group.parent()))
+
+    canJoinGroup: (group) ->
+      (group.membershipGrantedUpon == 'request') and
+      @canViewGroup(group) and
+      !CurrentUser.isMemberOf(group)
+
+    canRequestMembership: (group) ->
+      (group.membershipGrantedUpon == 'approval') and
+      @canViewGroup(group) and
+      !CurrentUser.isMemberOf(group) and
+      !group.hasPendingMembershipRequestFrom(CurrentUser)

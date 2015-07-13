@@ -1,20 +1,16 @@
 class ApplicationController < ActionController::Base
   include LocalesHelper
+  include ReadableUnguessableUrlsHelper
   include CurrentUserHelper
   include ApplicationHelper
-  include ReadableUnguessableUrlsHelper
   include ProtectedFromForgery
 
   helper :locales
   helper_method :current_user_or_visitor
   helper_method :dashboard_or_root_path
-  helper_method :subdomain
 
   before_filter :set_application_locale
   around_filter :user_time_zone, if: :user_signed_in?
-
-  after_filter :increment_measurement
-  after_filter :new_relic_insights, if: :using_new_relic?
 
   rescue_from ActionView::MissingTemplate do |exception|
     raise exception unless %w[txt text gif png].include?(params[:format])
@@ -32,26 +28,6 @@ class ApplicationController < ActionController::Base
   protected
   def permitted_params
     @permitted_params ||= PermittedParams.new(params)
-  end
-
-  def using_new_relic?
-    ENV['NEW_RELIC_APP_NAME'].present?
-  end
-
-  def new_relic_insights
-    NewRelic::Agent.add_custom_parameters({:user_id => current_user_or_visitor.id})
-  end
-
-  def subdomain
-    request.subdomain.gsub(/^#{ENV['DEFAULT_SUBDOMAIN']}./, '')
-  end
-
-  def increment_measurement
-    Measurement.increment(measurement_name)
-  end
-
-  def measurement_name
-    "#{controller_name}.#{action_name}"
   end
 
   def dashboard_or_root_path
