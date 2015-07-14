@@ -850,7 +850,7 @@ es:
         description: Detalles
         close_at_date: Cerrando
       user:
-        name: Nombre completo
+        name: Tu nickname (no uses tu nombre real!)
         username: Nombre de usuario
         email: Correo electrónico
         password: Contraseña
