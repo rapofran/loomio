@@ -36,5 +36,32 @@ namespace :lineman do
   end
 end
 
+namespace :faye do
+  desc 'Iniciar faye'
+  task :start do
+    on roles(:web) do
+      within release_path do
+        execute :bundle, 'exec rackup --pid tmp/pids/faye.pid --daemonize private_pub.ru'
+      end
+    end
+  end
+
+  desc 'Detener faye'
+  task :stop do
+    on roles(:web) do
+      within release_path do
+        execute :pkill, '--signal INT --pidfile tmp/pids/faye.pid'
+      end
+    end
+  end
+
+  desc 'Reiniciar faye'
+  task :restart do
+    invoke 'faye:stop'
+    invoke 'faye:start'
+  end
+end
+
 after 'deploy:publishing', 'deploy:restart'
 after 'deploy:publishing', 'lineman:build'
+after 'lineman:build', 'faye:restart'
