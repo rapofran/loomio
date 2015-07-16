@@ -14,6 +14,10 @@ class DevelopmentController < ApplicationController
     "http://localhost:8000/g/#{group.key}/"
   end
 
+  def dashboard_url
+    "http://localhost:8000/dashboard"
+  end
+
   def setup_group
     cleanup_database
     sign_in patrick
@@ -56,6 +60,14 @@ class DevelopmentController < ApplicationController
     cleanup_database
     test_discussion
     sign_in patrick
+    redirect_to discussion_url(test_discussion)
+  end
+
+  def setup_busy_discussion
+    cleanup_database
+    test_discussion
+    sign_in patrick
+    setup_all_notifications_work
     redirect_to discussion_url(test_discussion)
   end
 
@@ -113,10 +125,28 @@ class DevelopmentController < ApplicationController
     redirect_to group_url(test_group)
   end
 
+  def setup_user_email_settings
+    cleanup_database
+    sign_in patrick
+    patrick.update_attributes(email_when_proposal_closing_soon: false,
+                              email_missed_yesterday:           false,
+                              email_when_mentioned:             false,
+                              email_on_participation:           false)
+    redirect_to dashboard_url
+  end
+
   def setup_all_notifications
     cleanup_database
     sign_in patrick
+    setup_all_notifications_work
 
+
+    redirect_to discussion_url(test_discussion)
+  end
+
+  private
+
+  def setup_all_notifications_work
     #'comment_liked'
     comment = Comment.new(discussion: test_discussion, body: 'I\'m rather likeable')
     new_comment_event = CommentService.create(comment: comment, actor: patrick)
@@ -157,11 +187,7 @@ class DevelopmentController < ApplicationController
     another_group = Group.new(name: 'Planets of the 80\'s')
     GroupService.create(group: another_group, actor: jennifer)
     MembershipService.add_users_to_group(users: [patrick], group: another_group, inviter: jennifer, message: 'join in')
-
-    redirect_to discussion_url(test_discussion)
   end
-
-  private
 
   def ensure_testing_environment
     raise "Do not call me." if Rails.env.production?
