@@ -62,6 +62,6 @@ namespace :faye do
   end
 end
 
-after 'deploy:publishing', 'deploy:restart'
 after 'deploy:publishing', 'lineman:build'
+after 'deploy:publishing', 'deploy:restart'
 after 'lineman:build', 'faye:restart'
