@@ -17,7 +17,6 @@
     = theme_javascript_include_tag
     = csrf_meta_tags
     = render 'social_metadata', description: @meta_description, title: @meta_title
-    = render 'google_analytics'
 
   %body{class: "#{controller_name} #{action_name}"}
     = render 'application/header'

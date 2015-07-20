@@ -8,7 +8,6 @@
     = stylesheet_link_tag  "marketing"
     = csrf_meta_tags
     = render 'social_metadata'
-    = render 'google_analytics'
 
   %body{class: "#{controller_name} #{action_name}", dir: language_dir(current_locale)}
     = render 'flash_messages'
