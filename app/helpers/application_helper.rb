@@ -118,12 +118,13 @@ module ApplicationHelper
         :strikethrough       => true,
         :space_after_headers => true,
         :superscript         => true,
-        :underline           => true
+        :underline           => true,
+        :footnotes           => true
       ]
 
       renderer = Redcarpet::Render::HTML.new(
         :filter_html         => true,
-        :hard_wrap           => true,
+        :hard_wrap           => false,
         :link_attributes     => {target: '_blank'}
         )
       markdown = Redcarpet::Markdown.new(renderer, *options)
