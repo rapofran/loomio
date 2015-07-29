@@ -13,6 +13,10 @@
   }else{
     var data = [
       {
+        value: votes.participation,
+        color: "#90D490"
+      },
+      {
         value: votes.yes,
         color: "#90D490"
       },
@@ -27,9 +31,13 @@
       {
         value: votes.block,
         color: "#dd0000"
+      },
+      {
+        value: votes.confusing,
+        color: "#0d0d00"
       }
     ]
   }
-  var options = { showTooltips: false, animation: false }
+  var options = { showTooltips: false, animation: true }
 
   var myPieChart = new Chart(ctx).Pie(data, options);

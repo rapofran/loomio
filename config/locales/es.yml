@@ -600,6 +600,10 @@ es:
   no_details: " Creo que podemos hacerlo mejor, pero si el resto del grupo siente que es el mejor curso de acción, entonces yo estoy de acuerdo con que siga adelante."
   block_position: Bloqueo
   block_details: Tengo fuertes objeciones a esta propuesta y no estoy de acuerdo con que siga adelante.
+  participation_position: Participo
+  participation_details: Estoy de acuerdo con la propuesta y quiero participar activamente en su desarrollo
+  confusing_position: Confusión
+  confusing_details: Esta propuesta es confusa para mí y necesita ser redefinida
   not_voted: "[Mostrar los miembros que aun no han decidido]"
   outcome_placeholder: ¿Cuál fue el resultado de esta propuesta?
   outcome_submit: Publicar resultado
@@ -608,11 +612,15 @@ es:
     "no": en desacuerdo
     abstain: Me abstengo
     block: Bloqueo
+    participation: Participo
+    confusing: Me confunde
     past_tense:
       "yes": Estoy de acuerdo
       "no": No estoy de acuerdo
       abstain: Me abstengo
       block: Bloqueo
+      participation: Participo
+      confusing: Me confundía
   unable_to_vote:
     permission_denied: No tienes permiso para votar en esta propuesta.
     motion_closed: Esta propuesta ya se ha cerrado
