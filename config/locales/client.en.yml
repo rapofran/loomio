@@ -252,6 +252,7 @@ en:
     edit_proposal: 'Edit proposal'
     close_proposal: 'Close proposal'
     votes_count: '{{count}} other votes'
+    closed_badge: Closed
 
 
   proposal_position_yes: 'Agree'
@@ -270,10 +271,15 @@ en:
 
   start_group_form:
     heading: 'Start a group'
+    heading_when_subgroup: 'Start a subgroup'
     group_helptext: 'To start making decisions together on Loomio, set up a group for free:'
     group_payment_reminder: "In 30 days, when you've seen how Loomio improves your group's decision making, we'll ask you to choose the <a href='#'>payment plan</a> that works for you."
     name_label: 'Group Name'
+    subgroup_name_label: 'Subgroup name'
     submit: 'Start Group'
+    messages:
+      success: Group created
+      success_when_subgroup: Subgroup created
 
   join_group_button:
     join_group: Join group
@@ -309,7 +315,7 @@ en:
         parent_members: 'This group is now visible only to members of your organisation'
         public: 'This group is now visible to the public'
       leave_group_success: 'You have left this group'
-      deactivate_group_success: 'Group deactivated'
+      archive_group_success: 'This group has been deactivated'
     group_logo: 'Group logo'
     header:
       aria_label: 'Group page header'

@@ -16,6 +16,18 @@ describe 'Group Page', ->
       expect(groupsHelper.discussionTitle().getText()).toContain('Nobody puts baby in a corner')
       expect(groupsHelper.discussionTitle().getText()).toContain("I've had the time of my life")
 
+  describe 'starting a subgroup', ->
+    beforeEach ->
+      groupsHelper.load()
+
+    it 'successfully starts a subgroup', ->
+      groupsHelper.clickStartSubgroupLink()
+      groupsHelper.fillInSubgroupName('The Breakfast Club')
+      groupsHelper.submitSubgroupForm()
+      expect(flashHelper.flashMessage()).toContain('Subgroup created')
+      expect(groupsHelper.groupName()).toContain('Dirty Dancing Shoes')
+      expect(groupsHelper.groupName()).toContain('The Breakfast Club')
+
   describe 'editing group settings', ->
     beforeEach ->
       groupsHelper.load()
@@ -77,3 +89,14 @@ describe 'Group Page', ->
       groupsHelper.clickLeaveGroupButton()
       groupsHelper.clickAddCoordinatorButton()
       expect(membershipsHelper.membershipsPageHeader().isDisplayed()).toBeTruthy
+
+  describe 'archiving a group', ->
+
+    it 'allows a coordinator to archive a group', ->
+      groupsHelper.load()
+      groupsHelper.openMemberOptionsDropdown()
+      groupsHelper.clickArchiveGroupButton()
+      groupsHelper.confirmArchiveGroup()
+      expect(flashHelper.flashMessage()).toContain('This group has been deactivated')
+      groupsHelper.visitGroupPage()
+      expect(groupsHelper.groupsList().getText()).not.toContain('Dirty Dancing Shoes')
