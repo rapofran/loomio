@@ -14,7 +14,8 @@
         - if TranslationService.can_translate? @discussion
           = translate_link_for @discussion
   .col-sm-3.col-sm-offset-1.right-context
-    %a{type: 'button', class: 'btn btn-left btn-success', href: "#{ENV['COLLABORATIVE_TEXT_URL']}/#{@discussion.key}"}= t 'discussion_context.collaborative_text'
+    - if ENV['COLLABORATIVE_TEXT_URL']
+      %a{type: 'button', class: 'btn btn-left btn-success', href: "#{ENV['COLLABORATIVE_TEXT_URL']}/#{@discussion.key}"}= t 'discussion_context.collaborative_text'
     - if can? :set_volume, @discussion
       - current_volume = @discussion_reader.volume
       .btn-group.dropdown.volume-dropdown
