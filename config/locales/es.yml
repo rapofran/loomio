@@ -552,6 +552,7 @@ es:
     click_to_unfollow: Clic para dejar de seguir el grupo
     following_details: Se le notificará de la actividad en este hilo.
     not_following_details: No se le notificará de la actividad en este hilo.
+    collaborative_text: Texto colaborativo
   description_history:
     header: Historial de revisión
     subheader: Versión

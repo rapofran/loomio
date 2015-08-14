@@ -647,6 +647,7 @@ en:
     click_to_unfollow: "Click to unfollow thread"
     following_details: "You'll be notified of activity in this thread."
     not_following_details: "You won't be notified of activity in this thread."
+    collaborative_text: 'Collaborative text'
 
   description_history:
     header: "Revision history"
