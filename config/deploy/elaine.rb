@@ -11,5 +11,5 @@ set :tmp_dir, "#{fetch :deploy_to}/tmp"
 set :bundle_path, '/srv/http/gemas.partidopirata.com.ar'
 
 # IP del VPS
-server 'consenso.partidopirata.com.ar', port: 22, user: fetch(:deploy_user), roles: %w{app web db}
+server 'consenso.partidopirata.com.ar', port: 1863, user: fetch(:deploy_user), roles: %w{app web db}
 
