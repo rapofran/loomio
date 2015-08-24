@@ -1,0 +1,34 @@
+
+%li
+  %a{href: 'http://wiki.partidopirata.com.ar/Categor%C3%ADa:Documentos_Fundacionales', target: '_blank'}
+    %i.fa.fa-users
+    Documentos Fundacionales
+
+%li
+  %a{href: 'https://webchat.pirateirc.net/?channels=ppar', target: '_blank'}
+    %i.fa.fa-comments
+    Canal de chat
+
+- without_help ||= false
+- unless without_help
+  %li
+    %a{href: help_path}
+      %i.fa.fa-star
+      = t :"help.help"
+
+%li.divider{ role: 'separator' }
+
+%li
+  %a{href: 'http://partidopirata.com.ar', target: '_blank'}
+    %i.fa.fa-home
+    Sitio
+
+%li
+  %a{href: 'https://wiki.partidopirata.com.ar', target: '_blank'}
+    %i.fa.fa-archive
+    Wiki
+
+%li
+  %a{href: 'http://tiempo.partidopirata.com.ar', target: '_blank'}
+    %i.fa.fa-newspaper-o
+    Tiempo Pirata

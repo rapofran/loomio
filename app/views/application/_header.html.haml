@@ -43,6 +43,7 @@
           %ul.nav.navbar-nav
             .user-options.visible-xs
               = render 'application/user_profile_options'
+              = render 'application/party_options', without_help: true
             = render 'search'
             - if current_user.created_at < 750.days.ago
               %li.hidden-sm
@@ -50,6 +51,9 @@
                   %i.fa.fa-star{style: 'color: #F6A82B'}
                   = t :'angular.enable.invite'
 
+
+        %ul.nav.navbar-nav.navbar-right.hidden-xs
+          = render 'party_dropdown'
 
         %ul.nav.navbar-nav.navbar-right.hidden-xs
           = render 'user_dropdown'

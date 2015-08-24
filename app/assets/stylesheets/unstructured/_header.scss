@@ -155,11 +155,13 @@ li#sign-in {
   float: right;
 }
 
+li.dropdown#party,
 li.dropdown#user {
   float: right;
   max-width: 300px;
   height: 45px;
   padding-top: 2px;
+  #header-party-image,
   #header-user-image {
     position: relative;
     bottom: 5px;
