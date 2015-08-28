@@ -40,22 +40,32 @@ class DiscussionService
     end
 
     return false unless discussion.valid?
-
-    update_search_vector = discussion.title_changed? || discussion.description_changed?
-
-    event = true
-    if discussion.title_changed?
-      event = Events::DiscussionTitleEdited.publish!(discussion, actor)
-    end
-
-    if discussion.description_changed?
-      event = Events::DiscussionDescriptionEdited.publish!(discussion, actor)
-    end
+    return discussion if discussion.changed == ['uses_markdown']
+    return discussion unless discussion.changed?
 
     discussion.save!
+    event = Events::DiscussionEdited.publish!(discussion, actor)
 
-    ThreadSearchService.index! discussion.id if update_search_vector
+    ThreadSearchService.index! discussion.id
     DiscussionReader.for(discussion: discussion, user: actor).set_volume_as_required!
     event
+  end
+
+  def self.update_reader(discussion:, params:, actor:)
+    reader = DiscussionReader.for(discussion: discussion, user: actor)
+    actor.ability.authorize! :show, discussion
+
+    [:starred, :volume].each do |attr|
+      reader.send("#{attr}=", params[attr]) if params.has_key?(attr)
+    end
+
+    reader.save!
+  end
+
+  def self.mark_as_read(discussion:, params:, actor:)
+    actor.ability.authorize! :show, discussion
+
+    target_to_read = Event.where(discussion_id: discussion.id, sequence_id: params[:sequence_id]).first || discussion
+    DiscussionReader.for(user: actor, discussion: discussion).viewed! target_to_read.created_at
   end
 end

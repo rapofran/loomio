@@ -8,7 +8,7 @@ angular.module('loomioApp').directive 'activityCard', ->
     $scope.pageSize = 30
     $scope.firstLoadedSequenceId = 0
     $scope.lastLoadedSequenceId = 0
-    $scope.lastReadSequenceId = $scope.discussion.reader().lastReadSequenceId
+    $scope.lastReadSequenceId = $scope.discussion.lastReadSequenceId
     $scope.hasNewActivity = $scope.discussion.isUnread()
     visibleSequenceIds = []
 
@@ -22,7 +22,7 @@ angular.module('loomioApp').directive 'activityCard', ->
 
     $scope.initialLoadSequenceId = ->
       if $scope.discussion.isUnread()
-        $scope.discussion.reader().lastReadSequenceId - 1
+        $scope.discussion.lastReadSequenceId - 1
       else
         $scope.discussion.lastSequenceId - $scope.pageSize + 1
 
@@ -75,7 +75,15 @@ angular.module('loomioApp').directive 'activityCard', ->
       item.sequenceId < $scope.discussion.lastSequenceId
 
     $scope.safeEvent = (kind) ->
-      _.contains ['new_comment', 'new_motion', 'new_vote', 'motion_closed'], kind
+      _.contains ['new_comment',
+                  'new_motion',
+                  'new_vote',
+                  'motion_closed',
+                  'motion_closed_by_user',
+                  'motion_edited',
+                  'motion_outcome_created',
+                  'motion_outcome_updated',
+                  'discussion_edited'], kind
 
     $scope.events = ->
       _.filter $scope.discussion.events(), (event) -> $scope.safeEvent(event.kind)

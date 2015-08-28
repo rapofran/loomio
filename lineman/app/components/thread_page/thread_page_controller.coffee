@@ -34,11 +34,11 @@ angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routePa
     if discussion and !@discussion?
       @discussion = discussion
       @group      = @discussion.group()
-      @comment    = Records.comments.build(discussion_id: @discussion.id)
+      @comment    = Records.comments.build(discussionId: @discussion.id)
       if @discussion.hasActiveProposal() and $location.search().proposal == @discussion.activeProposal().key
         @proposalToFocus = @discussion.activeProposal()
 
-      @sequenceIdToFocus = @discussion.reader().lastReadSequenceId # or location hash when we put it back in.
+      @sequenceIdToFocus = @discussion.lastReadSequenceId # or location hash when we put it back in.
 
       $rootScope.$broadcast 'currentComponent', { page: 'threadPage'}
       $rootScope.$broadcast 'viewingThread', @discussion
@@ -48,12 +48,13 @@ angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routePa
       MessageChannelService.subscribeTo "/discussion-#{@discussion.key}"
 
   @init Records.discussions.find $routeParams.key
-  Records.discussions.findOrFetchByKey($routeParams.key).then @init, (error) ->
+  Records.discussions.findOrFetchById($routeParams.key).then @init, (error) ->
     $rootScope.$broadcast('pageError', error)
 
   $scope.$on 'threadPageEventsLoaded',    (event) =>
     @eventsLoaded = true
-    @commentToFocus = Records.comments.find parseInt($location.search().comment)
+    commentId = parseInt($location.search().comment)
+    @commentToFocus = Records.comments.find(commentId) unless isNaN(commentId)
     @performScroll() if @proposalsLoaded or !@discussion.anyClosedProposals()
   $scope.$on 'threadPageProposalsLoaded', (event) =>
     @proposalsLoaded = true

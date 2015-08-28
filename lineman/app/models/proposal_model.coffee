@@ -1,23 +1,21 @@
-angular.module('loomioApp').factory 'ProposalModel', (BaseModel) ->
+angular.module('loomioApp').factory 'ProposalModel', (BaseModel, AppConfig) ->
   class ProposalModel extends BaseModel
     @singular: 'proposal'
     @plural: 'proposals'
-    @indices: ['id', 'key', 'discussionId']
+    @uniqueIndices: ['id', 'key']
+    @indices: ['discussionId']
+    @serializationRoot: 'motion'
+    @serializableAttributes: AppConfig.permittedParams.motion
 
     defaultValues: ->
       voteCounts: {yes: 0, no: 0, abstain: 0, block: 0}
-      closingAt: moment().add(3, 'days')
+      closingAt: moment().add(3, 'days').startOf('hour')
 
-    setupViews: ->
-      @setupView 'votes'
-      @setupView 'didNotVotes'
-
-    serialize: ->
-      motion:
-        discussion_id: @discussionId
-        name: @name
-        description: @description
-        closing_at: @closingAt
+    relationships: ->
+      @hasMany 'votes', sortBy: 'createdAt', sortDesc: true
+      @hasMany 'didNotVotes'
+      @belongsTo 'author', from: 'users'
+      @belongsTo 'discussion'
 
     positionVerbs: ['agree', 'abstain', 'disagree', 'block']
     positions: ['yes', 'abstain', 'no', 'block']
@@ -31,20 +29,8 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel) ->
     hasVotes: ->
       @votes().length > 0
 
-    author: ->
-      @recordStore.users.find(@authorId)
-
     group: ->
       @discussion().group()
-
-    discussion: ->
-      @recordStore.discussions.find(@discussionId)
-
-    votes: ->
-      @votesView.data() unless @isNew()
-
-    didNotVotes: ->
-      @didNotVotesView.data() unless @isNew()
 
     voters: ->
       @recordStore.users.find(@voterIds())
@@ -92,7 +78,7 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel) ->
       @lastVoteByUser(user)?
 
     close: =>
-      @restfulClient.postMember(@id, "close")
+      @remote.postMember(@id, "close")
 
     hasOutcome: ->
       _.some(@outcome)
@@ -102,3 +88,19 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel) ->
         _.difference(@group().members(), @voters())
       else
         @recordStore.users.find(_.pluck(@didNotVotes(), 'userId'))
+
+    createOutcome: =>
+      @remote.postMember @id, "create_outcome",
+        motion:
+          outcome: @outcome
+
+    updateOutcome: =>
+      @remote.postMember @id, "update_outcome",
+        motion:
+          outcome: @outcome
+
+    fetchUndecidedMembers: ->
+      if @isActive()
+        @recordStore.memberships.fetchByGroup(@group().key, {per: 500})
+      else
+        @recordStore.didNotVotes.fetchByProposal(@key, {per: 500})

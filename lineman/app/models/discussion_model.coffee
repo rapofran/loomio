@@ -1,51 +1,55 @@
-angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
+angular.module('loomioApp').factory 'DiscussionModel', (BaseModel, AppConfig) ->
   class DiscussionModel extends BaseModel
     @singular: 'discussion'
     @plural: 'discussions'
-    @indices: ['id', 'key', 'groupId', 'authorId']
+    @uniqueIndices: ['id', 'key']
+    @indices: ['groupId', 'authorId']
+    @serializableAttributes: AppConfig.permittedParams.discussion
 
-    defaultValues: ->
+    afterConstruction: ->
+      @private = @privateDefaultValue()
+
+    defaultValues: =>
+      private: null
       usesMarkdown: true
       lastSequenceId: 0
       firstSequenceId: 0
       lastItemAt: null
+      title: ''
+      description: ''
 
-    setupViews: ->
-      @setupView 'comments'
-      @setupView 'events', 'sequenceId'
-      @setupView 'proposals', 'createdAt', true
+    privateDefaultValue: =>
+      if @group()
+        switch @group().discussionPrivacyOptions
+          when 'private_only' then true
+          when 'public_or_private' then true
+          when 'public_only' then false
+      else
+        null
+
+    relationships: ->
+      @hasMany 'comments', sortBy: 'createdAt'
+      @hasMany 'events', sortBy: 'sequenceId'
+      @hasMany 'proposals', sortBy: 'createdAt', sortDesc: true
+      @belongsTo 'group'
+      @belongsTo 'author', from: 'users'
 
     translationOptions: ->
       title:     @title
       groupName: @groupName()
 
-    author: ->
-      @recordStore.users.find(@authorId)
-
     authorName: ->
       @author().name
-
-    group: ->
-      @recordStore.groups.find(@groupId)
 
     groupName: ->
       @group().name if @group()
 
-    events: ->
-      @eventsView.data()
-
-    comments: ->
-      @commentsView.data()
-
-    proposals: ->
-      @proposalsView.data()
-
     activeProposals: ->
-      _.filter @proposalsView.data(), (proposal) ->
+      _.filter @proposals(), (proposal) ->
         proposal.isActive()
 
     closedProposals: ->
-      _.reject @proposalsView.data(), (proposal) ->
+      _.reject @proposals(), (proposal) ->
         proposal.isActive()
 
     anyClosedProposals: ->
@@ -69,47 +73,29 @@ angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
       proposal = @activeProposal()
       proposal.lastVoteAt if proposal?
 
-    reader: ->
-      @recordStore.discussionReaders.import(id: @id)
-
-    readerNotLoaded: ->
-      !@reader().discussionId?
-
     isUnread: ->
-      if @reader().lastReadAt?
+      if @lastReadAt?
         @unreadActivityCount() > 0
       else
         true
 
-    isMuted: ->
-      @reader().volume == 'mute'
-
-    isParticipating: ->
-      @reader().participating
-
-    isStarred: ->
-      @reader().starred
-
     isImportant: ->
-      @isStarred() or @hasActiveProposal()
+      @starred or @hasActiveProposal()
 
     unreadItemsCount: ->
-      (@itemsCount - @reader().readItemsCount)
+      @itemsCount - @readItemsCount
 
     unreadActivityCount: ->
-      @salientItemsCount - @reader().readSalientItemsCount
+      @salientItemsCount - @readSalientItemsCount
 
     unreadCommentsCount: ->
-      @commentsCount - @reader().readCommentsCount
+      @commentsCount - @readCommentsCount
 
     lastInboxActivity: ->
       @activeProposalClosingAt() or @lastActivityAt
 
     unreadPosition: ->
-      @reader().lastReadSequenceId + 1
-
-    markAsRead: (sequenceId) ->
-      @reader().markAsRead(sequenceId)
+      @lastReadSequenceId + 1
 
     minLoadedSequenceId: ->
       item = _.min @events(), (event) -> event.sequenceId or Number.MAX_VALUE
@@ -118,3 +104,17 @@ angular.module('loomioApp').factory 'DiscussionModel', (BaseModel) ->
     maxLoadedSequenceId: ->
       item = _.max @events(), (event) -> event.sequenceId or 0
       item.sequenceId
+
+    changeVolume: (volume) ->
+      @remote.patchMember @keyOrId(), 'set_volume', { volume: volume }
+
+    toggleStar: ->
+      @remote.patchMember @keyOrId(), if @starred then 'unstar' else 'star'
+
+    markAsRead: (sequenceId) ->
+      if isNaN(sequenceId)
+        sequenceId = @lastSequenceId
+
+      if _.isNull(@lastReadAt) or @lastReadSequenceId < sequenceId
+        @remote.patchMember(@keyOrId(), 'mark_as_read', {sequence_id: sequenceId})
+        @lastReadSequenceId = sequenceId
