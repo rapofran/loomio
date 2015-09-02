@@ -1,14 +1,18 @@
 class API::EventsController < API::RestfulController
+  include UsesDiscussionReaders
 
   private
 
   def visible_records
     load_and_authorize :discussion
-    resource_class.where(discussion: @discussion).sequenced
+    resource_class.
+      includes(:user).
+      where(discussion: @discussion).sequenced
   end
 
   def page_collection(collection)
     collection.where('sequence_id >= ?', sequence_id_for(collection))
+              .includes(:eventable)
               .limit(params[:per] || default_page_size)
   end
 
