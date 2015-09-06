@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150902032116) do
+ActiveRecord::Schema.define(version: 20150903161434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 20150902032116) do
   end
 
   add_index "comments", ["created_at"], name: "index_comments_on_created_at", using: :btree
+  add_index "comments", ["discussion_id"], name: "index_comments_on_commentable_id", using: :btree
   add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
@@ -164,6 +165,15 @@ ActiveRecord::Schema.define(version: 20150902032116) do
   end
 
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
+
+  create_table "default_group_covers", force: :cascade do |t|
+    t.string   "cover_photo_file_name"
+    t.string   "cover_photo_content_type"
+    t.integer  "cover_photo_file_size"
+    t.datetime "cover_photo_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",               default: 0
@@ -210,6 +220,7 @@ ActiveRecord::Schema.define(version: 20150902032116) do
   add_index "discussion_readers", ["participating"], name: "index_discussion_readers_on_participating", using: :btree
   add_index "discussion_readers", ["starred"], name: "index_discussion_readers_on_starred", using: :btree
   add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_readers_on_user_id_and_discussion_id", unique: true, using: :btree
+  add_index "discussion_readers", ["user_id", "volume"], name: "index_discussion_readers_on_user_id_and_volume", using: :btree
   add_index "discussion_readers", ["user_id"], name: "index_motion_read_logs_on_user_id", using: :btree
   add_index "discussion_readers", ["volume"], name: "index_discussion_readers_on_volume", using: :btree
 
@@ -248,9 +259,10 @@ ActiveRecord::Schema.define(version: 20150902032116) do
   add_index "discussions", ["author_id"], name: "index_discussions_on_author_id", using: :btree
   add_index "discussions", ["created_at"], name: "index_discussions_on_created_at", using: :btree
   add_index "discussions", ["group_id"], name: "index_discussions_on_group_id", using: :btree
+  add_index "discussions", ["is_deleted", "archived_at"], name: "index_discussions_on_is_deleted_and_archived_at", using: :btree
   add_index "discussions", ["is_deleted"], name: "index_discussions_on_is_deleted", using: :btree
   add_index "discussions", ["key"], name: "index_discussions_on_key", unique: true, using: :btree
-  add_index "discussions", ["last_activity_at"], name: "index_discussions_on_last_activity_at", using: :btree
+  add_index "discussions", ["last_activity_at"], name: "index_discussions_on_last_activity_at", order: {"last_activity_at"=>:desc}, using: :btree
   add_index "discussions", ["private"], name: "index_discussions_on_private", using: :btree
 
   create_table "events", force: :cascade do |t|
@@ -418,11 +430,13 @@ ActiveRecord::Schema.define(version: 20150902032116) do
     t.boolean  "is_commercial"
     t.boolean  "is_referral",                                    default: false,          null: false
     t.integer  "cohort_id"
+    t.integer  "default_group_cover_id"
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
   add_index "groups", ["cohort_id"], name: "index_groups_on_cohort_id", using: :btree
   add_index "groups", ["created_at"], name: "index_groups_on_created_at", using: :btree
+  add_index "groups", ["default_group_cover_id"], name: "index_groups_on_default_group_cover_id", using: :btree
   add_index "groups", ["full_name"], name: "index_groups_on_full_name", using: :btree
   add_index "groups", ["is_visible_to_public"], name: "index_groups_on_is_visible_to_public", using: :btree
   add_index "groups", ["key"], name: "index_groups_on_key", unique: true, using: :btree
@@ -489,6 +503,7 @@ ActiveRecord::Schema.define(version: 20150902032116) do
   add_index "memberships", ["group_id", "user_id", "is_suspended", "archived_at"], name: "active_memberships", using: :btree
   add_index "memberships", ["group_id"], name: "index_memberships_on_group_id", using: :btree
   add_index "memberships", ["inviter_id"], name: "index_memberships_on_inviter_id", using: :btree
+  add_index "memberships", ["user_id", "volume"], name: "index_memberships_on_user_id_and_volume", using: :btree
   add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
   add_index "memberships", ["volume"], name: "index_memberships_on_volume", using: :btree
 
