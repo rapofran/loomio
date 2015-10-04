@@ -6,8 +6,8 @@ es:
     to_change_one_group: "Para cambiar el volumen de solo uno de tus barco, visita la página del mismo."
     discussion_activity: Cambiar el volumen de las discusiones cuando participo.
     discussion_activity_description: "Cuando participas en una discusión, la configuración de volumen sera cambiada a \"Alto\", toda actividad futura te será enviada por correo electrónico. "
-    yesterday_on_loomio: Recibir un resumen de la actividad de cada día
-    yesterday_on_loomio_description: "Cada día a las 6am, enviarme un correo electrónico con las actividades no leídas del día anterior. Esta es una forma muy buena de ponerte al día con tus barcos e incluye todo lo que no está en volumen silenciado."
+    yesterday_on_loomio: Recibir un resumen de la actividad de cada semana
+    yesterday_on_loomio_description: "Cada lunes a las 6am, enviarme un correo electrónico con las actividades no leídas del día anterior. Esta es una forma muy buena de ponerte al día con tus barcos e incluye todo lo que no está en volumen silenciado."
     email_when_mentioned: "Recibir un correo electrónico cuando soy @mencionado"
     email_when_mentioned_description: "Cuando alguien quiere llamar tu atención, te @mencionaran. Te recomendamos dejar esta configuración seleccionada, para que recibas un correo electrónico cuando esto suceda. "
     proposal_closing_soon: Recibir un correo electrónico antes de que una propuesta se cierre
@@ -919,11 +919,11 @@ es:
       intro: Esto es lo que ha pasado en las últimas 24 horas en tus barcos de Loomio
       subject: Loomio - Resumen de las últimas 24 horas
     missed_yesterday:
-      subject: Ayer en Loomio
+      subject: Esta semana en Loomio
       headlines: "Titulo "
       mark_as_read: Marcar como leído
       thanks_for_reading: "Gracias por leer, ¡que tengas un buen día!"
-      click_here_to_mark_all_as_read_html: "Esto es lo que sucedió ayer en Loomio.\nUna vez usted lo haya leído, clic  <a href=\"%{link}\">marcar como leído</a>  para eliminarlo de tú bandeja de entrada.\n"
+      click_here_to_mark_all_as_read_html: "Esto es lo que sucedió esta semana en Loomio.\nUna vez usted lo haya leído, clic  <a href=\"%{link}\">marcar como leído</a>  para eliminarlo de tú bandeja de entrada.\n"
       marked_as_read_success: Todo el contenido del correo ha sido marcado como leído
     comment_replied_to:
       context: "%{author_name} respondió a tu comentario en la discusión \"%{discussion_title}\""
