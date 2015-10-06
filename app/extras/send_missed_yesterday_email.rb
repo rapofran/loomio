@@ -1,7 +1,8 @@
 class SendMissedYesterdayEmail
   def self.to_subscribers!
     zones = User.pluck('DISTINCT time_zone').select do |zone|
-      DateTime.now.in_time_zone(zone).hour == 6
+      t = DateTime.now.in_time_zone(zone)
+      t.monday? && t.hour == 6
     end
 
     User.email_missed_yesterday.where(time_zone: zones).find_each do |user|

@@ -3,9 +3,10 @@ class UserMailer < BaseMailer
   helper :motions
   helper :application
 
+  # PIRATAS cambiamos esto para que lo mande semanalmente
   def missed_yesterday(user, time_since = nil)
     @recipient = @user = user
-    @time_start = time_since || 24.hours.ago
+    @time_start = time_since || 1.week.ago
     @time_finish = Time.zone.now
     @time_frame = @time_start...@time_finish
 
