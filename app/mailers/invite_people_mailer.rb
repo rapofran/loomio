@@ -13,7 +13,7 @@ class InvitePeopleMailer < BaseMailer
     send_single_mail to:   @invitation.recipient_email,
                      from: from_user_via_loomio(sender),
                      reply_to: sender.name_and_email,
-                     subject: subject)
+                     subject: subject
   end
 
   def after_membership_request_approval(invitation, sender_email, message_body)
