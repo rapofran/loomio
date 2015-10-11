@@ -5,6 +5,7 @@
   padding: 0 6px;
   width: 100%;
   position: fixed;
+  top: 0;
 }
 
 .lmo-navbar-item-container{
@@ -68,10 +69,6 @@
 
 .lmo-navbar__item--user {
   .lmo-navbar__btn{
-    padding: 7px 6px;
-  }
-  .dropdown i.fa {
-    width: 24px;
   }
 }
 
@@ -119,7 +116,7 @@
   text-align: center;
 }
 
-@media (max-width: 767px) {
+@media (max-width: $medium-max-width) {
   .lmo-navbar__item {
     display: inline-block;
     text-align: center;
