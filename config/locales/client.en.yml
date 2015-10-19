@@ -31,6 +31,7 @@ en:
       edit: 'Edit'
       like: 'Like'
       unlike: 'Unlike'
+      update: 'Update'
       cancel: 'Cancel'
       show_more: "Show more"
       view_all: "View All"
@@ -84,6 +85,58 @@ en:
     quiet: 'Quiet'
     mute: 'Mute'
     unmute: 'Unmute'
+
+  thread_volume_card:
+    heading: "Thread Notifications"
+    body:
+      loud: "Email everything: you will be emailed whenever there is activity in this thread."
+      normal: "Email proposals: you will be emailed when a proposal is started, about to close, or an outcome is posted."
+      quiet: "No emails: you won't be emailed about activity in this thread."
+      mute: "Thread muted: you won't be emailed about this thread, and it will be removed from your Recent Threads and Unread pages."
+    change_volume_link: "Change"
+
+  thread_volume_form:
+    header: "Thread Notifications"
+    loud_label: "Email everything"
+    loud_description: "You will be emailed whenever there is activity in this thread."
+    normal_label: "Email proposals"
+    normal_description: "You will be emailed whenever a proposal is started, about to close, or an outcome is posted."
+    quiet_label: "No emails"
+    quiet_description: "You won't be emailed about this thread unless someone @mentions you."
+    mute_label: "Mute thread"
+    mute_description: "You won't be emailed about this thread, and it will be removed from your Recent Threads and Unread pages."
+    submit: "Update"
+    messages:
+      loud: "You will be emailed activity in this thread."
+      normal: "You will be emailed about proposals in this thread."
+      quiet: "You won't be emailed about this thread."
+      mute: "Thread muted."
+
+  group_volume_card:
+    heading: "Group Notifications"
+    body:
+      loud: "Email everything: you will be emailed whenever there is activity in this group."
+      normal: "You will be emailed about new threads and proposals in this group."
+      quiet: "No emails: you won't be emailed about activity in this group."
+      mute: "Group muted: you won't be emailed about this group, and it will be removed from your Recent Threads and Unread pages."
+    change_volume_link: "Change"
+
+  group_volume_form:
+    header: "Group Notifications"
+    loud_label: "Email everything"
+    loud_description: "You will be emailed whenever there is activity in this group."
+    normal_label: "Email new threads and proposals"
+    normal_description: "You will be emailed about new threads and proposals in this group."
+    quiet_label: "No emails"
+    quiet_description: "You won't be emailed about activity in this group, unless someone mentions you."
+    mute_label: "Mute group"
+    mute_description: "You won't be emailed about this group, and it will be removed from your Recent Threads and Unread pages."
+    submit: "Update"
+    messages:
+      loud: "You will be emailed all activity in this group."
+      normal: "You will be emailed about proposals in this group."
+      quiet: "You won't be emailed about this group."
+      mute: "Group muted."
 
   inbox:
     clear: 'Clear'
@@ -362,11 +415,12 @@ en:
     options_label: 'Options'
     options:
       label: 'Options'
-      edit_group: 'Edit group settings'
-      add_subgroup: 'Add subgroup'
-      manage_members: 'Manage members'
-      leave_group: 'Leave group'
-      deactivate_group: 'Deactivate group'
+      edit_group: 'Edit Group Settings'
+      manage_members: 'Manage Members'
+      add_subgroup: 'Add Subgroup'
+      manage_subscription: 'Manage Group Subscription'
+      leave_group: 'Leave Group'
+      deactivate_group: 'Deactivate Group'
     deactivate_group:
       title: 'Deactivate group'
       question: 'Are you sure you want to deactivate this group?'
@@ -394,6 +448,59 @@ en:
       private: 'Privacy: This group is only visible to members'
       parent_members: 'Privacy: This group is visible to members of {{parentGroupName}} and members of {{groupName}}'
       public: 'Privacy: This group is visible on the web'
+
+  confirm_gift_plan_modal:
+    heading: Gift plan selected
+    body: "If your group doesn't have the budget to pay for software, you don't need to pay a subscription. Your group members will periodically be invited to make a voluntary donation."
+    got_it: "Ok, got it!"
+
+  gift_card:
+    heading: Gift plan
+    body: "<strong>{{name}}</strong> is a gift-supported group. If you'd like to help Loomio achieve our mission, click this button:"
+    make_a_contribution: Make a contribution
+
+  trial_card:
+    title: '30-day trial'
+    choose_plan: 'Choose your pricing plan'
+    in_progress_body: 'Thanks for trying out Loomio with <strong>{{name}}</strong>. You can pick a pricing plan that works for you at any time.'
+    expired_body_html: "<strong>{{name}}</strong> has now reached the end of it's Loomio trial. If you'd like to keep using it, you'll need to pick a pricing plan that suits. If you'd like to talk to someone about this, just <a href=''>get in touch</a>."
+
+  choose_plan_modal:
+    heading: 'Choose your pricing plan'
+    overdue_heading: 'To continue using Loomio, please choose a payment plan'
+    gift: Gift
+    standard: Standard
+    plus: Plus
+    free_trial_html: "We'll ask you to choose your pricing plan after a <span>30-day free trial</span>. No credit card required."
+    get_started_for_free: "Get started for free"
+    gift_body_html: |
+      <p>For groups that don't have the budget to pay a subscription.</p>
+      <p>Donation supported, with no requirement to pay.</p>
+    support_before: I'm happy to
+    support_link: talk with you
+    support_after: about extending your trial, or with any other questions you may have.
+    remind_me_later: Remind me later
+    gift_donation_ask: We'll ask your group members for a donation.
+    unlimited_members: unlimited members
+    unlimited_decisions: unlimited decisions
+    email_support: email support
+    standard_price_html: |
+      <strong>$19</strong>/month<br><span>or</span> $190/year
+    plus_body: 'Everything in Standard, plus:'
+    premium_support: premium support
+    custom_url: custom URL
+    usage_statistics: usage statistics
+    plus_price_html: |
+      <strong>$179</strong>/month<br><span>or</span> $1790/year
+    select: Select
+
+  subscription_success_modal:
+    heading: Thanks for setting up your subscription!
+    social_mission: 'Your contribution helps us to deliver on our social mission: making it easy for anyone, anywhere to participate in decisions that affect them.'
+    receipt: "If you ever want to change or cancel your subscription, or if you have any other queries,"
+    contact_link: ' please contact us.'
+    sign_off: ❤ from the Loomio team
+    ok_got_it: 'Ok, got it!'
 
   edit_group_form:
     title: 'Edit Group Settings'
@@ -660,9 +767,10 @@ en:
   thread_context:
     aria_label: 'Thread context'
     thread_options: 'Thread options'
-    edit_thread: 'Edit thread'
-    move_thread: 'Move thread'
-    delete_thread: 'Delete thread'
+    notifications: 'Notifications'
+    edit_thread: 'Edit'
+    move_thread: 'Move'
+    delete_thread: 'Delete'
 
   delete_thread_form:
     title: Delete thread

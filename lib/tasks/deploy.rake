@@ -56,7 +56,6 @@ task :deploy do
   #   rake deploy remote-name branch-name  # build, deploy, migrate with alternate remote and branch.
   #                                        # Eg: rake deploy loomio-clone master
 
-
   remote = ARGV[1] || 'loomio-production'
   branch = ARGV[2] || 'master'
 
@@ -75,7 +74,6 @@ namespace :deploy do
     setup_heroku
     setup_git_remote(remote)
 
-    setup_git_remote_and_heroku(remote, branch)
     (remote != 'loomio-production' || bump_version_and_push_origin_master) &&
     build_and_push_branch(remote, branch) &&
     heroku_migrate_and_restart(remote)
