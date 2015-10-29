@@ -1,4 +1,5 @@
 .dashboard-page {
+  @include lmoRow;
 }
 
 .dashboard-page__heading{
@@ -7,6 +8,10 @@
 
 .dashboard-page__options{
   margin-bottom: 16px;
+}
+
+.dashboard-page__filter-dropdown{
+  float: right;
 }
 
 .dashboard-page__date-range{

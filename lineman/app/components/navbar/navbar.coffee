@@ -4,12 +4,10 @@ angular.module('loomioApp').directive 'navbar', ->
   templateUrl: 'generated/components/navbar/navbar.html'
   replace: true
   controller: ($scope, $rootScope, Records, ThreadQueryService, AppConfig) ->
-    console.log AppConfig.baseUrl
     parser = document.createElement('a')
     parser.href = AppConfig.baseUrl
-    console.log parser.hostname
 
-    $scope.officialLoomio = AppConfig.baseUrl == 'https://www.loomio.org/'
+    $scope.officialLoomio = AppConfig.isLoomioDotOrg
 
     $scope.hostName = parser.hostname
 
@@ -18,7 +16,7 @@ angular.module('loomioApp').directive 'navbar', ->
       $scope.selected = component.page
 
     $scope.unreadThreadCount = ->
-      ThreadQueryService.filterQuery('show_unread', queryType: 'inbox').length()
+      ThreadQueryService.filterQuery(['show_unread', 'only_threads_in_my_groups'], queryType: 'inbox').length()
 
     $scope.homePageClicked = ->
       $rootScope.$broadcast 'homePageClicked'

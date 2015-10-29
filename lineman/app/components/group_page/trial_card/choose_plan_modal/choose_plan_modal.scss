@@ -56,7 +56,8 @@
   border: 1px solid #b16a1a;
 }
 .choose-plan-modal__price {
-  left: 30%;
+  text-align: center;
+  width: 90%;
   position: absolute;
   bottom: 50px;
   font-weight: bold;
@@ -84,15 +85,10 @@
 }
 
 .choose-plan-modal__select-button {
+  @include lmoBtnOffer;
   position: absolute;
-  bottom: 10px;
-  left: 30%;
-  background-color: #4185DE;
-  color: #fff;
-  width: 90px;
-  &:hover { color: #fff }
-  &:visited { color: #fff }
-  &:visited { color: #fff }
+  bottom: 14px;
+  left: 36%;
 }
 
 .choose-plan-modal__features-list {
@@ -108,4 +104,9 @@
     width: 50px;
     margin-right: 10px;
   }
+}
+
+.choose-plan-modal__contact-link {
+  @include lmoBtnLink;
+  color: $link-color;
 }

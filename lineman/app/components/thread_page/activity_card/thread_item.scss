@@ -16,6 +16,9 @@
 .thread-item__title {
   color: $grey-on-white;
   display: inline-block;
+  & > span {
+    padding-right: 5px;
+  }
 }
 
 .thread-item__body {
@@ -39,6 +42,11 @@
 .thread-item__actions {
   margin-right: 3px;
   display: inline-block;
+}
+
+.thread-item__action {
+  @include lmoBtnLink;
+  color: $link-color;
 }
 
 .thread-item__timestamp {

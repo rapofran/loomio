@@ -9,7 +9,6 @@ class ExampleContent
     how_it_works_thread = example_content.how_it_works_thread(group)
     example_content.first_comment(how_it_works_thread, introduction_thread)
     first_proposal = example_content.first_proposal(how_it_works_thread)
-    first_vote = example_content.first_vote(first_proposal)
     bot_membership.destroy
   end
 
@@ -54,14 +53,6 @@ class ExampleContent
     }
   end
 
-  def first_vote_content(proposal)
-    {
-      position: 'yes',
-      motion: proposal,
-      statement: I18n.t('first_vote.statement')
-    }
-  end
-
   def introduction_thread(group)
     thread = Discussion.new(introduction_thread_content(group))
     DiscussionService.create(discussion: thread, actor: helper_bot)
@@ -76,6 +67,7 @@ class ExampleContent
 
   def first_comment(how_it_works_thread, introduction_thread)
     comment = Comment.new(body: I18n.t('first_comment.body',
+                                        hostname: ENV['CANONICAL_HOST'],
                                         thread_url: discussion_url(introduction_thread),
                                         group_name: how_it_works_thread.group.name),
                           discussion: how_it_works_thread)

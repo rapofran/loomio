@@ -28,6 +28,7 @@ class Group < ActiveRecord::Base
   before_save :update_full_name_if_name_changed
   before_validation :set_discussions_private_only, if: :is_hidden_from_public?
 
+
   include PgSearch
   pg_search_scope :search_full_name, against: [:name, :description],
     using: {tsearch: {dictionary: "english"}}
@@ -198,6 +199,11 @@ class Group < ActiveRecord::Base
     content_type: { content_type: /\Aimage/ },
     file_name: { matches: [/png\Z/i, /jpe?g\Z/i, /gif\Z/i] }
 
+  define_counter_cache(:motions_count)     { |group| group.discussions.published.sum(:motions_count) }
+  define_counter_cache(:discussions_count) { |group| group.discussions.published.count }
+  define_counter_cache(:memberships_count) { |group| group.memberships.count }
+  define_counter_cache(:invitations_count) { |group| group.invitations.count }
+
   # default_cover_photo is the name of the proc used to determine the url for the default cover photo
   # default_group_cover is the associated DefaultGroupCover object from which we get our default cover photo
   def default_cover_photo
@@ -233,7 +239,7 @@ class Group < ActiveRecord::Base
   end
 
   def creator_id
-    self[:creator_id] || creator.id
+    self[:creator_id] || creator.try(:id)
   end
 
   def coordinators
@@ -262,10 +268,6 @@ class Group < ActiveRecord::Base
 
   def closed_motions
     motions.closed
-  end
-
-  def motions_count
-    discussions.published.sum :motions_count
   end
 
   def archive!
@@ -443,7 +445,7 @@ class Group < ActiveRecord::Base
   end
 
   def members_count
-    members.count
+    self.memberships_count
   end
 
   def update_full_name_if_name_changed
