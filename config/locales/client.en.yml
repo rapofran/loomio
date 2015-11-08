@@ -329,7 +329,6 @@ en:
   proposal_position_abstain: 'Abstain'
   proposal_position_no: 'Disagree'
   proposal_position_block: 'Block'
-  proposal_position_confused: 'Confused'
 
   group_welcome_modal:
     heading: "Welcome to your new group"
