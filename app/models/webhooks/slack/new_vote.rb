@@ -20,6 +20,7 @@ class Webhooks::Slack::NewVote < Webhooks::Slack::Base
 
   def attachment_color
     case eventable.position
+    when "commited" then SiteSettings.colors[:commited]
     when "yes" then SiteSettings.colors[:agree]
     when "no" then SiteSettings.colors[:disagree]
     when "abstain" then SiteSettings.colors[:abstain]

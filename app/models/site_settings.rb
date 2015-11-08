@@ -2,6 +2,7 @@ class SiteSettings
   def self.colors
     {
       primary: "#E3E4E6",
+      commited: "#9054b6",
       agree: "#94D587",
       abstain: "#EEBC57",
       disagree: "#D1908F",

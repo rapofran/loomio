@@ -132,6 +132,8 @@ module DiscussionsHelper
       'hand-no-18.png'
     when 'yes'
       'hand-yes-18.png'
+    when 'commited'
+      'hand-commited-18.png'
     end
   end
 
@@ -147,6 +149,8 @@ module DiscussionsHelper
       'hand-no-18.png'
     when 'position-yes-icon'
       'hand-yes-18.png'
+    when 'position-commited-icon'
+      'hand-commited-18.png'
     when 'proposal-icon'
       'pie-18.png'
     end

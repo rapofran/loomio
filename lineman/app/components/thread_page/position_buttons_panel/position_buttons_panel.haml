@@ -3,6 +3,9 @@
     %h4.lmo-card-subheading{translate: 'position_buttons_panel.heading'}
 
     .position_buttons_panel__buttons
+      %button.position-button.position-button--yes{ng-click: 'select("commited")'}
+        .sr-only{translate: 'vote_form.im_commited'}
+
       %button.position-button.position-button--yes{ng-click: 'select("yes")'}
         .sr-only{translate: 'vote_form.i_agree'}
 
@@ -14,4 +17,3 @@
 
       %button.position-button.position-button--block{ng-click: 'select("block")'}
         .sr-only{translate: 'vote_form.i_block'}
-

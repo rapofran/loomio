@@ -583,10 +583,12 @@ en:
   thread_item:
     user_agreed_on_proposal_html: "<strong>%{name}</strong> agreed on the proposal."
     user_abstained_on_proposal_html: "<strong>%{name}</strong> abstained on the proposal."
+    user_commited_on_proposal_html: "<strong>%{name}</strong> commited on the proposal."
     user_disagreed_on_proposal_html: "<strong>%{name}</strong> disagreed on the proposal."
     user_blocked_on_proposal_html: "<strong>%{name}</strong> blocked on the proposal."
     user_agreed_on_proposal_with_statement_html: "<strong>%{name}</strong> agreed on the proposal:"
     user_abstained_on_proposal_with_statement_html: "<strong>%{name}</strong> abstained on the proposal:"
+    user_commited_on_proposal_with_statement_html: "<strong>%{name}</strong> commited on the proposal:"
     user_disagreed_on_proposal_with_statement_html: "<strong>%{name}</strong> disagreed on the proposal:"
     user_blocked_on_proposal_with_statement_html: "<strong>%{name}</strong> blocked on the proposal:"
   discussion_items:
@@ -701,6 +703,10 @@ en:
   positions: "Positions"
   yes_position: "I agree"
   yes_details: "I agree with this and want it to go ahead."
+  commited_position: "I commit"
+  commited_details: "I commit to this and want it to go ahead."
+  abstain_position: "I abstain"
+  abstain_details: "I am happy for the group to decide without me."
   abstain_position: "I abstain"
   abstain_details: "I am happy for the group to decide without me."
   no_position: "I disagree"
@@ -717,11 +723,13 @@ en:
     "no": "disagree"
     abstain: "abstain"
     block: "block"
+    commited: "commited"
     past_tense:
       "yes": "agreed"
       "no": "disagreed"
       abstain: "abstained"
       block: "blocked"
+      commited: "commited"
 
   unable_to_vote:
     permission_denied: "You do not have permission to vote on this motion"

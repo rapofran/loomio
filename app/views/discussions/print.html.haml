@@ -39,6 +39,9 @@
           .motion-graph.clearfix
             %canvas.pie{id: "graph_#{motion.id}", height: 150, width: 150}
             .legend
+              .item.commited
+                = t(:'position_verbs.commited')
+                (#{motion.commited_votes_count})
               .item.yes
                 = t(:'position_verbs.yes')
                 (#{motion.yes_votes_count})

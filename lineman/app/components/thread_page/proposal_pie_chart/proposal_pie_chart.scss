@@ -16,6 +16,10 @@
   border-bottom-style: solid;
 }
 
+.proposal-pie-chart__label--commited{
+  border-color: $commited-color;
+}
+
 .proposal-pie-chart__label--yes{
   border-color: $agree-color;
 }

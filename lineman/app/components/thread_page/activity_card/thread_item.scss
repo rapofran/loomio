@@ -65,6 +65,11 @@
   background-repeat: no-repeat;
 }
 
+.thread-item__vote-icon--commited {
+  background-image: url(/img/commited_22.png);
+  background-position: 6px 0px;
+}
+
 .thread-item__vote-icon--yes {
   background-image: url(/img/green_thumb_22.png);
   background-position: 6px 0px;

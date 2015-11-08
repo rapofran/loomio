@@ -324,6 +324,7 @@ en:
     closed_badge: Closed
 
 
+  proposal_position_commited: 'Commited'
   proposal_position_yes: 'Agree'
   proposal_position_abstain: 'Abstain'
   proposal_position_no: 'Disagree'
@@ -807,10 +808,12 @@ en:
     in_reply_to: '<strong>{{author}}</strong> in reply to <strong>{{recipient}}</strong>'
 
   new_vote_item:
+    commited: '<strong>{{actor}}</strong> commited'
     agree: '<strong>{{actor}}</strong> agreed'
     abstain: '<strong>{{actor}}</strong> abstained'
     disagree: '<strong>{{actor}}</strong> disagreed'
     block: '<strong>{{actor}}</strong> blocked'
+    commited_with_statement: '<strong>{{actor}}</strong> commited: <span>{{statement}}</span>'
     agree_with_statement: '<strong>{{actor}}</strong> agreed: <span>{{statement}}</span>'
     abstain_with_statement: '<strong>{{actor}}</strong> abstained: <span>{{statement}}</span>'
     disagree_with_statement: '<strong>{{actor}}</strong> disagreed: <span>{{statement}}</span>'

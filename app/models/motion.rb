@@ -1,5 +1,5 @@
 class Motion < ActiveRecord::Base
-  CHART_COLOURS = ["#90D490", "#F0BB67", "#D49090", "#dd0000", '#ccc']
+  CHART_COLOURS = ["#9054b6", "#90D490", "#F0BB67", "#D49090", "#dd0000", '#ccc']
 
   include ReadableUnguessableUrls
   include HasTimeframe
@@ -64,7 +64,7 @@ class Motion < ActiveRecord::Base
   end
 
   def grouped_unique_votes
-    order = ['block', 'no', 'abstain', 'yes']
+    order = ['confused', 'block', 'no', 'abstain', 'yes']
     unique_votes.sort do |a,b|
       order.index(a.position) <=> order.index(b.position)
     end
@@ -104,7 +104,8 @@ class Motion < ActiveRecord::Base
 
   # map of position and votes
   def vote_counts
-    {'yes' => yes_votes_count,
+    {'commited' => commited_votes_count,
+     'yes' => yes_votes_count,
      'abstain' => abstain_votes_count,
      'no' => no_votes_count,
      'block' => block_votes_count}

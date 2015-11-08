@@ -35,6 +35,8 @@
           = @current_motion.description
         .clearfix
         .row.decision-buttons
+          .commited
+            %i.icon-commited{style: "color: purple"}
           .agree
             %i.icon-thumbsup{style: "color: green"}
           .abstain
@@ -44,6 +46,13 @@
           .block
             %i.icon-alert-circled{style: "color: red"}
         .row.new-position
+          .commited
+            %form
+              .form-group
+                %label Commited
+                %textarea.form-control{rows: 3}
+              %button.btn
+                Submit
           .agree
             %form
               .form-group
