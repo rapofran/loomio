@@ -38,8 +38,7 @@ Webhooks::Slack::Base = Struct.new(:event) do
              "#{proposal_link(eventable, "yes")} · " +
              "#{proposal_link(eventable, "abstain")} · " +
              "#{proposal_link(eventable, "no")} · " +
-             "#{proposal_link(eventable, "block")} · " +
-             "#{proposal_link(eventable, "confused")}"
+             "#{proposal_link(eventable, "block")} · "
     }
   end
 
@@ -66,7 +65,6 @@ Webhooks::Slack::Base = Struct.new(:event) do
     when 'abstain' then 'abstain'
     when 'no' then 'no'
     when 'block' then 'block'
-    when 'confused' then 'confused'
     end
   end
 

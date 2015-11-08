@@ -12,7 +12,6 @@ class DiscussionItems::NewVote < DiscussionItem
     when "abstain" then 'position-abstain-icon'
     when "no"      then 'position-no-icon'
     when "block"   then 'position-block-icon'
-    when "confused"   then 'position-confused-icon'
     else
       'position-unvoted-icon'
     end

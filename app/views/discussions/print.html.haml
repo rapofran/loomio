@@ -54,9 +54,6 @@
               .item.block
                 = t(:'position_verbs.block')
                 (#{motion.block_votes_count})
-              .item.confused
-                = t(:'position_verbs.confused')
-                (#{motion.confused_votes_count})
 
               - if motion.closed?
                 = t :engagement_on_closed_proposal,

@@ -124,8 +124,6 @@ module DiscussionsHelper
 
   def display_proposal_activity_icons_for_print(vote)
     case vote.position
-    when 'confused'
-      'hand-confused-18.png'
     when 'abstain'
       'hand-abstain-18.png'
     when 'block'
@@ -147,8 +145,6 @@ module DiscussionsHelper
       'hand-abstain-18.png'
     when 'position-block-icon'
       'hand-block-18.png'
-    when 'position-confused-icon'
-      'hand-confused-18.png'
     when 'position-no-icon'
       'hand-no-18.png'
     when 'position-yes-icon'

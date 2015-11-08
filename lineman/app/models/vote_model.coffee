@@ -39,9 +39,6 @@ angular.module('loomioApp').factory 'VoteModel', (BaseModel, AppConfig) ->
     isBlock: ->
       @position == 'block'
 
-    isConfused: ->
-      @position == 'confused'
-
     isCommited: ->
       @position == 'commited'
 

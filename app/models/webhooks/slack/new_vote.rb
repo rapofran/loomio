@@ -24,7 +24,6 @@ class Webhooks::Slack::NewVote < Webhooks::Slack::Base
     when "yes" then SiteSettings.colors[:agree]
     when "no" then SiteSettings.colors[:disagree]
     when "abstain" then SiteSettings.colors[:abstain]
-    when "confused" then SiteSettings.colors[:confused]
     else SiteSettings.colors[:block]
     end
   end

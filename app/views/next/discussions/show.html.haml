@@ -36,7 +36,7 @@
         .clearfix
         .row.decision-buttons
           .commited
-            %i.icon-thumbsup{style: "color: blue"}
+            %i.icon-commited{style: "color: purple"}
           .agree
             %i.icon-thumbsup{style: "color: green"}
           .abstain
@@ -45,8 +45,6 @@
             %i.icon-thumbsdown{style: "color: pink"}
           .block
             %i.icon-alert-circled{style: "color: red"}
-          .confused
-            %i.icon-alert-circled{style: "color: grey"}
         .row.new-position
           .commited
             %form
@@ -80,13 +78,6 @@
             %form
               .form-group
                 %label Block
-                %textarea.form-control{rows: 3}
-              %button.btn
-                Submit
-          .confused
-            %form
-              .form-group
-                %label Confused
                 %textarea.form-control{rows: 3}
               %button.btn
                 Submit

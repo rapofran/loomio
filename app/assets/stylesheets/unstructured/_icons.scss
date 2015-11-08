@@ -1,6 +1,7 @@
 //= depend_on 'dot-18.png'
 //= depend_on 'discussion-18.png'
 //= depend_on 'topic-18.png'
+//= depend_on 'hand-commited-18.png'
 //= depend_on 'hand-abstain-18.png'
 //= depend_on 'hand-block-18.png'
 //= depend_on 'hand-no-18.png'
@@ -39,6 +40,7 @@
   width: 18px;
   &.discussion-icon { background-image: image-url('discussion-18.png'); }
   &.loomio-icon { background-image: image-url('topic-18.png'); }
+  &.position-commited-icon { background-image: image-url('hand-commited-18.png'); }
   &.position-abstain-icon { background-image: image-url('hand-abstain-18.png'); }
   &.position-block-icon { background-image: image-url('hand-block-18.png'); }
   &.position-no-icon { background-image: image-url('hand-no-18.png'); }
