@@ -772,6 +772,7 @@ en:
     edit_thread: 'Edit'
     move_thread: 'Move'
     delete_thread: 'Delete'
+    collaborative_text: 'Collaborative text'
 
   delete_thread_form:
     title: Delete thread

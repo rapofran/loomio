@@ -565,6 +565,7 @@ es:
   thread_context:
     aria_label: Contexto del hilo
     thread_options: Preferencias del hilo
+    collaborative_text: Texto colaborativo
   delete_thread_form:
     title: "Borrar hilo "
     body: Estas seguro que quieres borrar este hilo?

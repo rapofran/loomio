@@ -36,6 +36,7 @@
           %span.nowrap.discussion-privacy__is-public{ng-show: '!threadPage.discussion.private'}>
             %i.fa.fa-globe>
             %span{translate: 'common.privacy.public'}
+        %a{type: 'button', target: '_blank', class: 'btn btn-left btn-success', href: "https://pad.partidopirata.com.ar/p/{{threadPage.discussion.key}}"}= "{{ 'thread_context.collaborative_text' | translate }}"
 
         .thread-context__description.lmo-markdown-wrapper{marked: 'threadPage.discussion.description', aria-label: "{{ 'thread_context.aria_label' | translate }}" }
         %a.lmo-card-minor-action{href: '', ng-click: 'threadPage.editThread()', translate: 'thread_context.edit_thread', ng-if: 'threadPage.canEditThread()'}
