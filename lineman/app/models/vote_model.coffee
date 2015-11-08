@@ -39,6 +39,12 @@ angular.module('loomioApp').factory 'VoteModel', (BaseModel, AppConfig) ->
     isBlock: ->
       @position == 'block'
 
+    isConfused: ->
+      @position == 'confused'
+
+    isCommited: ->
+      @position == 'commited'
+
     charsLeft: ->
       250 - (@statement or '').toString().length
 

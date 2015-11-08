@@ -16,6 +16,10 @@
   border-bottom-style: solid;
 }
 
+.proposal-pie-chart__label--commited{
+  border-color: $commited-color;
+}
+
 .proposal-pie-chart__label--yes{
   border-color: $agree-color;
 }
@@ -30,6 +34,10 @@
 
 .proposal-pie-chart__label--block{
   border-color: $block-color;
+}
+
+.proposal-pie-chart__label--confused{
+  border-color: $confused-color;
 }
 
 .proposal-pie-chart__participation-statement {

@@ -8,10 +8,12 @@
     .modal-body
       %form_errors{record: 'vote'}
       %select.form-control{ng-model: 'vote.position', class: 'vote-form__select-position'}
+        %option{value: 'commited', translate: 'vote_form.im_commited'}
         %option{value: 'yes', translate: 'vote_form.i_agree'}
         %option{value: 'abstain', translate: 'vote_form.i_abstain'}
         %option{value: 'no', translate: 'vote_form.i_disagree'}
         %option{value: 'block', translate: 'vote_form.i_block'}
+        %option{value: 'confused', translate: 'vote_form.im_confused'}
       %fieldset
         .form-group
           %textarea.vote-form__statement-field.form-control.lmo-primary-form-input{ng-model: 'vote.statement', placeholder: '{{ "vote_form.statement_placeholder" | translate }}'}
