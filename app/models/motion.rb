@@ -64,7 +64,7 @@ class Motion < ActiveRecord::Base
   end
 
   def grouped_unique_votes
-    order = ['confused', 'block', 'no', 'abstain', 'yes']
+    order = ['commited', 'block', 'no', 'abstain', 'yes']
     unique_votes.sort do |a,b|
       order.index(a.position) <=> order.index(b.position)
     end
