@@ -42,7 +42,7 @@ $ ->
 
 $ ->
   #load sparklines for motion pies
-  $('.motion-sparkline').sparkline('html', { disableTooltips: true, type: 'pie', height: '26px', width: '26px', sliceColors: [ "#90D490", "#F0BB67", "#D49090", "#dd0000", '#ccc'] })
+  $('.motion-sparkline').sparkline('html', { disableTooltips: true, type: 'pie', height: '26px', width: '26px', sliceColors: [ "#9054B6", "#90D490", "#F0BB67", "#D49090", "#dd0000", '#ccc'] })
 
   if $('body.inbox').length > 0
     $('.ui-sortable').sortable()
