@@ -1025,7 +1025,7 @@ en:
   introduction_thread:
     title: "Welcome to %{group_name}"
     description: |
-      Please take a moment to introduce yourself. You might like to share how you fit with this group of people.
+      Please take a moment to introduce yourself: **post a comment** in the form below.
 
       If you have clear intentions for this Loomio group, you could share them here so everyone has an idea of what they want to achieve together.
 
@@ -1038,7 +1038,7 @@ en:
 
       You are currently reading the thread **context**. Use this space to give the background information the group needs for a productive discussion.
 
-      The **proposal** panel is where you make decisions. You can start proposals and participated in them there.
+      The **proposal** panel is where you make decisions. You can start proposals and participate in them there.
 
       The **activity** panel below shows everything that’s happened in this thread.
 
