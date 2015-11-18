@@ -2,9 +2,6 @@ class User < ActiveRecord::Base
   include AvatarInitials
   include ReadableUnguessableUrls
 
-  require 'net/http'
-  require 'digest/md5'
-
   AVATAR_KINDS = %w[initials uploaded gravatar]
   LARGE_IMAGE = 170
   MED_LARGE_IMAGE = 70
@@ -153,10 +150,6 @@ class User < ActiveRecord::Base
 
   def is_logged_out?
     !is_logged_in?
-  end
-
-  def cached_group_ids
-    @cached_group_ids ||= group_ids
   end
 
   def top_level_groups

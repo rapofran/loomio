@@ -8,10 +8,20 @@ angular.module('loomioApp').factory 'GroupModel', (BaseModel, AppConfig) ->
 
     defaultValues: ->
       parentId: null
+      name: ''
+      description: ''
       groupPrivacy: 'closed'
       isVisibleToPublic: true
       discussionPrivacyOptions: 'private_only'
       membershipGrantedUpon: 'approval'
+      membersCanAddMembers: true
+      membersCanEditDiscussions: true
+      membersCanEditComments: true
+      membersCanRaiseMotions: true
+      membersCanVote: true
+      membersCanStartDiscussions: true
+      membersCanCreateSubgroups: false
+      motionsCanBeEdited: false
 
     relationships: ->
       @hasMany 'discussions'
@@ -138,7 +148,7 @@ angular.module('loomioApp').factory 'GroupModel', (BaseModel, AppConfig) ->
       @remote.upload("#{@key}/upload_photo/#{kind}", file)
 
     trialIsOverdue: ->
-      @subscriptionKind == 'trial' && @subscriptionExpiresAt.clone().add(15, 'days') < moment()
+      @subscriptionKind == 'trial' && @subscriptionExpiresAt.clone().add(1, 'days') < moment()
 
     noInvitationsSent: ->
       @membershipsCount < 2 and @invitationsCount < 2
