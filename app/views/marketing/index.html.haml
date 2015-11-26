@@ -57,6 +57,35 @@
                     = image_tag 'braid.png', {class: 'top'}
                   %h2= t(:'frontpage.product.step3.header')
                   %p= t(:'frontpage.product.step3.desc')
+            .col-xs-12#product-carousel.content.product-carousel.carousel.slide{"data-ride" => 'carousel'}
+              .carousel-inner
+                .item.active
+                  = image_tag 'ipad-1.png', alt: 'Loomio 1.0 discussion mockup'
+                .item
+                  = image_tag 'ipad-2.png', alt: 'Loomio 1.0 proposal mockup'
+                .item
+                  = image_tag 'ipad-3.png', alt: 'Loomio 1.0 proposal outcome mockup'
+              %a.carousel-control.left-ctrl{href: '#product-carousel', "data-slide" => 'prev'}
+                %i.fa.fa-angle-left
+              %a.carousel-control.right-ctrl{href: '#product-carousel', "data-slide" => 'next'}
+                %i.fa.fa-angle-right
+              =link_to 'https://www.youtube.com/watch?v=ZipyebSY2Lo', class: 'video hero-text' do
+                = t(:'frontpage.link.video')
+
+        .row.stories
+          .content
+            %a{href: 'https://blog.loomio.org/category/stories', class: 'block-link'}
+              %h1 Humans of Loomio
+            %p.hero-text
+              Stories from the amazing people using Loomio to make change in their communities and organizations, all around the world.
+            .cards
+              - @stories.each do |story|
+                = render 'story', story: story
+          .clearfix
+          %h2
+            %a{href: 'https://blog.loomio.org/category/stories', class: 'block-link'}
+              More stories and videos
+              %i.fa.fa-angle-right
 
         .row.quote
           .content.rushkoff

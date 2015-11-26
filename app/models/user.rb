@@ -97,6 +97,7 @@ class User < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :attachments, dependent: :destroy
+  has_many :drafts, dependent: :destroy
 
   has_one :deactivation_response,
           class_name: 'UserDeactivationResponse',
@@ -248,8 +249,10 @@ class User < ActiveRecord::Base
   end
 
   def deactivate!
+    former_group_ids = group_ids
     update_attributes(deactivated_at: Time.now, avatar_kind: "initials")
     memberships.update_all(archived_at: Time.now)
+    Group.where(id: former_group_ids).map(&:update_memberships_count)
     membership_requests.where("responded_at IS NULL").destroy_all
   end
 
