@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include AvatarInitials
   include ReadableUnguessableUrls
+  include MessageChannel
 
   AVATAR_KINDS = %w[initials uploaded gravatar]
   LARGE_IMAGE = 170
@@ -330,10 +331,6 @@ class User < ActiveRecord::Base
 
   def in_same_group_as?(other_user)
     (group_ids & other_user.group_ids).present?
-  end
-
-  def belongs_to_manual_subscription_group?
-    groups.manual_subscription.any?
   end
 
   def show_start_group_button?

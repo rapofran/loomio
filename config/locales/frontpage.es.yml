@@ -1,6 +1,6 @@
 es:
   frontpage:
-    view_this_in_your_language: 'Haz click aquí para usar Loomio en %{language}'
+    view_this_in_your_language: 'Haz clic aquí para usar Loomio en %{language}'
     title:
       collaborative_decision_making: Toma colectiva de decisiones
     link:

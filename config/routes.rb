@@ -35,6 +35,7 @@ Loomio::Application.routes.draw do
   end
 
   namespace :api, path: '/api/v1', defaults: {format: :json} do
+
     resources :groups, only: [:show, :create, :update] do
       get :subgroups, on: :member
       patch :archive, on: :member
@@ -46,6 +47,7 @@ Loomio::Application.routes.draw do
 
     resources :memberships, only: [:index, :create, :update, :destroy] do
       collection do
+        post :add_to_subgroup
         post :join_group
         get :autocomplete
         get :for_user
@@ -70,6 +72,7 @@ Loomio::Application.routes.draw do
 
     resources :invitations, only: [:create, :destroy] do
       get :pending, on: :collection
+      get :shareable, on: :collection
     end
 
     resources :profile, only: [:show] do
@@ -124,7 +127,9 @@ Loomio::Application.routes.draw do
       post :vote, on: :member
     end
 
-    resource :translations, only: :show
+    resource :translations, only: :show do
+      get :inline, to: 'translations#inline'
+    end
 
     resources :notifications, only: :index do
       post :viewed, on: :collection
@@ -138,7 +143,6 @@ Loomio::Application.routes.draw do
 
     namespace :message_channel do
       post :subscribe
-      post :subscribe_user
     end
 
     namespace :sessions do
@@ -344,7 +348,7 @@ Loomio::Application.routes.draw do
 
   get '/localisation/:locale' => 'localisation#show', format: 'js'
 
-  resources :users, path: 'u', only: [:new] do
+  resources :users, path: 'u', only: [] do
     member do
       put :set_avatar_kind
       post :upload_new_avatar

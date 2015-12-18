@@ -105,6 +105,15 @@ describe API::VotesController do
   # end
 
   describe 'create' do
+
+    context 'logged out' do
+      before { @controller.stub(:current_user).and_return(LoggedOutUser.new) }
+      it 'responds with unauthorized' do
+        post :create, vote: vote_params
+        expect(response.status).to eq 403
+      end
+    end
+
     context 'success' do
       it "creates a vote" do
         post :create, vote: vote_params
@@ -141,7 +150,7 @@ describe API::VotesController do
       end
 
       let(:another_user)          { create :user }
-      it "responds with an error when the user is unauthorized", focus: true do
+      it "responds with an error when the user is unauthorized" do
         sign_in another_user
         post :create, vote: vote_params
         expect(JSON.parse(response.body)['exception']).to eq 'CanCan::AccessDenied'

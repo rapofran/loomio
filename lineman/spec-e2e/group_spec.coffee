@@ -3,6 +3,13 @@ describe 'Group Page', ->
   page = require './helpers/page_helper.coffee'
 
   describe 'non-member views group', ->
+    describe 'logged out user', ->
+      xit 'should display group content', ->
+        page.loadPath('view_open_group_as_visitor')
+        page.expectElement('.group-theme__name')
+        page.expectElement('.lmo-navbar__sign-in')
+        page.expectElement('.thread-preview__title')
+
     describe 'see joining option for each privacy type', ->
       it 'secret group', ->
         page.loadPath('view_secret_group_as_non_member')
@@ -40,13 +47,13 @@ describe 'Group Page', ->
       page.expectText('.thread-context', "I've had the time of my life" )
 
     it 'automatically saves drafts', ->
-      groupsHelper.clickStartThreadButton()
+      page.click('.discussions-card__new-thread-button')
       page.fillIn('#discussion-title', 'Nobody puts baby in a corner')
       page.fillIn('#discussion-context', "I've had the time of my life")
       page.click('.discussion-form__cancel')
-      groupsHelper.clickStartThreadButton()
-      page.expectText('#discussion-title', 'Nobody puts baby in a corner' )
-      page.expectText('#discussion-context', "I've had the time of my life" )
+      page.click('.discussions-card__new-thread-button')
+      page.expectInputValue('#discussion-title', 'Nobody puts baby in a corner' )
+      page.expectInputValue('#discussion-context', "I've had the time of my life" )
 
   describe 'starting a subgroup', ->
     beforeEach ->
@@ -82,12 +89,16 @@ describe 'Group Page', ->
     it 'can be a very open group', ->
       page.click('.group-form__advanced-link')
 
-      options = ['.group-form__privacy-open',
-                 '.group-form__membership-granted-upon-request',
-                 '.group-form__members-can-add-members',
-                 '.group-form__members-can-create-subgroups']
+      selectThese = ['.group-form__privacy-open',
+                      '.group-form__membership-granted-upon-request',
+                      '.group-form__members-can-create-subgroups']
 
-      page.click(options)
+      expectThese = ['.group-form__privacy-open',
+                      '.group-form__membership-granted-upon-request',
+                      '.group-form__members-can-add-members',
+                      '.group-form__members-can-create-subgroups']
+
+      page.click(selectThese)
       page.click('.group-form__submit-button')
 
       # confirm privacy change
@@ -99,7 +110,7 @@ describe 'Group Page', ->
                  '.group-form__advanced-link')
 
       # confirm the settings have stuck
-      page.expectSelected(options)
+      page.expectSelected(expectThese)
 
     it 'can be a very locked down group', ->
       page.click('.group-form__advanced-link',
