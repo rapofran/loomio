@@ -192,20 +192,21 @@ class Group < ActiveRecord::Base
                        default_url: 'default-logo-:style.png'
 
   validates_attachment :cover_photo,
-    size: { in: 0..10.megabytes },
+    size: { in: 0..100.megabytes },
     content_type: { content_type: /\Aimage/ },
     file_name: { matches: [/png\Z/i, /jpe?g\Z/i, /gif\Z/i] }
 
   validates_attachment :logo,
-    size: { in: 0..10.megabytes },
+    size: { in: 0..100.megabytes },
     content_type: { content_type: /\Aimage/ },
     file_name: { matches: [/png\Z/i, /jpe?g\Z/i, /gif\Z/i] }
 
-  define_counter_cache(:motions_count)           { |group| group.discussions.published.sum(:motions_count) }
-  define_counter_cache(:discussions_count)       { |group| group.discussions.published.count }
-  define_counter_cache(:memberships_count)       { |group| group.memberships.count }
-  define_counter_cache(:admin_memberships_count) { |group| group.admin_memberships.count }
-  define_counter_cache(:invitations_count) { |group| group.invitations.count }
+  define_counter_cache(:motions_count)            { |group| group.discussions.published.sum(:motions_count) }
+  define_counter_cache(:discussions_count)        { |group| group.discussions.published.count }
+  define_counter_cache(:public_discussions_count) { |group| group.discussions.visible_to_public.count }
+  define_counter_cache(:memberships_count)        { |group| group.memberships.count }
+  define_counter_cache(:admin_memberships_count)  { |group| group.admin_memberships.count }
+  define_counter_cache(:invitations_count)        { |group| group.invitations.count }
 
   # default_cover_photo is the name of the proc used to determine the url for the default cover photo
   # default_group_cover is the associated DefaultGroupCover object from which we get our default cover photo
@@ -215,7 +216,7 @@ class Group < ActiveRecord::Base
     elsif self.default_group_cover
       /^.*(?=\?)/.match(self.default_group_cover.cover_photo.url).to_s
     else
-      'default-cover-photo.png'
+      'img/default-cover-photo.png'
     end
   end
 
@@ -425,6 +426,11 @@ class Group < ActiveRecord::Base
     membership.make_admin! && save
     self.creator = user if creator.blank?
     membership
+  end
+
+  def add_default_content!
+    update default_group_cover: DefaultGroupCover.sample, subscription: Subscription.new_trial
+    ExampleContent.add_to_group(self)
   end
 
   def find_or_create_membership(user, inviter)

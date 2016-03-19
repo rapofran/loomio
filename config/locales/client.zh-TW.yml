@@ -27,7 +27,8 @@ zh-TW:
     more_help: 詳細說明
     models:
       proposal: 提案
-    copied: 已複製
+    copy: 複製文字
+    copied: 已經複製到剪貼簿
     action:
       close: 關閉
       save: 儲存
@@ -35,7 +36,9 @@ zh-TW:
       update_settings: 更新設定
       reply: 回覆
       edit: 編輯
+      remove: 移除
       like: 讚
+      back: 返回
       unlike: 收回讚
       update: 更新
       cancel: 取消
@@ -46,6 +49,7 @@ zh-TW:
       loading: 讀取中
       translate: 翻譯
       translated: 採用 Bing 翻譯
+      upload: 上傳
       uploading: 正在上傳
     formatting_help:
       label: 格式化說明
@@ -189,7 +193,6 @@ zh-TW:
       discussions: 討論
       proposals: 提議
       comments: 意見
-    sign_in: 登入
   start_menu:
     title: 動作按鈕
     start_group: 啟動群組
@@ -200,6 +203,8 @@ zh-TW:
     header: 通知
     new_discussion: '<strong>{{name}}</strong> 啟動了 <strong>{{discussion}}</strong> 討論串'
     new_motion: '<strong>{{name}}</strong> 建立了一個提案 <strong>{{proposal}}</strong>'
+    motion_closed: '定案的提案：<strong>{{proposal}}</strong>'
+    publish_outcome: 發表成果
     motion_closed_by_user: '<strong>{{name}}</strong> 定案了一個提案 <strong>{{proposal}}</strong>'
     motion_closed_by_expiry: '提案已定案 <strong>{{proposal}}</strong>'
     new_vote: '<strong>{{name}}</strong> {{position}} 在提案中 <strong>{{proposal}}</strong>'
@@ -214,11 +219,14 @@ zh-TW:
     motion_closing_soon: '提案即將定案：<strong>{{proposal}}</strong>'
     motion_outcome_created: '<strong>{{name}}</strong> 公佈了提案 <strong>{{proposal}}</strong> 的結果'
     motion_outcome_updated: '<strong>{{name}}</strong> 已更新了提案 <strong>{{proposal}}</strong> 的結果'
+    invitation_accepted: '<strong>{{name}}</strong> 接受了您將其加入 <strong>{{group}}</strong> 的邀請'
+    new_coordinator: '<strong>{{name}}</strong> 讓您成為 <strong>{{group}}</strong> 群組的協調者'
   position_buttons_panel:
     heading: 擁有發言權
   vote_form:
     heading: 擁有發言權
     no_statement: 沒寫。
+    statement_over_limit: 太多字了！簡短的立場聲明讓大家能迅速了解提議。
     i_agree: 我贊成
     i_agree_details: 我支持這決定，就這麼進行。
     i_abstain: 我棄權
@@ -339,6 +347,12 @@ zh-TW:
     submit_button: 要求加入群組
     messages:
       membership_requested: '您已經申請 {{group}} 的成員資格'
+  revision_history_modal:
+    thread_header: 討論串內容修訂歷史
+    comment_header: 評論編輯修訂歷史
+    started_by: '由 <strong>{{name}}</strong> 所啟動'
+    edited_by: '由 <strong>{{name}}</strong> 所編輯'
+    posted: 已貼出
   group_page:
     thread_list:
       empty:
@@ -360,7 +374,7 @@ zh-TW:
     group_logo: 群組標誌
     new_photo: 新圖片
     description: 群組描述
-    description_placeholder: 使用這個地方來描述群組的目的讓您的夥伴們知道他們為什麼在這裡。
+    description_placeholder: 群組協調者可以使用這個區域來描述群組的目的，這樣才能讓每個人都知道為什麼他們會在這裡。
     discussions: 討論
     discussions_placeholder: 討論串是供每個人討論主題並共同作出決策的地方。
     members: '成員 ({{count}})'
@@ -407,6 +421,7 @@ zh-TW:
       private: 隱私權：此群組現在只會被成員看到
       parent_members: '隱私權：討論串只會被 {{parentGroupName}} 群組的成員以及 {{groupName}} 群組的成員看到。'
       public: 隱私權：此群組現在能在網路上被看到
+      aria_label: '群組隱私：{{privacy}}'
   confirm_gift_plan_modal:
     heading: 已選取禮物方案
     body: 如果您的團隊沒有足夠的預算來支付軟體費用，您就不需要支付訂閱的費用。您的群組成員是否有自願性的捐款。
@@ -425,11 +440,10 @@ zh-TW:
   trial_card:
     title: 30 天試用
     choose_plan: 選擇您的定價方案
-    in_progress_body: '感謝試用 Loomio，<strong>{{name}}</strong>。您可以在任何時間挑選一個適合您的定價方案。'
-    expired_body_html: "<strong>{{name}}</strong> 已經結束了 Loomio 的試用。若您想要繼續使用它，您必須挑選一個適合您的定價方案。若您想要與某人談論這個，請<a href=''>保持聯繫</a>。"
+    in_progress_body: '感謝試用 Loomio，<strong>{{name}}</strong>。您可以在任何時間挑選一個適合您的群組的定價方案。'
+    expired_body_html: '<strong>{{name}}</strong> 已經結束了 Loomio 的試用。若您想要繼續使用它，您必須挑選一個適合您的定價方案。'
   choose_plan_modal:
-    heading: 選擇您的定價方案
-    overdue_heading: 要繼續使用 Loomio，請選擇一個付款方案
+    heading: 請為您的群組選擇方案
     gift: 禮物方案
     standard: 標準方案
     plus: PLUS
@@ -468,6 +482,7 @@ zh-TW:
     edit_group_heading: 編輯群組設定
     edit_subgroup_heading: 編輯子群組設定
     group_name: 群組名稱
+    group_name_placeholder: 您想要怎麼稱呼您的群組？
     subgroup_name: 子群組名稱
     description: 描述
     description_placeholder: 描述群組的目的讓您的夥伴們知道他們為什麼在這裡。
@@ -476,19 +491,19 @@ zh-TW:
       private_to_group: 名稱與描述都將只會對成員可見。
       private_to_parent_members: '名稱與描述將會對 {{parent}} 的成員可見'
     privacy: 隱私權
-    group_privacy_open_description: 任何人都可以找到群組，檢視有誰在裡面，並要求加入。所有的討論串都是公開的。
-    group_privacy_closed_description: 任何人都可以找到群組，檢視有誰在裡面，並要求加入。只有成員才能看見討論串。
-    group_privacy_closed_public_threads_description: 任何人都可以找到群組，檢視有誰在裡面，並要求加入。討論串可以是公開或非公開的。
-    group_privacy_secret_description: 只有被邀請的成員才能找到群組並觀看討論串。
+    group_privacy_is_open_description: 任何人都可以找到群組並要求加入。只有成員才能看見誰在群組裡。所有的討論串都是公開的。
+    group_privacy_is_closed_description: 任何人都可以找到群組並要求加入。只有成員才能看見誰在群組裡。所有的討論串都是私密的。
+    group_privacy_is_closed_public_threads_description: 任何人都可以找到群組並要求加入。只有成員才能看見誰在群組裡。討論串可以是公開或私密的。
+    group_privacy_is_secret_description: 只有被邀請的成員才能找到群組，並檢視有誰在裡面以及觀看討論串。
     confirm_change_to_secret: 若您繼續，所有在此群組及其子群組的討論串都會變為非公開。
     confirm_change_to_secret_subgroup: 若您繼續，所有的討論串都會變為非公開。
     confirm_change_to_public: 若您繼續，所有在此群組的討論串都將會變為公開在網路上。
     confirm_change_to_private_discussions_only: 若您繼續，任何在此群組中的公開討論串都將會變為非公開。
-    subgroup_privacy_open_description: 任何人都可以找到此子群組，檢視有誰在裡面，並要求加入。所有的討論串都是公開的。
-    subgroup_privacy_closed_description: 任何人都可以找到此子群組，檢視有誰在裡面，並要求加入。只有成員才能看見討論串。
-    subgroup_privacy_closed_public_threads_description: 任何人都可以找到此子群組，檢視有誰在裡面，並要求加入。討論串可以是公開或非公開的。
-    subgroup_privacy_closed_secret_parent_description: '{{parent}} 的成員可以找到此子群組，檢視有誰在裡面，並要求加入。'
-    subgroup_privacy_secret_description: 只有被邀請的成員才能找到此子群組並觀看討論串。
+    subgroup_privacy_is_open_description: 任何人都可以找到這個子群組並要求加入。只有成員才能看見誰在群組裡。所有的討論串都是公開的。
+    subgroup_privacy_is_closed_description: 任何人都可以找到這個子群組並要求加入。只有成員才能看見誰在群組裡。所有的討論串都是私密的。
+    subgroup_privacy_is_closed_public_threads_description: 任何人都可以找到這個子群組並要求加入。只有成員才能看見誰在群組裡。討論串可以是公開或私密的。
+    subgroup_privacy_is_closed_secret_parent_description: '{{parent}} 的成員可以找到此子群組並要求加入。所有討論串均為私密。只有成員才能看見有誰在群組裡。'
+    subgroup_privacy_is_secret_description: 只有被邀請的成員才能找到此子群組，並檢視有誰在裡面以及觀看討論串。
     advanced_settings: 進階設定
     how_do_people_join: 夥伴要怎樣加入？
     membership_granted_upon_request: 任何人都能加入此群組。
@@ -501,7 +516,7 @@ zh-TW:
     private_threads: 只有成員才能看到討論串
     permissions: 權限
     allow_public_threads: 允許在此群組中公開討論串。
-    parent_members_can_see_discussions: '{{parent}} 的成員可以看到討論串。'
+    parent_members_can_see_discussions: '{{parent}} 的成員可以看到私密討論串。'
     members_can_add_members: 成員可以邀請夥伴並核准加入請求。
     members_can_create_subgroups: 成員可以建立子群組。
     members_can_edit_discussions: 成員可以更新任何討論串的內容與標題。
@@ -522,7 +537,9 @@ zh-TW:
   group_help_card:
     title: 教學文件
     ten_tips_article_title: 10 個使用 Loomio 做出好決策的祕訣
+    ten_tips_article_link: 'https://blog.loomio.org/2015/09/10/10-tips-for-making-great-decisions-with-loomio/'
     nine_ways_to_use_proposals: 9 個使用 Loomio 提案把討論化為行動的方法
+    nine_ways_to_use_proposals_link: 'https://blog.loomio.org/2015/09/18/9-ways-to-use-a-loomio-proposal-to-turn-a-conversation-into-action/'
   membership_requests_page:
     heading: 申請成員資格
     approve: 批准
@@ -540,8 +557,12 @@ zh-TW:
   invitation_form:
     invite_people: 邀請夥伴
     group: 群組
+    shareable_link: 可分享的連結
+    copy_link: 複製連結
     email_addresses: 電子郵件地址
     email_addresses_placeholder: '範例：helperbot@loomio.org, friendlybot@loomio.org'
+    shareable_link_explanation: 複製連結並將其傳送給任何您想要將其加入群組中的人。只要點選連結就會立即將他們加入群組中。
+    email_explanation: 或是在下面輸入電子郵件，Loomio 將會以電子郵件的方式傳送一封邀請函給他們。
     add_custom_message: 讓您的邀請變為私人的，
     add_custom_message_link: 加入一段自訂的訊息。
     custom_message: 自訂訊息
@@ -551,16 +572,12 @@ zh-TW:
     add_members: 增加成員
     from_parent_group: '從 {{name}}'
     send: 寄送
+    done: 完成
     messages:
       invitation_sent: 邀請函已寄出。
       invitations_sent: '{{count}} 封邀請函已寄出。'
       no_invitations: 唉呀！請確認電子郵件地址是否正確定並再試一次。
       max_invitations: 若您想要寄出多於 100 封邀請函，使用團隊連結。
-  team_link_modal:
-    heading: 加入夥伴
-    share_link: 分享此連結
-    caution: '注意：任何有此連結的人都可以立刻加入您的群組。所以要注意您分享給誰 :)'
-    copy_link: 複製連結
   add_members_modal:
     heading: '從 {{name}} 加入夥伴'
     add_members: 增加成員
@@ -587,6 +604,7 @@ zh-TW:
     heading: 擱置中的邀請函
     email: 電子郵件
     invitation_link: 邀請連結
+    sent: 已寄出
   cancel_invitation_form:
     heading: 取消邀請函
     question: 您確定您想要取消此邀請函嗎？
@@ -676,7 +694,6 @@ zh-TW:
       muted_aria_label: 目前正在顯示已靜音的討論串
       muted_description: 僅檢視已被靜音的討論串
     aria_thread:
-      title: '討論串標題：{{title}}。'
       unread: '{{count}} 個未讀的項目。'
       current_proposal: '目前提案：{{name}}.'
       you_voted: '您已經投票：{{position}}.'
@@ -699,6 +716,7 @@ zh-TW:
     page_header: 您的群組
   discussion:
     activity: 動態
+    activity_placeholder: 尚無動態！
     proposals: 提議
     previous_proposals: 上一個提案
     load_previous: 載入更早的動態
@@ -711,6 +729,7 @@ zh-TW:
     liked_by_name: '{{name}} 對此按讚。'
     liked_by_names_and_name: '{{joinedNames}} 與 {{name}} 對此按讚。'
     started_by: '由 <strong>{{name}}</strong> 所啟動'
+    edited: 已編輯
     volume:
       loud: 只要這個討論串有活動就立刻寄發電子郵件。
       loud_aria_description: 您在此討論串的通知音量設定為大聲。這意味著您會收到任何關於此動態的電子郵件。
@@ -732,6 +751,7 @@ zh-TW:
     notifications: 通知
     edit_thread: 編輯
     move_thread: 移動
+    print_thread: 列印
     delete_thread: 刪除
   delete_thread_form:
     title: 刪除討論串
@@ -761,38 +781,45 @@ zh-TW:
       aria_label: 意見選項
       edit_comment: 編輯意見
       delete_comment: 刪除意見
-    in_reply_to: '<strong>{{author}}</strong> 在回覆 <strong>{{recipient}}</strong>'
+    in_reply_to: '回覆給 <strong>{{recipient}}</strong>'
+    edited: 已編輯
   new_vote_item:
-    agree: '<strong>{{actor}}</strong> 已同意'
-    abstain: '<strong>{{actor}}</strong> 已棄權'
-    disagree: '<strong>{{actor}}</strong> 已反對'
-    block: '<strong>{{actor}}</strong> 已阻擋'
-    agree_with_statement: '<strong>{{actor}}</strong>已同意：<span>{{statement}}</span>'
-    abstain_with_statement: '<strong>{{actor}}</strong>已棄權：<span>{{statement}}</span>'
-    disagree_with_statement: '<strong>{{actor}}</strong>已反對：<span>{{statement}}</span>'
-    block_with_statement: '<strong>{{actor}}</strong>已阻擋：<span>{{statement}}</span>'
+    agree: 同意
+    abstain: 棄權
+    disagree: 反對
+    block: 阻擋
+    agree_with_statement: '同意：<span>{{statement}}</span>'
+    abstain_with_statement: '棄權：<span>{{statement}}</span>'
+    disagree_with_statement: '反對：<span>{{statement}}</span>'
+    block_with_statement: '阻擋：<span>{{statement}}</span>'
   new_proposal_item:
-    author_created_proposal: '<strong>{{actor}}</strong>已啟動一個提案：<span>{{title}}</span>'
+    author_created_proposal: '已啟動一個提案：<span>{{title}}</span>'
   proposal_closed_item:
     proposal_closed: '提案已定案：<span>{{title}}</span>'
   proposal_closed_by_user_item:
-    proposal_closed_by_user: '<strong>{{actor}}</strong>已定案了一個提案：<span>{{title}}</span>'
+    proposal_closed_by_user: '已定案一個提案：<span>{{title}}</span>'
   proposal_edited_item:
-    name: '<strong>{{actor}}</strong>已更新提案標題：<span>{{title}}</span>'
-    description: '<strong>{{actor}}</strong>已更新了提案的描述'
-    closing_at: '<strong>{{actor}}</strong>已經更新了在<span>{{time}}</span>定案的提案'
-    description_name: '<strong>{{actor}}</strong>已經更新提案的標題與描述'
-    closing_at_name: '<strong>{{actor}}</strong>已經更新了提案的標題與定案時間'
-    closing_at_description: '<strong>{{actor}}</strong>已經更新了提案的描述與定案時間'
-    closing_at_description_name: '<strong>{{actor}}</strong>已經更新了提案的標題、描述與關閉時間'
+    name: '已更新提案標題：<span>{{title}}</span>'
+    description: 已更新提案描述
+    closing_at: '已更新的提案以在 <span>{{time}}</span> 定案'
+    description_name: 已更新提案標題與描述
+    closing_at_name: 已更新提案標題與定案時間
+    closing_at_description: 已更新提案描述與定案時間
+    closing_at_description_name: 已更新提案標題、描述與定案時間
   proposal_outcome_created_item:
-    proposal_outcome_created: '<strong>{{actor}}</strong>已公佈了提案的結果：'
+    proposal_outcome_created: 已發表提案成果：
   proposal_outcome_updated_item:
-    proposal_outcome_updated: '<strong>{{actor}}</strong>已更新了提案的結果：'
+    proposal_outcome_updated: 已更新提案結果：
   discussion_edited_item:
-    title: '<strong>{{actor}}</strong>已更新討論串的標題：<span>{{title}}</span>'
-    description: '<strong>{{actor}}</strong> 已經更新了此討論串的內容'
-    description_title: '<strong>{{actor}}</strong> 已經更新了此討論串的標題與內容'
+    title: '已更新討論串標題：<span>{{title}}</span>'
+    description: 已更新討論串內容
+    description_title: 已更新討論串標題與內容
+    private: 更新討論串隱私設定為
+    public_to_private: 私人
+    private_to_public: 公開
+    private_title: 更新討論串標題與隱私設定
+    description_private: 更新討論串內容與隱私設定
+    description_private_title: 更新討論串標題、內容與隱私設定
   contact_message_form:
     contact_us: 聯絡我們
     name_label: 您的大名
@@ -907,7 +934,7 @@ zh-TW:
     enable:
       invite: 嘗試新的 Loomio！
       title: 嘗試新的 Loomio
-      intro: 我們將會重新建立 Loomio 且需要您的協助，以確定我們在釋出它給公眾前變的足夠好。
+      intro: 我們正在重新建造 Loomio，我們需要要您的協助來讓它變得更好！
       body_html: >
         <p></p>
 
@@ -917,18 +944,18 @@ zh-TW:
 
         <p>
 
-          新的介面就像舊的介面，但是更新了：
+        新的介面就像舊的介面，但是更新了：
 
-          <ul>
+        <ul>
 
-            <li>每樣事情都會在它發生時即時在頁面上更新</li>
+        <li>每樣事情都會在它發生時即時在頁面上更新</li>
 
-            <li>它設計給您所有的裝置使用，從智慧型手機到桌上型電腦</li>
+        <li>它設計給您所有的裝置使用，從智慧型手機到桌上型電腦</li>
 
-            <li>它可以讓盲人使用，且翻譯為 <a
+        <li>它可以讓盲人使用，且被翻譯為 <a
         href="https://www.loomio.org/translation">許多的語言</a>
 
-          </ul>
+        </ul>
 
         </p>
 
@@ -941,10 +968,57 @@ zh-TW:
         <p>在新版應用程式的左下角會有一個「切換回舊版 Loomio」的連結。點擊該連結，然後您就會切換回您使用較久的
         Loomio。也有一個您可以輸入回饋的回饋表單。</p>
 
-        <p>我們真的很想聽到您的回饋，感謝您的使用與支援。</p>
+        <p>我們真的很想聽到您的回饋，感謝您的使用與支持。</p>
       button_text: 啟用新的 Loomio
     disable:
       title: 感謝您嘗試新的 Loomio
       body_html: '<p>唉呀，我們作錯什麼了呢？我們對於您對新 Loomio 有不好的印象很抱歉。</p>'
       give_feedback: 在您離開前，請您考慮分享您的回饋，以讓我們可以改進。
       button_text: 切換回舊版 Loomio
+  global:
+    messages:
+      app_update: 新版本的 Loomio 出了
+      reload: 重新整理
+  emoji_picker:
+    search: 找到一個 emoji...
+    no_emojis_found: "找不到 '{{term}}' 的 emoji！"
+  authorized_apps_page:
+    title: 已授權的應用程式
+    no_applications: 您尚未授權任何第三方的應用程式。
+    notice: 您已經給予下列這些第三方應用程式使用您的帳號的權限。點選「撤銷」以停用它們。
+    revoke: 撤銷
+  registered_apps_page:
+    title: 已註冊的應用程式
+    no_applications: 您尚未有任何 OAuth 應用程式！點選下面這裡以建立一個。
+    name: 名稱
+    redirect_uris: 重新導向 URI
+    create_new_application: 新應用程式
+  registered_app_page:
+    uid: 應用程式 ID
+    secret: 應用程式祕密
+  registered_app_form:
+    new_application_title: 新應用程式
+    edit_application_title: 更新應用程式
+    name_label: 名稱
+    name_placeholder: 您的應用程式叫什麼？
+    redirect_uri_label: 重新導向 URI
+    redirect_uri_placeholder: '您應用程式呼叫的網址。例如：https://myapplication.com/loomio/callback'
+    redirect_uri_note: '（每個 URI 一行，在本機測試使用「urn:ietf:wg:oauth:2.0:oob」）'
+    new_application_submit: 建立應用程式
+    edit_application_submit: 更新應用程式
+    messages:
+      logo_changed: 標誌已更新
+      created: '建立「{{name}}」'
+      updated: '已更新「{{name}}」'
+  remove_app_form:
+    title: '停用「{{name}}」'
+    question: '您確定要停用應用程式「{{name}}」？這個動作無法復原。'
+    submit: 停用
+    messages:
+      success: '「{{name}}」已成功停用'
+  revoke_app_form:
+    title: '撤銷{{name}}的存取權'
+    question: '您確定您要取消允許「{{name}}」使用您的帳號？'
+    submit: 撤銷存取權
+    messages:
+      success: '「{{name}}」已無法使用您的帳號'

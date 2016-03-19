@@ -4,8 +4,12 @@ class API::InvitationsController < API::RestfulController
     @invitations = InvitationService.invite_to_group(recipient_emails: email_addresses,
                                                      group: @group,
                                                      inviter: current_user,
-                                                     message: params[:message])
-    respond_with_collection
+                                                     message: invitation_form_params[:message])
+    if @invitations.any?
+      respond_with_collection
+    else
+      respond_with_errors
+    end
   end
 
   def pending
@@ -27,24 +31,17 @@ class API::InvitationsController < API::RestfulController
   end
 
   private
+
+  def invitation_form_params
+    params.require(:invitation_form)
+  end
+
   def email_addresses
-    params[:email_addresses].scan(/[^\s<,]+?@[^>,\s]+/).take(100)
+    invitation_form_params[:emails].scan(/[^\s,;<>]+?@[^\s,;<>]+\.[^\s,;<>]+/).take(100)
   end
 
-  def new_members
-    common_params.merge users: invitation_parser.new_members
-  end
-
-  def new_emails
-    common_params.merge recipient_emails: invitation_parser.new_emails
-  end
-
-  def common_params
-    @common_params ||= { group: @group, inviter: current_user, message: params[:message] }
-  end
-
-  def invitation_parser
-    @invitation_parser ||= InvitationParser.new(@invitations)
+  def respond_with_errors
+    render json: {errors: { emails: [  I18n.t('invitation_form.error.all_email_addresses_belong_to_members') ]}}, root: false, status: 422
   end
 
 end

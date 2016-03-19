@@ -201,7 +201,8 @@ class Ability
     end
 
     can :create, Discussion do |discussion|
-      (discussion.group.members_can_start_discussions? &&
+      (discussion.group.present? &&
+       discussion.group.members_can_start_discussions? &&
        user_is_member_of?(discussion.group_id)) ||
       user_is_admin_of?(discussion.group_id)
     end
@@ -231,6 +232,10 @@ class Ability
 
     can [:destroy], Comment do |comment|
       user_is_author_of?(comment) or user_is_admin_of?(comment.discussion.group_id)
+    end
+
+    can [:create], Attachment do
+      user.is_logged_in?
     end
 
     can [:destroy], Attachment do |attachment|
@@ -293,6 +298,18 @@ class Ability
     can :update, Draft do |draft|
       draft.user_id == @user.id &&
       can?(:make_draft, draft.draftable)
+    end
+
+    can [:show, :update, :destroy], OauthApplication do |application|
+      application.owner_id == @user.id
+    end
+
+    can :revoke_access, OauthApplication do |application|
+      OauthApplication.authorized_for(user).include? application
+    end
+
+    can :create, OauthApplication do |application|
+      @user.is_logged_in?
     end
 
   end

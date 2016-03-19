@@ -27,15 +27,19 @@ en:
     more_help: 'More help'
     models:
       proposal: 'Proposal'
-    copied: 'Copied'
+    copy: 'Copy text'
+    copied: 'Copied to clipboard'
     action:
+      back: 'Back'
       close: 'Close'
       save: 'Save'
       save_changes: 'Save changes'
       update_settings: 'Update settings'
       reply: 'Reply'
       edit: 'Edit'
+      remove: 'Remove'
       like: 'Like'
+      back: 'Back'
       unlike: 'Unlike'
       update: 'Update'
       cancel: 'Cancel'
@@ -46,6 +50,7 @@ en:
       loading: 'Loading'
       translate: 'Translate'
       translated: 'Translation by Bing Translator'
+      upload: 'Upload'
       uploading: 'Uploading'
     formatting_help:
       label: 'Formatting help'
@@ -205,7 +210,7 @@ en:
       discussions: 'Threads'
       proposals: 'Proposals'
       comments: 'Comments'
-    sign_in: 'Sign In'
+    sign_in: 'Log In'
 
   start_menu:
     title: 'Action button'
@@ -218,6 +223,8 @@ en:
     header: "Notifications"
     new_discussion: "<strong>{{name}}</strong> started a discussion <strong>{{discussion}}</strong>"
     new_motion: "<strong>{{name}}</strong> created a proposal <strong>{{proposal}}</strong>"
+    motion_closed: "Proposal closed: <strong>{{proposal}}</strong>"
+    publish_outcome: "Publish an outcome"
     motion_closed_by_user: "<strong>{{name}}</strong> closed the proposal <strong>{{proposal}}</strong>"
     motion_closed_by_expiry: "Proposal has closed <strong>{{proposal}}</strong>"
     new_vote: "<strong>{{name}}</strong> {{position}} on the proposal <strong>{{proposal}}</strong>"
@@ -232,6 +239,8 @@ en:
     motion_closing_soon: "Proposal is closing soon: <strong>{{proposal}}</strong>"
     motion_outcome_created: "<strong>{{name}}</strong> published an outcome for the proposal <strong>{{proposal}}</strong>"
     motion_outcome_updated: "<strong>{{name}}</strong> updated the outcome for the proposal <strong>{{proposal}}</strong>"
+    invitation_accepted: "<strong>{{name}}</strong> accepted your invitation to join <strong>{{group}}</strong>"
+    new_coordinator: "<strong>{{name}}</strong> made you a coordinator of <strong>{{group}}</strong>"
 
   position_buttons_panel:
     heading: Have your say
@@ -239,6 +248,7 @@ en:
   vote_form:
     heading: Have your say
     no_statement: No statement.
+    statement_over_limit: 'Too many words! Short position statements let everyone quickly catch up on the proposal.'
     i_agree: 'I agree'
     i_agree_details: 'I support this and want it to go ahead.'
     i_abstain: 'I abstain'
@@ -380,6 +390,12 @@ en:
     messages:
       membership_requested: 'You have requested membership to {{group}}'
 
+  revision_history_modal:
+    thread_header: Thread context revision history
+    comment_header: Comment edit revision history
+    started_by: 'Started by <strong>{{name}}</strong>'
+    edited_by: 'Edited by <strong>{{name}}</strong>'
+    posted: Posted
 
   group_page:
     thread_list:
@@ -403,7 +419,7 @@ en:
     group_logo: 'Group logo'
     new_photo: 'new photo'
     description: 'Group description'
-    description_placeholder: 'Use this place to describe the purpose of the group so your members know why they are here.'
+    description_placeholder: 'Groups coordinators can use this area to describe the group’s purpose, so everyone knows why they are here.'
     discussions: 'Threads'
     discussions_placeholder: 'A thread is where everyone can discuss a topic and make decisions together.'
     members: 'Members'
@@ -450,6 +466,7 @@ en:
       private: 'Privacy: This group is only visible to members'
       parent_members: 'Privacy: This group is visible to members of {{parentGroupName}} and members of {{groupName}}'
       public: 'Privacy: This group is visible on the web'
+      aria_label: 'Group privacy: {{privacy}}'
 
   confirm_gift_plan_modal:
     heading: Gift plan selected
@@ -517,6 +534,7 @@ en:
     edit_group_heading: 'Edit group settings'
     edit_subgroup_heading: 'Edit subgroup settings'
     group_name: 'Group Name'
+    group_name_placeholder: 'What do you want to call your group?'
     subgroup_name: 'Subgroup Name'
     description: 'Description'
     description_placeholder: 'Describe the purpose of your group so your group members know why they are here.'
@@ -525,20 +543,20 @@ en:
       private_to_group: 'Name and description will only be visible to members.'
       private_to_parent_members: 'Name and description will be visible to members of {{parent}}'
     privacy: 'Privacy'
-    group_privacy_open_description: "anyone can find the group, see who's in it, and ask to join. All threads are public."
-    group_privacy_closed_description: "anyone can find the group, see who's in it, and ask to join. Only members can see threads."
-    group_privacy_closed_public_threads_description: "anyone can find the group, see who's in it, and ask to join. Threads can be public or private."
-    group_privacy_secret_description: 'only invited members can find the group and see threads.'
+    group_privacy_is_open_description: "anyone can find the group and ask to join. Only members can see who is in the group. All threads are public."
+    group_privacy_is_closed_description: "anyone can find the group and ask to join. Only members can see who is in the group. All threads are private."
+    group_privacy_is_closed_public_threads_description: "anyone can find the group and ask to join. Only members can see who is in the group. Threads can be public or private."
+    group_privacy_is_secret_description: 'only invited members can find the group, see who is in it and see threads.'
     confirm_change_to_secret: "If you proceed, all threads in this group and its subgroups will be made private."
     confirm_change_to_secret_subgroup: 'If you proceed, all threads will be made private.'
     confirm_change_to_public: 'If you proceed, all threads in this group will be made public on the web.'
     confirm_change_to_private_discussions_only: 'If you proceed, any public threads in this group will be made private.'
 
-    subgroup_privacy_open_description: "anyone can find this subgroup, see who's in it, and ask to join. All threads are public."
-    subgroup_privacy_closed_description: "anyone can find this subgroup, see who's in it, and ask to join. Only members can see threads."
-    subgroup_privacy_closed_public_threads_description: "anyone can find this subgroup, see who's in it, and ask to join. Threads can be public or private."
-    subgroup_privacy_closed_secret_parent_description: "members of {{parent}} can find this subgroup, see who's in it, and ask to join."
-    subgroup_privacy_secret_description: 'only invited members can find this subgroup and see threads.'
+    subgroup_privacy_is_open_description: "anyone can find this subgroup and ask to join. Only members can see who is in the group. All threads are public."
+    subgroup_privacy_is_closed_description: "anyone can find this subgroup and ask to join. Only members can see who is in the group. All threads are private."
+    subgroup_privacy_is_closed_public_threads_description: "anyone can find this subgroup and ask to join. Only members can see who is in the group. Threads can be public or private."
+    subgroup_privacy_is_closed_secret_parent_description: "members of {{parent}} can find this subgroup and ask to join. All threads are private. Only members can see who is in the group."
+    subgroup_privacy_is_secret_description: 'only invited members can find this subgroup, see who is in it and see threads.'
 
     advanced_settings: "Advanced settings"
     how_do_people_join: "How do people join?"
@@ -556,7 +574,7 @@ en:
     permissions: 'Permissions'
     allow_public_threads: 'Allow public threads in this group.'
     #is_visible_to_parent_members: 'Content is visible to members of {{parentGroupName}}.'
-    parent_members_can_see_discussions: 'Members of {{parent}} can see threads.'
+    parent_members_can_see_discussions: 'Members of {{parent}} can see private threads.'
     members_can_add_members: 'Members can invite people and approve requests to join.'
     members_can_create_subgroups: 'Members can create subgroups.'
     members_can_edit_discussions: 'Members can update the context and title of any thread.'
@@ -581,7 +599,9 @@ en:
   group_help_card:
     title: Help
     ten_tips_article_title: 10 tips for making great decisions with Loomio
+    ten_tips_article_link: https://blog.loomio.org/2015/09/10/10-tips-for-making-great-decisions-with-loomio/
     nine_ways_to_use_proposals: 9 ways to use a Loomio proposal to turn a conversation into action
+    nine_ways_to_use_proposals_link: https://blog.loomio.org/2015/09/18/9-ways-to-use-a-loomio-proposal-to-turn-a-conversation-into-action/
 
   membership_requests_page:
     heading: Membership Requests
@@ -603,8 +623,12 @@ en:
   invitation_form:
     invite_people: 'Invite People'
     group: 'Group'
+    shareable_link: 'Shareable link'
+    copy_link: 'Copy link'
     email_addresses: 'Email addresses'
     email_addresses_placeholder: 'e.g. helperbot@loomio.org, friendlybot@loomio.org'
+    shareable_link_explanation: 'Copy the link and send it to anyone you want to join the group. Clicking the link will give them immediate access.'
+    email_explanation: 'Alternatively, enter email addresses below and Loomio will send them an invitation by email.'
     add_custom_message: 'Make your invite personal, '
     add_custom_message_link: 'add a custom message.'
     custom_message: 'Custom message'
@@ -614,17 +638,12 @@ en:
     add_members: 'Add members'
     from_parent_group: 'from {{name}}.'
     send: 'Send'
+    done: 'Done'
     messages:
       invitation_sent: 'Invitation sent.'
       invitations_sent: '{{count}} invitations sent.'
       no_invitations: 'Uh-oh! Please verify the email address is correct and try again.'
       max_invitations: 'If you want to send more than 100 invitations, use a team link.'
-
-  team_link_modal:
-    heading: 'Add people'
-    share_link: 'Share this link'
-    caution: 'Caution: anyone who has this link will be able to join your group immediately. Be careful who you share it with :)'
-    copy_link: 'Copy link'
 
   add_members_modal:
     heading: 'Add people from {{name}}'
@@ -748,7 +767,6 @@ en:
       muted_aria_label: Current showing muted threads
       muted_description: View only threads which have been muted
     aria_thread:
-      title: 'Thread title: {{title}}.'
       unread: '{{count}} unread items.'
       current_proposal: 'Current proposal: {{name}}.'
       you_voted: 'You voted: {{position}}.'
@@ -788,6 +806,7 @@ en:
     liked_by_name: 'Liked by {{name}}.'
     liked_by_names_and_name: 'Liked by {{joinedNames}} and {{name}}.'
     started_by: 'Started by <strong>{{name}}</strong>'
+    edited: 'Edited'
     volume:
       loud: Email whenever there is activity in this thread.
       loud_aria_description: Your notification volume for this thread is set to Loud. This means you will be emailed whenever there is activity in this thread.
@@ -809,6 +828,7 @@ en:
     notifications: 'Notifications'
     edit_thread: 'Edit'
     move_thread: 'Move'
+    print_thread: 'Print'
     delete_thread: 'Delete'
     collaborative_text: 'Collaborative text'
 
@@ -845,6 +865,7 @@ en:
       edit_comment: 'Edit comment'
       delete_comment: 'Delete comment'
     in_reply_to: 'in reply to <strong>{{recipient}}</strong>'
+    edited: 'Edited'
 
   new_vote_item:
     commited: '<strong>{{actor}}</strong> commited'
@@ -886,6 +907,12 @@ en:
     title: 'updated the thread title: <span>{{title}}</span>'
     description: 'updated the thread context'
     description_title: 'updated the thread title and context'
+    private: 'updated the thread privacy to'
+    public_to_private: 'private'
+    private_to_public: 'public'
+    private_title: 'updated the thread title and privacy'
+    description_private: 'updated the thread context and privacy'
+    description_private_title: 'updated the thread title, context and privacy'
 
   contact_message_form:
     contact_us: 'Contact Us'
@@ -1027,7 +1054,7 @@ en:
     enable:
       invite: 'Try the new Loomio!'
       title: 'Try the new Loomio'
-      intro: "We've rebuilt Loomio and we need your help to make sure it is awesome before we release it to the general public."
+      intro: "We've rebuilt Loomio and we need your help to make sure it is awesome!"
       body_html: |
         <p></p>
         <h3>What's the difference anyway?</h3>
@@ -1041,9 +1068,8 @@ en:
           </ul>
         </p>
 
-        <p>It uses the same database as the old interface, meaning it will have all your existing groups and discussions. You can change back to the old interface at any time.</p>
-        <p>Things will be changing slightly every day as we implement the feedback we get during this time. Some less frequently used features may not be there yet.</p>
-        <p>There is a link "Switch back to the old Loomio" in the bottom left corner of the new app. Click that link and you can switch back to the Loomio you're more used to. There is also a feedback form for you to enter any feedback you have.</p>
+        <p>It uses the same database as the old interface, meaning it will have all your existing groups and discussions.</p>
+        <p>There is a link to "Give feedback" in the bottom left corner. You'll also see a link there to "Switch back to old Loomio", which will remain available for the next little while.</p>
         <p>We really look forward to hearing your feedback, thanks for your time and support.</p>
 
       button_text: 'Enable the new Loomio'
@@ -1058,3 +1084,53 @@ en:
     messages:
       app_update: 'A new version of Loomio is available'
       reload: 'Reload'
+
+  emoji_picker:
+    search: "Find an emoji..."
+    no_emojis_found: "No emojis found for '{{term}}'!"
+
+  authorized_apps_page:
+    title: Authorized Apps
+    no_applications: "You haven't authorized any third party apps yet."
+    notice: "You've given the following third-party apps permission to use your account. Click 'Revoke' to disable them."
+    revoke: Revoke
+
+  registered_apps_page:
+    title: Registered Applications
+    no_applications: "You don't have any OAuth applications yet! Click below to create one."
+    name: Name
+    redirect_uris: Redirect URIs
+    create_new_application: New Application
+
+  registered_app_page:
+    uid: Application ID
+    secret: Application Secret
+
+  registered_app_form:
+    new_application_title: New Application
+    edit_application_title: Update Application
+    name_label: Name
+    name_placeholder: What is your application called?
+    redirect_uri_label: Redirect Uris
+    redirect_uri_placeholder: "The callback uri for your application, Eg: https://myapplication.com/loomio/callback"
+    redirect_uri_note: (one line per URI, use 'urn:ietf:wg:oauth:2.0:oob' for local tests)
+    new_application_submit: Create Application
+    edit_application_submit: Update Application
+    messages:
+      logo_changed: Logo updated.
+      created: "Created '{{name}}'"
+      updated: "Updated '{{name}}'"
+
+  remove_app_form:
+    title: Deactivate {{name}}
+    question: "Are you sure you want to deactivate the application '{{name}}'? This action cannot be undone."
+    submit: Deactivate
+    messages:
+      success: "'{{name}}' was successfully deactivated"
+
+  revoke_app_form:
+    title: Revoke access for {{name}}
+    question: "Are you sure you disallow '{{name}}' to use your account?"
+    submit: Revoke Access
+    messages:
+      success: "'{{name}}' can no longer use your account."

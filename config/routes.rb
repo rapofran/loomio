@@ -1,5 +1,7 @@
 Loomio::Application.routes.draw do
 
+  use_doorkeeper
+
   get '/development' => 'development#index'
   namespace :development do
     get ':action'
@@ -39,6 +41,7 @@ Loomio::Application.routes.draw do
     resources :groups, only: [:show, :create, :update] do
       get :subgroups, on: :member
       patch :archive, on: :member
+      put :archive, on: :member
       post :use_gift_subscription, on: :member
       post 'upload_photo/:kind', on: :member, action: :upload_photo
     end
@@ -88,6 +91,7 @@ Loomio::Application.routes.draw do
         get    '/:draftable_type/:draftable_id', action: :show
         post   '/:draftable_type/:draftable_id', action: :update
         patch  '/:draftable_type/:draftable_id', action: :update
+        put    '/:draftable_type/:draftable_id', action: :update
       end
     end
 
@@ -97,6 +101,11 @@ Loomio::Application.routes.draw do
       patch :star, on: :member
       patch :unstar, on: :member
       patch :move, on: :member
+      put :mark_as_read, on: :member
+      put :set_volume, on: :member
+      put :star, on: :member
+      put :unstar, on: :member
+      put :move, on: :member
       get :dashboard, on: :collection
       get :inbox, on: :collection
     end
@@ -140,6 +149,15 @@ Loomio::Application.routes.draw do
     end
 
     resources :contact_messages, only: :create
+
+    resources :versions, only: :index
+
+    resources :oauth_applications, only: [:show, :create, :update, :destroy] do
+      post :revoke_access, on: :member
+      post :upload_logo, on: :member
+      get :owned, on: :collection
+      get :authorized, on: :collection
+    end
 
     namespace :message_channel do
       post :subscribe
@@ -455,4 +473,13 @@ Loomio::Application.routes.draw do
   get '/community'  => redirect('https://www.loomio.org/g/WmPCB3IR/loomio-community')
   get '/timeline'   => redirect('http://www.tiki-toki.com/timeline/entry/313361/Loomio')
   get '/robots'     => 'robots#show'
+
+  get 'apps/registered'                    => 'base#boot_angular_ui'
+  get 'apps/authorized'                    => 'base#boot_angular_ui'
+  get 'apps/registered/:id'                => 'base#boot_angular_ui'
+  get 'apps/registered/:id/:slug'          => 'base#boot_angular_ui'
+  get 'd/:key/proposal/:proposal'          => 'base#boot_angular_ui'
+  get 'd/:key/comment/:comment'            => 'base#boot_angular_ui'
+  get 'd/:key/proposal/:proposal/:outcome' => 'base#boot_angular_ui'
+  get 'g/:key/memberships/:username'       => 'base#boot_angular_ui'
 end

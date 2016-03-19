@@ -19,13 +19,15 @@ class InvitationService
   def self.invite_to_group(recipient_emails: nil,
                            message: nil,
                            group: nil,
-                           inviter: nil,
-                           subject: nil)
-    recipient_emails.map do |recipient_email|
+                           inviter: nil)
+    (recipient_emails - group.members.pluck(:email)).map do |recipient_email|
       invitation = create_invite_to_join_group(recipient_email: recipient_email,
                                                group: group,
+                                               message: message,
                                                inviter: inviter)
-      InvitePeopleMailer.delay.to_join_group(invitation, inviter, message, subject)
+
+      InvitePeopleMailer.delay.to_join_group(invitation: invitation,
+                                             locale: I18n.locale)
       invitation
     end
   end

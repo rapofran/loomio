@@ -6,12 +6,16 @@
 
 Loomio is a collaborative decision-making tool that makes it easy for anyone to participate in decisions which affect them. If you'd like to find out more, check out [Loomio.org](https://www.loomio.org).
 
-- Issues and __bugs__ should be [reported here](http://github.com/loomio/loomio/issues)
-- Setting up or developing Loomio is described in the [Tech Manual](https://www.gitbook.com/book/loomio/tech-manual).
-- To see what's being worked on and what's planned, vote on development priorities, and find tasks to pick up, check out the [Loomio Roadmap](https://www.loomio.org/roadmap). To participate in discussions about the app, potential features, and more, [join the Loomio Community group on Loomio](https://www.loomio.org/g/WmPCB3IR/loomio-community).
+If you'd like to report a bug, give us feedback, or contribute to Loomio, please read [CONTRIBUTING.md](https://github.com/loomio/loomio/blob/master/CONTRIBUTING.md)
+
+For documentation about deploying and developing Loomio see the [Tech Manual](https://loomio.gitbooks.io/tech-manual/content/).
+
+Want to learn how to use Loomio? read the [User Help Manual](https://help.loomio.org).
+
+To learn about working within the Loomio Co-op, read the [Loomio Coop Handbook](https://github.com/loomio/loomio-coop-handbook)
 
 ### Contact
 
-If you have any questions or feedback, get in touch via [contact@loomio.org](mailto:contact@loomio.org).
-<br />
-[Facebook](https://facebook.com/Loomio) [Twitter](https://twitter.com/Loomio) [Google+](https://plus.google.com/+LoomioOrg)
+If you want to get in touch with us, send an email: [contact@loomio.org](mailto:contact@loomio.org).
+
+[Facebook](https://facebook.com/Loomio) [Twitter](https://twitter.com/Loomio)

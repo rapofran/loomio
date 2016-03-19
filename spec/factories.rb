@@ -93,6 +93,11 @@ published_at "2015-11-18 14:28:30"
     end
   end
 
+  factory :comment_vote do
+    comment
+    user
+  end
+
   factory :motion do
     sequence(:name) { Faker::Name.name }
     association :author, factory: :user
@@ -226,6 +231,17 @@ published_at "2015-11-18 14:28:30"
     user
     association :draftable, factory: :discussion
     payload {{ payload: 'payload' }}
+  end
+
+  factory :application, class: OauthApplication do
+    name "More like BROAuth, am I right?"
+    association :owner, factory: :user
+    redirect_uri "https://www.loomio.org"
+  end
+
+  factory :access_token, class: Doorkeeper::AccessToken do
+    resource_owner_id { create(:user).id }
+    association :application, factory: :application
   end
 
 end

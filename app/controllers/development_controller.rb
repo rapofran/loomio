@@ -2,7 +2,7 @@ class DevelopmentController < ApplicationController
   include Development::DashboardHelper
   include Development::NintiesMoviesHelper
 
-  before_filter :cleanup_database, except: [:last_email, :index]
+  before_filter :cleanup_database, except: [:last_email, :index, :accept_last_invitation]
   around_filter :ensure_testing_environment
 
   def index
@@ -15,6 +15,11 @@ class DevelopmentController < ApplicationController
   def last_email
     @email = ActionMailer::Base.deliveries.last
     render layout: false
+  end
+
+  def accept_last_invitation
+    InvitationService.redeem(Invitation.last, max)
+    redirect_to(test_group)
   end
 
   def setup_dashboard
@@ -45,6 +50,11 @@ class DevelopmentController < ApplicationController
     redirect_to group_url(test_group)
   end
 
+  def setup_group_as_member
+    sign_in jennifer
+    redirect_to group_url(test_group)
+  end
+
   def setup_group_with_expired_legacy_trial
     sign_in jennifer
     GroupService.create(group: test_group, actor: patrick)
@@ -62,16 +72,24 @@ class DevelopmentController < ApplicationController
   end
 
   def setup_group_with_many_discussions
-    sign_in patrick
     test_group.add_member! emilio
-    50.times do
+    40.times do
       discussion = FactoryGirl.build(:discussion,
                                      group: test_group,
-                                     private: true,
+                                     private: false,
                                      author: emilio)
       DiscussionService.create(discussion: discussion, actor: emilio)
     end
-    redirect_to group_url(test_group)
+    redirect_to group_url(test_group, from: 5)
+  end
+
+  def setup_discussion_with_many_comments
+    test_group.add_member! emilio
+    40.times do |i|
+      comment = FactoryGirl.build(:comment, discussion: test_discussion, body: "#{i} bottles of beer on the wall")
+      CommentService.create(comment: comment, actor: emilio)
+    end
+    redirect_to discussion_url(test_discussion, from: 5)
   end
 
   def setup_group_on_trial_admin
@@ -117,6 +135,32 @@ class DevelopmentController < ApplicationController
     public_test_proposal
     sign_in jennifer
     redirect_to discussion_url(public_test_discussion)
+  end
+
+  def setup_restricted_profile
+    sign_in patrick
+    test_group = Group.create!(name: 'Secret Dirty Dancing Shoes',
+                                group_privacy: 'secret')
+    test_group.add_member!(jennifer)
+    redirect_to "/u/#{jennifer.username}"
+  end
+
+  def setup_profile_with_group_visible_to_members
+    sign_in patrick
+    test_group = Group.create!(name: 'Secret Dirty Dancing Shoes',
+                                group_privacy: 'secret')
+    test_group.add_admin!(patrick)
+    test_group.add_member!(jennifer)
+    redirect_to "/u/#{jennifer.username}"
+  end
+
+  def setup_group_with_empty_draft
+    sign_in patrick
+    @test_group = Group.create!(name: 'Secret Dirty Dancing Shoes',
+                                group_privacy: 'secret')
+    @test_group.add_admin! patrick
+    test_empty_draft
+    redirect_to group_url(test_group)
   end
 
   def setup_multiple_discussions
@@ -174,9 +218,27 @@ class DevelopmentController < ApplicationController
     redirect_to group_url(@test_group)
   end
 
+  def setup_open_group
+    @test_group = Group.create!(name: 'Open Dirty Dancing Shoes',
+                                group_privacy: 'open')
+    @test_group.add_admin!  patrick
+    @test_group.add_member! jennifer
+    sign_in patrick
+    redirect_to group_url(test_group)
+  end
+
   def setup_closed_group
     @test_group = Group.create!(name: 'Closed Dirty Dancing Shoes',
                                 group_privacy: 'closed')
+    @test_group.add_admin!  patrick
+    @test_group.add_member! jennifer
+    sign_in patrick
+    redirect_to group_url(test_group)
+  end
+
+  def setup_secret_group
+    @test_group = Group.create!(name: 'Secret Dirty Dancing Shoes',
+                                group_privacy: 'secret')
     @test_group.add_admin!  patrick
     @test_group.add_member! jennifer
     sign_in patrick
@@ -232,7 +294,6 @@ class DevelopmentController < ApplicationController
   def setup_proposal
     sign_in patrick
     test_proposal
-
     redirect_to discussion_url(test_discussion)
   end
 
@@ -255,7 +316,7 @@ class DevelopmentController < ApplicationController
     sign_in patrick
     test_proposal
     MotionService.close(test_proposal)
-    redirect_to previous_proposal_url(test_group)
+    redirect_to previous_proposals_group_url(test_group)
   end
 
   def setup_proposal_closing_soon
@@ -296,37 +357,16 @@ class DevelopmentController < ApplicationController
   def setup_all_notifications
     sign_in patrick
     setup_all_notifications_work
-
-
     redirect_to discussion_url(test_discussion)
   end
 
   private
 
-  def discussion_url(discussion)
-    "http://localhost:8000/d/#{discussion.key}/"
-  end
-
-  def group_url(group)
-    "http://localhost:8000/g/#{group.key}/"
-  end
-
-  def dashboard_url
-    "http://localhost:8000/dashboard"
-  end
-
-  def inbox_url
-    "http://localhost:8000/inbox"
-  end
-
-  def previous_proposal_url(group)
-    "http://localhost:8000/g/#{group.key}/previous_proposals"
-  end
-
   def ensure_testing_environment
     raise "Do not call me." if Rails.env.production?
     tmp, Rails.env = Rails.env, 'test'
     yield
+  ensure
     Rails.env = tmp
   end
 

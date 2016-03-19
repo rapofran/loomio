@@ -41,7 +41,7 @@ class Discussion < ActiveRecord::Base
   validate :privacy_is_permitted_by_group
 
   is_translatable on: [:title, :description], load_via: :find_by_key!, id_field: :key
-  has_paper_trail only: [:title, :description]
+  has_paper_trail only: [:title, :description, :private]
 
   belongs_to :group
   belongs_to :author, class_name: 'User'
@@ -70,7 +70,7 @@ class Discussion < ActiveRecord::Base
 
   scope :search_for, ->(query, user, opts = {}) do
     query = sanitize(query)
-     select(:id, :key, :title, :result_group_name, :description, :last_activity_at, :rank, "#{query} as query")
+     select(:id, :key, :title, :result_group_name, :description, :last_activity_at, :rank, "#{query}::text as query")
     .select("ts_headline(discussions.description, plainto_tsquery(#{query}), 'ShortWord=0') as blurb")
     .from(SearchVector.search_for(query, user, opts))
     .joins("INNER JOIN discussions on subquery.discussion_id = discussions.id")
@@ -92,7 +92,12 @@ class Discussion < ActiveRecord::Base
     discussion.motions.count
   end
 
+  define_counter_cache :versions_count do |discussion|
+    discussion.versions.where(event: :update).count
+  end
+
   update_counter_cache :group, :discussions_count
+  update_counter_cache :group, :public_discussions_count
   update_counter_cache :group, :motions_count
 
   def published_at

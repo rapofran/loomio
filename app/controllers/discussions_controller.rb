@@ -6,6 +6,8 @@ class DiscussionsController < GroupBaseController
   before_filter :load_resource_by_key, except: [:new, :create, :index, :update_version]
   authorize_resource :except => [:new, :create, :index, :add_comment]
 
+  skip_before_filter :boot_angular_ui, only: :print
+
   after_filter :mark_as_read, only: :show
   after_filter :track_visit, only: :show
 
@@ -219,5 +221,9 @@ class DiscussionsController < GroupBaseController
     elsif params[:discussion][:group_id]
       Group.find(params[:discussion][:group_id])
     end
+  end
+
+  def metadata
+    @metadata ||= Metadata::DiscussionSerializer.new(load_resource_by_key).as_json
   end
 end

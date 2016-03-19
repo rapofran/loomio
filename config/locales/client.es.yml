@@ -27,7 +27,8 @@ es:
     more_help: 'Mas ayuda '
     models:
       proposal: Propuesta
-    copied: 'Copiado '
+    copy: Copiar texto
+    copied: Copiado al portapapeles
     action:
       close: Cerrar
       save: Guardar
@@ -35,7 +36,9 @@ es:
       update_settings: Actualizar preferencias
       reply: Responder
       edit: Editar
+      remove: Eliminar
       like: Me gusta
+      back: Atrás
       unlike: Ya no me gusta
       update: 'Actualizar '
       cancel: Cancelar
@@ -46,6 +49,7 @@ es:
       loading: Cargando
       translate: Traducir
       translated: Traducido mediante Bing Translator
+      upload: 'Cargar '
       uploading: Cargando
     formatting_help:
       label: 'Ayuda de formato '
@@ -189,7 +193,7 @@ es:
       discussions: Hilos
       proposals: Propuestas
       comments: 'Comentarios '
-    sign_in: Inicia sesión
+    sign_in: Iniciar sesión
   start_menu:
     title: 'Botones de acción '
     start_group: Crear un grupo nuevo
@@ -200,6 +204,8 @@ es:
     header: Notificaciones
     new_discussion: '<strong>{{name}}</strong> empezó una discusión <strong>{{discussion}}</strong>'
     new_motion: '<strong>{{name}}</strong> creó una propuesta <strong>{{proposal}}</strong>'
+    motion_closed: 'Propuesta cerrada: <strong>{{proposal}}</strong>'
+    publish_outcome: Publicar el resultado
     motion_closed_by_user: '<strong>{{name}}</strong> cerró la propuesta <strong>{{proposal}}</strong>'
     motion_closed_by_expiry: 'Se ha cerrado la propuesta <strong>{{proposal}}</strong>'
     new_vote: '<strong>{{name}}</strong> {{position}} a la propuesta <strong>{{proposal}}</strong>'
@@ -214,11 +220,14 @@ es:
     motion_closing_soon: 'La propuesta está a punto de cerrarse: <strong>{{proposal}}</strong>'
     motion_outcome_created: '<strong>{{name}}</strong> publicó un resultado para la propuesta <strong>{{proposal}}</strong>'
     motion_outcome_updated: '<strong>{{name}}</strong> ha actualizado el resultado de la propuesta <strong>{{proposal}}</strong>'
+    invitation_accepted: '<strong>{{name}}</strong> aceptó tu invitación a unirse a <strong>{{group}}</strong>'
+    new_coordinator: '<strong>{{name}}</strong> te ha añadido como coordinador de <strong>{{group}}</strong>'
   position_buttons_panel:
     heading: 'Danos tu opinión '
   vote_form:
     heading: 'Danos tu opinión '
     no_statement: Sin opinión.
+    statement_over_limit: 'Demasiadas palabras! Las frases cortas ayudan a que todos se pongan al día rápidamente.  '
     i_agree: Estoy de acuerdo
     i_agree_details: Estoy de acuerdo con esto y quiero que siga adelante.
     i_abstain: Me abstengo
@@ -309,13 +318,7 @@ es:
   proposal_position_block: Bloquear
   legacy_trial_expired_modal:
     heading: 'Gracias por usar Loomio este año!'
-    body: >
-      <p>Realmente apreciamos tu apoyo en este año, y esperamos mejor Loomio
-      mucho mas en 2016.</p>
-
-      <p>¿Encuentras Loomio útil para tu grupo? Acabamos de terminar nuestros
-      planes de pago y le estamos pidiendo a los grupos que han estado usado
-      Loomio por un tiempo que elijan un plan que les convenga.</p>
+    body: "<p>Realmente apreciamos tu apoyo en este año, y estamos entusiasmados de mejorar Loomio aún más en 2016.</p> \n<p>¿Encuentras que Loomio es útil para tu grupo? Acabamos de lanzar nuestros planes de pago y le estamos pidiendo a los grupos que han utilizado Loomio por un tiempo que elijan un plan que les convenga.</p> \n"
     submit: Muéstrame los planes
   group_welcome_modal:
     heading: Bienvenido/a a tu nuevo grupo
@@ -346,6 +349,12 @@ es:
     submit_button: Solicita unirte al grupo
     messages:
       membership_requested: 'Ya has solicitado unirte a {{group}}'
+  revision_history_modal:
+    thread_header: Historial de revisión del contexto del hilo
+    comment_header: Historial de revisión del comentario
+    started_by: 'Iniciado por <strong>{{name}}</strong>'
+    edited_by: 'Editado por <strong>{{name}}</strong>'
+    posted: Enviado
   group_page:
     thread_list:
       empty:
@@ -367,7 +376,7 @@ es:
     group_logo: Logo del grupo
     new_photo: 'Nueva foto '
     description: 'Descripción del grupo '
-    description_placeholder: 'Usa este espacio para describir el propósito del grupo, de manera que los miembros sepan por qué están aquí.'
+    description_placeholder: 'Los coordinadores pueden usar esta área para describir el propósito del grupo, para que todos sepan para que están aquí. '
     discussions: Hilos
     discussions_placeholder: Un hilo es donde todo el mundo puede discutir un tema y tomar decisiones juntos.
     members: 'Miembros '
@@ -414,6 +423,7 @@ es:
       private: 'Privacidad: Este grupo es solo visible para miembros'
       parent_members: 'Privacidad: Este grupo es visible para los miembros de {{parentGroupName}} y miembros de {{groupName}} '
       public: 'Privacidad: Este grupo es visible en la red '
+      aria_label: 'Privacidad del grupo: {{privacy}}'
   confirm_gift_plan_modal:
     heading: 'Plan Donación a sido seleccionado. '
     body: 'Si tu grupo no tiene presupuesto para pagar por software, no tienes que pagar una suscripción. Los miembros de tu grupo serán regularmente invitados a hacer una donación voluntaria.'
@@ -433,10 +443,9 @@ es:
     title: '30 días de prueba '
     choose_plan: Elige tu plan de pago
     in_progress_body: 'Gracias por probar Loomio con <strong>{{name}}</strong>. En cualquier momento puedes elegir un plan de pago que funcione para tu grupo.'
-    expired_body_html: "<strong>{{name}}</strong> ha alcanzado el final de su prueba de Loomio. Si quieres seguir utilizándolo tienes que elegir un plan de pago a tu medida. Si quieres hablar con alguien al respecto ponte <a href=''>en contacto</a>. "
+    expired_body_html: '<strong>{{name}}</strong> ha llegado al final de su prueba de Loomio. Si quieres seguir usándolo tienes que elegir un plan de pago a la medida de tu grupo.'
   choose_plan_modal:
-    heading: 'Elige tu plan de pago '
-    overdue_heading: 'Para continuar utilizando Loomio por favor elige un plan de pago. '
+    heading: Por favor elige un plan de pago para tu grupo.
     gift: Donación
     standard: 'Estándar '
     plus: Plus
@@ -477,6 +486,7 @@ es:
     edit_group_heading: Editar la configuración del grupo
     edit_subgroup_heading: Editar la configuración del subgrupo
     group_name: Nombre del Grupo
+    group_name_placeholder: ¿Cómo quieres nombrar a tu grupo?
     subgroup_name: 'Nombre del sub-grupo '
     description: 'Descripción '
     description_placeholder: 'Describe el propósito de tu grupo para que los miembros sepan porque están aquí. '
@@ -485,19 +495,19 @@ es:
       private_to_group: 'El nombre y la descripción solo serán visibles para miembros. '
       private_to_parent_members: 'El nombre y la descripción serán visibles para los miembros de {{parent}}'
     privacy: Privacidad
-    group_privacy_open_description: 'Cualquier persona puede encontrar el grupo, ver quien pertenece al mismo, y pedir membresía. Todos los hilos son públicos.'
-    group_privacy_closed_description: 'Cualquier persona puede encontrar el grupo, ver quien pertenece al mismo, y pedir membresía. Solo los miembros pueden ver los hilos.'
-    group_privacy_closed_public_threads_description: 'Cualquier persona puede encontrar el grupo, ver quien pertenece al mismo, y pedir membresía. Los hilos pueden ser públicos o privados.'
-    group_privacy_secret_description: 'Solo miembros que han sido invitados pueden encontrar el grupo y ver los hilos.  '
+    group_privacy_is_open_description: Cualquier persona puede encontrar el grupo y pedir membresía. Solo los miembros pueden ver quien pertenece al grupo. Todos los hilos son públicos.
+    group_privacy_is_closed_description: Cualquier persona puede encontrar el grupo y pedir membresía. Solo los miembros pueden ver quien pertenece al grupo. Todos los hilos son privados.
+    group_privacy_is_closed_public_threads_description: Cualquier persona puede encontrar el grupo y pedir membresía. Solo los miembros pueden ver quien pertenece al grupo. Los hilos pueden ser públicos o privados.
+    group_privacy_is_secret_description: 'Solo miembros que han sido invitados pueden encontrar el grupo, ver el listado de miembros y los hilos de discusión.  '
     confirm_change_to_secret: 'Si procedes, todos los hilo en este grupo y sus subgrupos se harán privados.'
     confirm_change_to_secret_subgroup: Si continuas todos los hilos se harán privados.
     confirm_change_to_public: 'Si continúas, todos los hilos de este grupo se harán públicos en internet.  '
     confirm_change_to_private_discussions_only: 'Si continuas cualquier hilo público en este grupo se hará privado. '
-    subgroup_privacy_open_description: 'Cualquier persona puede encontrar este subgrupo, ver quien pertenece al mismo, y pedir membresía. Todos los hilos son públicos.'
-    subgroup_privacy_closed_description: 'Cualquier persona puede encontrar este subgrupo, ver quien pertenece al mismo, y pedir membresía. Solo los miembros pueden ver los hilos.'
-    subgroup_privacy_closed_public_threads_description: 'Cualquier persona puede encontrar este subgrupo, ver quien pertenece al mismo, y pedir membresía. Los hilos pueden ser públicos o privados.'
-    subgroup_privacy_closed_secret_parent_description: 'miembros de {{parent}} pueden encontrar este subgrupo, ver quien pertenece al mismo, y pedir membresía. '
-    subgroup_privacy_secret_description: 'Solo miembros que han sido invitados pueden encontrar este subgrupo y ver los hilos.  '
+    subgroup_privacy_is_open_description: Cualquier persona puede encontrar el grupo y pedir membresía. Solo los miembros pueden ver quien pertenece al grupo. Todos los hilos son públicos.
+    subgroup_privacy_is_closed_description: Cualquier persona puede encontrar este subgrupo y pedir membresía. Sólo los miembros pueden ver quien pertenece al mismo. Todos los hilos son privados.
+    subgroup_privacy_is_closed_public_threads_description: Cualquier persona puede encontrar este subgrupo y pedir membresía. Sólo los miembros pueden ver quien pertenece al mismo. Los hilos pueden ser públicos o privados.
+    subgroup_privacy_is_closed_secret_parent_description: 'Miembros de {{parent}} pueden encontrar este subgrupo y pedir membresía. Solo los miembros pueden ver quien pertenece al grupo. Todos los hilos son privados.'
+    subgroup_privacy_is_secret_description: 'Sólo miembros que han sido invitados pueden encontrar este subgrupo, ver quien pertenece al mismo y los hilos.  '
     advanced_settings: 'Configuración avanzada '
     how_do_people_join: ¿Cómo se unen las personas a este grupo?
     membership_granted_upon_request: Cualquiera puede unirse al grupo.
@@ -510,7 +520,7 @@ es:
     private_threads: Solamente los miembros pueden ver las discusiones
     permissions: Permisos
     allow_public_threads: Permitir hilos públicos en este grupo.
-    parent_members_can_see_discussions: 'Los miembros de {{parent}} pueden ver los hilos'
+    parent_members_can_see_discussions: 'Los miembros de {{parent}} pueden ver los hilos privados.'
     members_can_add_members: Miembros pueden invitar gente y aprobar membresías.
     members_can_create_subgroups: Los miembros pueden crear subgrupos.
     members_can_edit_discussions: Los miembros pueden editar el título y contexto de cualquier hilo.
@@ -531,7 +541,9 @@ es:
   group_help_card:
     title: Ayuda
     ten_tips_article_title: 10 consejos para tomar decisiones con Loomio
+    ten_tips_article_link: 'https://blog.loomio.org/2015/09/10/10-tips-for-making-great-decisions-with-loomio/'
     nine_ways_to_use_proposals: 9 formas de utilizar propuestas en Loomio para convertir una charla en acción
+    nine_ways_to_use_proposals_link: 'https://blog.loomio.org/2015/09/18/9-ways-to-use-a-loomio-proposal-to-turn-a-conversation-into-action/'
   membership_requests_page:
     heading: Solicitudes de ingreso
     approve: 'Aprobar '
@@ -549,8 +561,12 @@ es:
   invitation_form:
     invite_people: Invita gente
     group: Grupo
+    shareable_link: Enlace para compartir
+    copy_link: Copiar enlace
     email_addresses: Correo electrónico
     email_addresses_placeholder: 'ej. helperbot@loomio.org, friendlybot@loomio.org'
+    shareable_link_explanation: 'Copia el enlace y envíalo a cualquier persona que quieras que se una a tu grupo. Hacer clic en el enlace les dará acceso inmediato. '
+    email_explanation: 'Alternativamente, ingresa las direcciones de email debajo y Loomio les enviará una invitación.'
     add_custom_message: 'Personaliza tu invitación,'
     add_custom_message_link: 'agrega un mensaje personalizado '
     custom_message: 'Mensaje personalizado '
@@ -560,16 +576,12 @@ es:
     add_members: Incluye miembros
     from_parent_group: 'de {{name}}.'
     send: Enviar
+    done: Listo
     messages:
       invitation_sent: 'Invitaciones enviadas. '
       invitations_sent: '{{count}} invitaciones enviadas.'
       no_invitations: 'Por favor verifica que la dirección de correo electrónico es correcta e intenta de nuevo. '
       max_invitations: 'Si quieres enviar mas de 100 invitaciones, utiliza un enlace.'
-  team_link_modal:
-    heading: Incluye gente
-    share_link: Comparte este enlace
-    caution: 'Precaución: cualquiera que tenga este enlace podrá unirse a tu grupo inmediatamente. Se cauteloso de con quien lo compartes :)'
-    copy_link: Copia el enlace
   add_members_modal:
     heading: 'Adherir miembros de {{name}}'
     add_members: 'Incluye miembros '
@@ -596,6 +608,7 @@ es:
     heading: Invitaciones pendientes
     email: 'correo electrónico '
     invitation_link: 'enlace de invitación '
+    sent: 'Enviado '
   cancel_invitation_form:
     heading: 'cancelar invitación '
     question: ¿Estás seguro de que quieres cancelar esta invitación?
@@ -685,7 +698,6 @@ es:
       muted_aria_label: Mostrando hilos silenciados
       muted_description: Ver únicamente hilos que han sido silenciados
     aria_thread:
-      title: 'Título del hilo: {{title}}.'
       unread: '{{count}} elementos no leídos.'
       current_proposal: 'Propuesta actual: {{name}}.'
       you_voted: 'Has votado: {{position}}.'
@@ -708,6 +720,7 @@ es:
     page_header: Tus grupos
   discussion:
     activity: Actividad
+    activity_placeholder: No hay actividad todavía
     proposals: Propuestas
     previous_proposals: Propuestas anteriores
     load_previous: Cargar actividad más reciente
@@ -720,6 +733,7 @@ es:
     liked_by_name: 'Le ha gustado a {{name}}.'
     liked_by_names_and_name: 'A {{joinedNames}} y a {{name}} les ha gustado.'
     started_by: 'Iniciado por <strong>{{name}}</strong>'
+    edited: Editado
     volume:
       loud: 'Enviar correo electrónico cuando hay actividad en este hilo. '
       loud_aria_description: El volumen de notificaciones para este hilo está establecido como Alto. Esto significa que se te enviará un correo electrónico siempre que haya actividad en él.
@@ -742,6 +756,7 @@ es:
     notifications: Notificaciones
     edit_thread: Editar
     move_thread: Mover
+    print_thread: 'Imprimir '
     delete_thread: Eliminar
   delete_thread_form:
     title: 'Borrar hilo '
@@ -771,39 +786,47 @@ es:
       aria_label: Opciones de comentario
       edit_comment: Editar comentario
       delete_comment: Borrar comentario
-    in_reply_to: '<strong>{{author}}</strong> en respuesta a <strong>{{recipient}}</strong>'
+    in_reply_to: 'en respuesta a <strong>{{recipient}}</strong>'
+    edited: Editado
   new_vote_item:
-    commited: "<strong>{{actor}}</strong> se compromete"
-    agree: '<strong>{{actor}}</strong> está de acuerdo'
-    abstain: '<strong>{{actor}}</strong> se abstiene '
-    disagree: '<strong>{{actor}}</strong> no está de acuerdo'
-    block: '<strong>{{actor}}</strong> bloquea  '
-    agree_with_statement: '<strong>{{actor}}</strong> está de acuerdo: <span>{{statement}}</span>'
-    abstain_with_statement: '<strong>{{actor}}</strong> se abstiene: <span>{{statement}}</span>'
-    disagree_with_statement: '<strong>{{actor}}</strong> no está de acuerdo: <span>{{statement}}</span>'
-    block_with_statement: '<strong>{{actor}}</strong> bloquea: <span>{{statement}}</span>'
+    commited: se compromete
+    agree: de acuerdo
+    abstain: abstiene
+    disagree: en desacuerdo
+    block: bloqueado
+    agree_with_statement: 'de acuerdo: <span>{{statement}}</span>'
+    abstain_with_statement: 'abstiene: <span>{{statement}}</span>'
+    disagree_with_statement: 'en desacuerdo: <span>{{statement}}</span>'
+    block_with_statement: 'bloqueo: <span>{{statement}}</span>'
+    commited_with_statement: 'se compromete: <span>{{statement}}</span>'
   new_proposal_item:
-    author_created_proposal: '<strong>{{actor}}</strong> comenzó una propuesta: <span>{{title}}</span>'
+    author_created_proposal: 'comenzó una propuesta: <span>{{title}}</span>'
   proposal_closed_item:
     proposal_closed: 'La propuesta ha cerrado: <span>{{title}}</span>'
   proposal_closed_by_user_item:
-    proposal_closed_by_user: '<strong>{{actor}}</strong> ha cerrado la propuesta: <span>{{title}}</span>'
+    proposal_closed_by_user: 'cerró la propuesta: <span>{{title}}</span>'
   proposal_edited_item:
-    name: '<strong>{{actor}}</strong> ha actualizado el título de la propuesta: <span>{{title}}</span>'
-    description: '<strong>{{actor}}</strong> ha actualizado la descripción de la propuesta'
-    closing_at: '<strong>{{actor}}</strong> ha actualizado el cierre de la propuesta para <span>{{time}}</span>'
-    description_name: '<strong>{{actor}}</strong> ha actualizado el título y la descripción de la propuesta'
-    closing_at_name: '<strong>{{actor}}</strong> ha actualizado el título y el tiempo de cierre de la propuesta '
-    closing_at_description: '<strong>{{actor}}</strong> ha actualizado la descripción y el tiempo de cierre de la propuesta'
-    closing_at_description_name: '<strong>{{actor}}</strong> ha actualizado el título, la descripción y el tiempo de cierre de la propuesta'
+    name: 'actualizó el título de la propuesta: <span>{{title}}</span>'
+    description: actualizó la descripción de la propuesta
+    closing_at: 'actualizó la propuesta para que cierre en <span>{{time}}</span>'
+    description_name: actualizó el título y la descripción de la propuesta
+    closing_at_name: 'actualizó el título y el tiempo de cierre de la propuesta '
+    closing_at_description: actualizó la descripción y el tiempo de cierre de la propuesta
+    closing_at_description_name: 'actualizó el título, la descripción y el tiempo de cierre de la propuesta'
   proposal_outcome_created_item:
-    proposal_outcome_created: '<strong>{{actor}}</strong> ha publicado el resultado de la propuesta'
+    proposal_outcome_created: 'publicó el resultado de la propuesta:'
   proposal_outcome_updated_item:
-    proposal_outcome_updated: '<strong>{{actor}}</strong> ha actualizado el resultado de la propuesta'
+    proposal_outcome_updated: actualizó el resultado de la propuesta
   discussion_edited_item:
-    title: '<strong>{{actor}}</strong> ha actualizado el título del hilo: <span>{{title}}</span>'
-    description: '<strong>{{actor}}</strong> ha actualizado el contexto del hilo'
-    description_title: '<strong>{{actor}}</strong> ha actualizado el título y el contexto del hilo '
+    title: 'actualizó el título del hilo: <span>{{title}}</span>'
+    description: actualizó el contexto del hilo
+    description_title: 'actualizó el título y el contexto del hilo '
+    private: 'Actualizar la privacidad del hilo a '
+    public_to_private: privado
+    private_to_public: público
+    private_title: 'actualizó el título y la privacidad del hilo '
+    description_private: 'actualizó el contexto y la privacidad del hilo '
+    description_private_title: 'se actualizó el título, el contexto y la privacidad del hilo '
   contact_message_form:
     contact_us: Contáctanos
     name_label: Tu nombre
@@ -990,49 +1013,58 @@ es:
     enable:
       invite: Prueba el nuevo Loomio
       title: 'Prueba el nuevo Loomio '
-      intro: Hemos reconstruido Loomio y necesitamos tu ayuda para asegurarnos de que es genial antes de lanzarlo al público general.
-      body_html: >
-        <p></p>
-
-        <h3>¿Cuál es la diferencia ?</h3>
-
-        <p>
-
-        La nueva interfaz es como la antigua pero más nueva:
-
-        <ul>
-
-        <li> Todo en la pagina se actualiza en vivo, como va sucediendo </li>
-
-        <li> Está diseñada para todos tus dispositivos, desde tu smartphone al
-        ordenador de escritorio </li>
-
-        <li> Es accesible para gente ciega, y esta traducido <a
-        href="https://www.loomio.org/translation">a muchos idiomas</a>
-
-        </ul>
-
-        </p>
-
-
-
-        <p> Usa la misma base de datos que la interfaz antigua, esto significa
-        que tiene todos tus grupos existentes y discusiones. Puedes cambiar a la
-        interfaz antigua cuando quieras</p>
-
-        <p> Las cosas cambiar un poquito cada día, implementaremos cambios
-        a medida que recibimos comentarios. Algunas de las opciones menos usadas
-        quizás no estén ahí todavía.</p>
-
-        <p>Hay un enlace para "Volver al Loomio antiguo" en la parte inferior
-        izquierda del nuevo app. Haz clic en ese enlace y podrás volver al Loomio
-        al que estas más acostumbrado. También hay un formulario para que nos
-        dejes cualquier comentario que tengas.</p>
-
-        <p>Esperamos recibir tus comentarios, gracias por tu tiempo y apoyo.</p>
+      intro: 'Hemos reconstruido Loomio y necesitamos tu ayuda para asegurarnos de que es genial!'
+      body_html: "<p></p>\n<h3>;¿Cuál es la diferencia?</h3> \n\n<p> La nueva interfaz es como la antigua pero más nueva:\n<ul>\n<li> Todo en la pagina se actualiza en vivo, como va sucediendo </li>\n<li> Está diseñada para todos tus dispositivos, desde tu smartphone al ordenador de escritorio </li>\n<li> Es accesible para gente ciega, y esta traducido <a href=\"https://www.loomio.org/translation\">a muchos idiomas</a>\n</ul>\n</p>\n\n<p> Usa la misma base de datos que la interfaz antigua, esto significa que tiene todos tus grupos existentes y discusiones.</p>\n<p>Hay un enlace para dar \"Comentarios para Loomio\" en la parte inferior izquierda del nuevo app.También veras un enlace para \"Volver al Loomio antiguo\" que estara disponible por un tiempo más.</p>\n<p>Esperamos recibir tus comentarios, muchas gracias por tu tiempo y apoyo.</p> \n"
       button_text: Habilita el nuevo Loomio
     disable:
       title: Gracias por probar el nuevo Loomio
       body_html: '<p> ¿Hicimos algo mal? Perdón si haz pasado un mal tiempo en el nuevo Loomio.</p>'
       give_feedback: 'Antes de irte considera dejarnos un comentario para que podamos mejorar. '
       button_text: Vuelve al Loomio antiguo
+  global:
+    messages:
+      app_update: 'Una nueva versión de Loomio está disponible '
+      reload: 'Actualizar '
+  emoji_picker:
+    search: Busca un emoji / emoticono...
+    no_emojis_found: "No se han encontrado emojis /emoticonos para  '{{term}}'!"
+  authorized_apps_page:
+    title: 'Apps autorizados '
+    no_applications: No has autorizado ningún app de terceros todavía.
+    notice: "Le has dado permiso a los siguientes apps para usar tu cuenta. Haz clic en 'Remover' para des-habilitarlos. "
+    revoke: Remover
+  registered_apps_page:
+    title: 'Aplicaciones registradas '
+    no_applications: No tienes ninguna aplicación OAuth todavía. Haz clic debajo para crear una.
+    name: Nombre
+    redirect_uris: Redireccionar URLs
+    create_new_application: 'Nueva aplicación '
+  registered_app_page:
+    uid: ID de la aplicación
+    secret: Secreto de la aplicación
+  registered_app_form:
+    new_application_title: 'Nueva aplicación '
+    edit_application_title: Actualizar aplicación
+    name_label: 'Nombre '
+    name_placeholder: ¿Cómo se llama tu aplicación?
+    redirect_uri_label: Redireccionar Uris
+    redirect_uri_placeholder: 'El callback uri de tu aplicación, Ej: https://myapplication.com/loomio/callback'
+    redirect_uri_note: "(una línea por URI, usa 'urn:ietf:wg:oauth:2.0:oob' para pruebas locales)"
+    new_application_submit: Crear aplicación
+    edit_application_submit: 'Actualizar aplicación '
+    messages:
+      logo_changed: Logo actualizado
+      created: "'{{name}}' creado"
+      updated: "'{{name}}' actualizado "
+  remove_app_form:
+    title: 'Desactivar {{name}}'
+    question: "¿Estás seguro de que quieres desactivar la aplicación '{{name}}'? Esta acción no puede ser deshecha. "
+    submit: Desactivar
+    messages:
+      success: "'{{name}}' ha sido desactivada satisfactoriamente"
+  revoke_app_form:
+    title: 'Acceso removido para {{name}}'
+    question: "¿Estás seguro que quieres rechazar que '{{name}}' use tu cuenta?"
+    submit: 'Remover acceso '
+    messages:
+      success: "'{{name}}' ya no puede usar tu cuenta."

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151211044552) do
+ActiveRecord::Schema.define(version: 20160301094551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.datetime "time"
   end
 
+  add_index "ahoy_events", ["properties"], name: "ahoy_events_properties", using: :gin
   add_index "ahoy_events", ["time"], name: "index_ahoy_events_on_time", using: :btree
   add_index "ahoy_events", ["user_id"], name: "index_ahoy_events_on_user_id", using: :btree
   add_index "ahoy_events", ["visit_id"], name: "index_ahoy_events_on_visit_id", using: :btree
@@ -149,6 +150,7 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.integer  "attachments_count",   default: 0,     null: false
     t.text     "liker_ids_and_names"
     t.datetime "edited_at"
+    t.integer  "versions_count",      default: 0
   end
 
   add_index "comments", ["created_at"], name: "index_comments_on_created_at", using: :btree
@@ -265,6 +267,7 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.integer  "first_sequence_id",   default: 0,     null: false
     t.datetime "last_item_at"
     t.integer  "salient_items_count", default: 0,     null: false
+    t.integer  "versions_count",      default: 0
   end
 
   add_index "discussions", ["author_id"], name: "index_discussions_on_author_id", using: :btree
@@ -400,7 +403,6 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "members_invitable_by",               limit: 255
     t.integer  "parent_id"
     t.boolean  "hide_members",                       default: false
     t.text     "description"
@@ -453,6 +455,7 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.integer  "motions_count",                      default: 0,              null: false
     t.integer  "admin_memberships_count",            default: 0,              null: false
     t.integer  "invitations_count",                  default: 0,              null: false
+    t.integer  "public_discussions_count",                       default: 0,              null: false
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
@@ -481,6 +484,7 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "single_use",      default: true,  null: false
+    t.text     "message"
   end
 
   add_index "invitations", ["created_at"], name: "index_invitations_on_created_at", using: :btree
@@ -551,17 +555,17 @@ ActiveRecord::Schema.define(version: 20151211044552) do
     t.integer  "discussion_id"
     t.text     "outcome"
     t.datetime "last_vote_at"
-    t.boolean  "uses_markdown",       default: true, null: false
-    t.integer  "yes_votes_count",     default: 0,    null: false
-    t.integer  "no_votes_count",      default: 0,    null: false
-    t.integer  "abstain_votes_count", default: 0,    null: false
-    t.integer  "block_votes_count",   default: 0,    null: false
+    t.boolean  "uses_markdown",           default: true, null: false
+    t.integer  "yes_votes_count",         default: 0,    null: false
+    t.integer  "no_votes_count",          default: 0,    null: false
+    t.integer  "abstain_votes_count",     default: 0,    null: false
+    t.integer  "block_votes_count",       default: 0,    null: false
     t.datetime "closing_at"
     t.integer  "did_not_votes_count"
-    t.integer  "votes_count",         default: 0,    null: false
+    t.integer  "votes_count",             default: 0,    null: false
     t.integer  "outcome_author_id"
     t.string   "key"
-    t.integer  "members_not_voted_count",             default: 0,    null: false
+    t.integer  "members_not_voted_count", default: 0,    null: false
   end
 
   add_index "motions", ["author_id"], name: "index_motions_on_author_id", using: :btree
@@ -628,6 +632,53 @@ ActiveRecord::Schema.define(version: 20151211044552) do
   add_index "notifications", ["event_id"], name: "index_notifications_on_event_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
   add_index "notifications", ["viewed"], name: "index_notifications_on_viewed", using: :btree
+
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.integer  "resource_owner_id", null: false
+    t.integer  "application_id",    null: false
+    t.string   "token",             null: false
+    t.integer  "expires_in",        null: false
+    t.text     "redirect_uri",      null: false
+    t.datetime "created_at",        null: false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id"
+    t.string   "token",             null: false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        null: false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
+  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
+  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.string   "uid",                       null: false
+    t.string   "secret",                    null: false
+    t.text     "redirect_uri",              null: false
+    t.string   "scopes",       default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
+  end
+
+  add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
   create_table "omniauth_identities", force: :cascade do |t|
     t.integer  "user_id"

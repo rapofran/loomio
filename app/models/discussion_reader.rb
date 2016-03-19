@@ -18,6 +18,10 @@ class DiscussionReader < ActiveRecord::Base
     end
   end
 
+  def self.for_model(model, actor = nil)
+    self.for(user: actor || model.author, discussion: model.is_a?(Discussion) ? model : model.discussion)
+  end
+
   def author_thread_item!(time)
     set_volume_as_required!
     participate!
@@ -93,12 +97,7 @@ class DiscussionReader < ActiveRecord::Base
       reset_counts!
     end
 
-    publish!
-  end
-
-  def publish!
-    publish_data = Simple::DiscussionSerializer.new(discussion, scope: { reader_cache: reader_cache })
-    MessageChannelService.publish(publish_data.as_json, to: user)
+    EventBus.broadcast('discussion_reader_viewed!', discussion, user)
   end
 
   def reset_comment_counts
@@ -160,9 +159,5 @@ class DiscussionReader < ActiveRecord::Base
   private
   def membership
     discussion.group.membership_for(user)
-  end
-
-  def reader_cache
-    @reader_cache ||= DiscussionReaderCache.new(user: self.user, discussions: Array(self.discussion))
   end
 end

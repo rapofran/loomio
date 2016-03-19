@@ -27,7 +27,6 @@ de:
     more_help: Weitere Hilfe
     models:
       proposal: Vorschlag
-    copied: Kopiert
     action:
       close: Schließen
       save: Sichern
@@ -44,6 +43,8 @@ de:
       new_thread: Neuer Strang
       add_subgroup: Untergruppe anlegen
       loading: Laden
+      translate: Übersetze
+      translated: Übersetzung mit Bing Translator
       uploading: Hochladen
     formatting_help:
       label: Formatierungshilfe
@@ -187,7 +188,6 @@ de:
       discussions: Themen
       proposals: Vorschläge
       comments: Kommentare
-    sign_in: Anmelden
   start_menu:
     title: Aktions-Button
     start_group: Gruppe gründen
@@ -302,6 +302,17 @@ de:
   proposal_position_abstain: Enthalten
   proposal_position_no: Ablehnen
   proposal_position_block: Veto
+  legacy_trial_expired_modal:
+    heading: 'Danke, dass Du dieses Jahr Loomio genutzt hast!'
+    body: >
+      <p>Wir schätzen Deine Unterstützung während des Jahres sehr und wir sind
+      glücklich Loomio auch in 2016 immer besser zu machen.</p>
+
+      <p>Hilft Loomio in Deiner Gruppe? Wir haben gerade erst unsere
+      Vertragsmodelle veröffentlicht und wir fragen Gruppen, welche Loomio
+      bereits testen konnten, ein Vertragsmodell zu wählen, das zu ihnen
+      passt.</p>
+    submit: "Zeig' mir die Modelle"
   group_welcome_modal:
     heading: Willkommen in Deiner neuen Gruppe
     first_step: 'Du bist der <strong>Gruppenkoordinator</strong>, das ist so was wie ein Gastgeber. Schau Dir das Video an und dann die Beispiel-Diskussionen.'
@@ -352,7 +363,6 @@ de:
     group_logo: Gruppen-Logo
     new_photo: Neues Foto
     description: Gruppenbeschreibung
-    description_placeholder: 'Nutze diesen Platz um den Zweck der Gruppe zu erläutern, damit Mitglieder wissen, warum sie da sind.'
     discussions: Themen
     discussions_placeholder: In einer Diskussion kann jeder diskutieren und es können gemeinsam Entscheidungen getroffen werden.
     members: 'Mitglieder ({{count}})'
@@ -417,11 +427,10 @@ de:
   trial_card:
     title: 30-Tage-Probe
     choose_plan: Wähle dein Vertragsmodell
-    in_progress_body: 'Danke für das Testen von Loomio mit <strong>{{name}}</strong>. Du kannst jederzeit ein Vertragsmodell wählen, dass Dir passt.'
-    expired_body_html: "<strong>{{name}}</strong> hat nun das Ende des Loomio-Probezeitraums erreicht. Wenn Du es weiter nutzen willst, musst Du ein Vertragsmodell wählen, dass zu Dir passt. Wenn Du mit jemandem von uns darüber reden willst, dann <a href=''>kontaktiere uns</a>."
+    in_progress_body: 'Danke für das testen von Loomio in <strong>{{name}}</strong>. Du kannst jederzeit das Vertragsmodell wählen, dass am Besten zu Deiner Gruppe passt.'
+    expired_body_html: '<strong>{{name}}</strong> hat das Ende des Loomio Probezeitraums erreicht. Um es weiterhin zu nutzen musst Du ein Vertragsmodell wählen, dass am Besten zu Deiner Gruppe passt.'
   choose_plan_modal:
-    heading: Wähle dein Vertragsmodell
-    overdue_heading: 'Um Loomio weiterhin zu nutzen, wähle bitte ein Vertragsmodell aus'
+    heading: Bitte wähle ein Vertragsmodell für Deine Gruppe.
     gift: Geschenk
     standard: Standard
     plus: Plus
@@ -468,19 +477,14 @@ de:
       private_to_group: Name und Beschreibung sind nur Mitgliedern sichtbar
       private_to_parent_members: 'Name und Beschreibung sind nur für Mitglieder von {{parent}} sichtbar'
     privacy: Privatsphäre
-    group_privacy_open_description: 'jede.r kann die Gruppe finden, sehen wer dabei ist und um Aufnahme bitten. Alle Diskussionen sind öffentlich.'
-    group_privacy_closed_description: 'jede.r kann die Gruppe finden, sehen wer dabei ist und um Aufnahme bitten. Nur Mitglieder können die Diskussionen sehen.'
-    group_privacy_closed_public_threads_description: 'jede.r kann die Gruppe finden, sehen wer dabei ist und um Aufnahme bitten. Alle Diskussionen können öffentlich oder privat sein.'
-    group_privacy_secret_description: nur geladene Mitglieder können diese Gruppe finden und die Diskussionen sehen.
+    group_privacy_is_open_description: 'jede.r kann die Gruppe finden und um Aufnahme bitten. Nur Mitglieder können sehen, wer dabei ist. Alle Diskussionen sind öffentlich.'
+    group_privacy_is_closed_description: 'jede.r kann die Gruppe finden und um Aufnahme bitten. Nur Mitglieder können sehen, wer dabei ist. Alle Diskussionen sind privat.'
+    group_privacy_is_closed_public_threads_description: 'jede.r kann die Gruppe finden und um Aufnahme bitten. Nur Mitglieder können sehen, wer dabei ist. Alle Diskussionen können öffentlich oder privat sein.'
+    group_privacy_is_secret_description: 'nur eingeladene Mitglieder können diese Gruppe finden, sehen, wer dabei ist, und die Diskussionen sehen.'
     confirm_change_to_secret: Wenn Du fortfährst werden alle Diskussionen dieser Gruppe und all ihrer Untergruppen privat.
     confirm_change_to_secret_subgroup: Wenn Du fortfährst werden alle Diskussionen privat.
     confirm_change_to_public: Wenn Du fortfährst werden alle Diskussionen in der Gruppe öffentlich sichtbar im Web.
     confirm_change_to_private_discussions_only: Wenn Du fortfährst werden alle öffentlichen Diskussionen dieser Gruppe privat.
-    subgroup_privacy_open_description: 'jede.r kann die Untergruppe finden, sehen wer dabei ist und um Aufnahme bitten. Alle Diskussionen sind öffentlich.'
-    subgroup_privacy_closed_description: 'jede.r kann die Untergruppe finden, sehen wer dabei ist und um Aufnahme bitten. Nur Mitglieder können die Diskussionen sehen.'
-    subgroup_privacy_closed_public_threads_description: 'jede.r kann die Untergruppe finden, sehen wer dabei ist und um Aufnahme bitten. Alle Diskussionen können öffentlich oder privat sein.'
-    subgroup_privacy_closed_secret_parent_description: 'Mitglieder von {{parent}} können die Untergruppe finden, sehen wer dabei ist und um Aufnahme bitten.'
-    subgroup_privacy_secret_description: nur geladene Mitglieder können diese Untergruppe finden und die Diskussionen sehen.
     advanced_settings: Erweiterte Einstellungen
     how_do_people_join: Wie kann jemand teilnehmen?
     membership_granted_upon_request: JedeR kann der Gruppe beitreten.
@@ -493,7 +497,6 @@ de:
     private_threads: Nur Mitglieder können Diskussionen sehen
     permissions: Berechtigungen
     allow_public_threads: Öffentliche Diskussionen in der Gruppe erlauben.
-    parent_members_can_see_discussions: 'Miglieder von {{parent}} können die Diskussionen sehen.'
     members_can_add_members: Mitglieder können andere einladen und Beitrittsanfragen beantworten.
     members_can_create_subgroups: Mitglieder können Untergruppen erstellen.
     members_can_edit_discussions: Mitglieder können die Beschreibung und den Titel aller Diskussionen bearbeiten.
@@ -548,11 +551,6 @@ de:
       invitations_sent: '{{count}} Einladungen versendet.'
       no_invitations: 'Upps! Bitte überprüfe die eMail-Adresse und versuche es noch einmal.'
       max_invitations: 'Wenn Du mehr als 100 Einladungen zu verschicken hast, nutze einen Team-Link.'
-  team_link_modal:
-    heading: Füge Menschen hinzu
-    share_link: Teile diesen Link
-    caution: 'Achtung: jede Person, die diesen Link hat, kann Deiner Gruppe unverzüglich beitreten. Achte darauf, wem Du diesen Link teilst :)'
-    copy_link: Link kopieren
   add_members_modal:
     heading: 'Mitglieder aus der Gruppe {{name}} hinzufügen'
     add_members: Mitglieder hinzufügen
@@ -579,6 +577,7 @@ de:
     heading: Ausstehende Einladungen
     email: eMail
     invitation_link: Link zur Einladung
+    sent: Senden
   cancel_invitation_form:
     heading: Einladung abbrechen
     question: 'Sicher, dass Du diese Einladung löschen willst?'
@@ -668,7 +667,6 @@ de:
       muted_aria_label: Momentan werden nur stumm-geschaltete Diskussionen angezeigt
       muted_description: 'Nur Diskussionen anzeigen, die Du stumm geschaltet hast.'
     aria_thread:
-      title: 'Diskussionstitel:  {{title}}.'
       unread: '{{count}} ungelesene Einträge'
       current_proposal: 'Aktueller Vorschlag: {{name}}.'
       you_voted: 'Du hast folgendermaßen abgestimmt: {{position}}.'
@@ -691,6 +689,7 @@ de:
     page_header: Deine Gruppen
   discussion:
     activity: Beiträge
+    activity_placeholder: 'Noch keine neuen Beiträge!'
     proposals: Vorschläge
     previous_proposals: Vorherige Vorschläge
     load_previous: Lade ältere Beiträge
@@ -753,38 +752,38 @@ de:
       aria_label: Kommentar-Optionen
       edit_comment: Kommentar bearbeiten
       delete_comment: Kommentar löschen
-    in_reply_to: '<strong>{{author}}</strong> antwortet <strong>{{recipient}}</strong>'
+    in_reply_to: 'In Antwort zu <strong>{{recipient}}</strong>:'
   new_vote_item:
-    agree: '<strong>{{actor}}</strong> stimmte zu'
-    abstain: '<strong>{{actor}}</strong> enthielt sich'
-    disagree: '<strong>{{actor}}</strong> lehnte ab'
-    block: '<strong>{{actor}}</strong> legte Veto ein'
-    agree_with_statement: '<strong>{{actor}}</strong> stimmte zu: <span>{{statement}}</span>'
-    abstain_with_statement: '<strong>{{actor}}</strong> enthielt sich: <span>{{statement}}</span>'
-    disagree_with_statement: '<strong>{{actor}}</strong> lehnte ab: <span>{{statement}}</span>'
-    block_with_statement: '<strong>{{actor}}</strong> lehnte Veto ein: <span>{{statement}}</span>'
+    agree: hat zugestimmt
+    abstain: hat sich enthalten
+    disagree: hat abgelehnt
+    block: hat Veto eingelegt
+    agree_with_statement: 'hat zugestimmt: <span>{{statement}}</span>'
+    abstain_with_statement: 'hat sich enthalten: <span>{{statement}}</span>'
+    disagree_with_statement: 'hat abgelehnt: <span>{{statement}}</span>'
+    block_with_statement: 'hat Veto eingelegt: <span>{{statement}}</span>'
   new_proposal_item:
-    author_created_proposal: '<strong>{{actor}}</strong> schlägt vor: <span>{{title}}</span>'
+    author_created_proposal: 'hat einen Vorschlag erstellt: <span>{{title}}</span>'
   proposal_closed_item:
     proposal_closed: 'Der Vorschlag ist geschlossen: <span>{{title}}</span>'
   proposal_closed_by_user_item:
-    proposal_closed_by_user: '<strong>{{actor}}</strong> schloss den Vorschlag: <span>{{title}}</span>'
+    proposal_closed_by_user: 'schloss den Vorschlag: <span>{{title}}</span>'
   proposal_edited_item:
-    name: '<strong>{{actor}}</strong> aktualisierte den Vorschlagtitel: <span>{{title}}</span>'
-    description: '<strong>{{actor}}</strong> aktualisierte die Vorschlagsbeschreibung'
-    closing_at: '<strong>{{actor}}</strong> aktualisierte das Ende des Vorschlags auf <span>{{time}}</span>'
-    description_name: '<strong>{{actor}}</strong> aktualisierte Vorschlagtitel und -beschreibung'
-    closing_at_name: '<strong>{{actor}}</strong> aktualisierte Vorschlagtitel und -Endzeit'
-    closing_at_description: '<strong>{{actor}}</strong> aktualisierte Vorschlagsbeschreibung und -Endzeit'
-    closing_at_description_name: '<strong>{{actor}}</strong> aktualisierte Vorschlagtitel, -beschreibung und -Endzeit'
+    name: 'aktualisierte den Vorschlagtitel: <span>{{title}}</span>'
+    description: aktualisierte die Vorschlagsbeschreibung
+    closing_at: 'aktualisierte das Ende des Vorschlags auf <span>{{time}}</span>'
+    description_name: aktualisierte Vorschlagtitel und -beschreibung
+    closing_at_name: aktualisierte Vorschlagtitel und Ende
+    closing_at_description: aktualisierte Vorschlagsbeschreibung und Ende
+    closing_at_description_name: 'aktualisierte Vorschlagtitel, -beschreibung und Ende'
   proposal_outcome_created_item:
-    proposal_outcome_created: '<strong>{{actor}}</strong> veröffentlichte ein Vorschlagsbeschluss:'
+    proposal_outcome_created: 'veröffentlichte ein Vorschlagsbeschluss:'
   proposal_outcome_updated_item:
-    proposal_outcome_updated: '<strong>{{actor}}</strong> aktualisierte den Vorschlagsbeschluss:'
+    proposal_outcome_updated: 'aktualisierte den Vorschlagsbeschluss:'
   discussion_edited_item:
-    title: '<strong>{{actor}}</strong> aktualisierte den Diskussionstitel: <span>{{title}}</span>'
-    description: '<strong>{{actor}}</strong> aktualisierte die Diskussionsbeschreibung'
-    description_title: '<strong>{{actor}}</strong> aktualisierte den Diskussionstitel und die Diskussionsbeschreibung'
+    title: 'aktualisierte den Diskussionstitel: <span>{{title}}</span>'
+    description: aktualisierte die Diskussionsbeschreibung
+    description_title: aktualisierte Diskussionstitel und Diskussionsbeschreibung
   contact_message_form:
     contact_us: Kontaktiere uns
     name_label: Dein Name
@@ -948,52 +947,13 @@ de:
     enable:
       invite: 'Das neue Loomio testen!'
       title: Das neue Loomio testen
-      intro: 'Wir haben Loomio erneuert und wir benötigen Deine Hilfe, damit wir sicher sein können, dass es grandios ist bevor wir es der Öffentlichkeit präsentieren.'
-      body_html: >
-        <p></p>
-
-        <h3>Was ist denn eigentlich der Unterschied?</h3>
-
-
-
-        <p>
-
-          Das neue Interface ist wie das Alte, nur neuer:
-
-          <ul>
-
-            <li>Alles wird in Echtzeit aktualisiert.</li>
-
-            <li>Es ist für alle Endgeräte konzipiert: vom Smartphone bis zum
-        Desktop-PC</li>
-
-            <li>Es ist zugänglich für Menschen mit Sehbehinderung und in einen <a
-        href="https://www.loomio.org/translation">Haufen Sprachen</a> übersetzt
-
-          </ul>
-
-        </p>
-
-
-
-        <p>Es benutzt die gleiche Datenbank wie das alte Interface, was heißt,
-        dass alle Deine Gruppen und Diskussionen enthalten sind. Du kannst
-        jederzeit zum alten Interface wechseln.</p>
-
-        <p>Dinge werden sich schleichend ändern, in dem Zuge, wie wir Euer
-        Feedback implementieren. Einige kaum genutzte Features wird es noch nicht
-        geben.</p>
-
-        <p>Es gibt einen Link "Zum alten Loomio wechseln" am unteren, linken Eck
-        der neuen App. Klicke diesen Link und Du kannst zum alten, Dir bekannten
-        Loomio wechseln. Dort gibt es auch ein Feedback-Formular in welches Du
-        Rückmeldungen eingeben kannst, falls Du welche hast.</p>
-
-        <p>Wir würden uns sehr über Dein Feedback freuen. Vielen Dank für Deine
-        Zeit und Deine Unterstützung.</p>
       button_text: Das neue Loomio einrichten
     disable:
       title: 'Vielen Dank, dass Du das neue Loomio getestet hast'
       body_html: '<p>Mmmh, haben wir etwas falsch gemacht? Wir bedauern sehr, dass Dir das neue Loomio nicht gefällt. </p>'
       give_feedback: 'Bevor Du das neue Loomio verlässt, gib uns bitte Deine Meinung damit wir uns und es verbessern können.'
       button_text: Zum alten Loomio wechseln
+  global:
+    messages:
+      app_update: Eine neue Version von Loomio ist erhältlich
+      reload: Reload
