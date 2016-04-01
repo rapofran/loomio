@@ -24,11 +24,13 @@ $small-max-px:  $small-max  + px;
 $medium-max-px: $medium-max + px;
 $max-container-size: 1120px;
 
+$commited-color: #9054b6;
 $agree-color: hsl(148, 40, 52);
 $abstain-color: hsl(37, 92, 61);
 $disagree-color: hsl(352, 79, 70);
 $block-color: hsl(7, 68, 49);
 
+$commited-border-color: darken($commited-color, 10%);
 $agree-border-color: darken($agree-color, 10%);
 $disagree-border-color: darken($disagree-color, 10%);
 $abstain-border-color: darken($abstain-color, 10%);
