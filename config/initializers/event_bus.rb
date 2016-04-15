@@ -43,7 +43,9 @@ EventBus.configure do |config|
   # update discussion reader after thread item creation
   config.listen('new_comment_event',
                 'new_motion_event',
-                'new_vote_event') do |event|
+                'new_vote_event',
+                'motion_closed_event',
+                'motion_closed_by_user_event') do |event|
     DiscussionReader.for_model(event.eventable).author_thread_item!(event.created_at)
   end
 
@@ -63,6 +65,10 @@ EventBus.configure do |config|
                 'motion_description_edited_event',
                 'comment_liked_event') do |event|
     MessageChannelService.publish(EventSerializer.new(event), to: event.eventable.group)
+  end
+
+  config.listen('discussion_moved_event') do |event|
+    MessageChannelService.publish(EventSerializer.new(event), to: event.eventable)
   end
 
   # update discussion reader after discussion creation / edition

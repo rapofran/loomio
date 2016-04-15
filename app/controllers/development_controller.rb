@@ -215,6 +215,15 @@ class DevelopmentController < ApplicationController
                                 membership_granted_upon: 'request',
                                 group_privacy: 'open')
     @test_discussion = @test_group.discussions.create!(title: 'I carried a watermelon', private: false, author: jennifer)
+    @test_proposal = @test_discussion.motions.create!(name: 'Let\'s go to the moon!', closed_at: 3.days.ago, closing_at: 3.days.ago, author: jennifer)
+    redirect_to group_url(@test_group)
+  end
+
+  def view_closed_group_as_visitor
+    @test_group = Group.create!(name: 'Closed Dirty Dancing Shoes',
+                                membership_granted_upon: 'approval',
+                                group_privacy: 'closed')
+    @test_discussion = @test_group.discussions.create!(title: 'I carried a watermelon', private: true, author: jennifer)
     redirect_to group_url(@test_group)
   end
 

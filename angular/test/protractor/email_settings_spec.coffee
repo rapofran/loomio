@@ -1,20 +1,28 @@
 describe 'Email settings', ->
   page = require './helpers/page_helper.coffee'
-  emailSettingsHelper = require './helpers/email_settings_helper.coffee'
 
   beforeEach ->
-    emailSettingsHelper.load()
-    emailSettingsHelper.visitEmailSettingsPage()
+    page.loadPath('setup_group')
+    page.click '.navbar-user-options',
+               '.navbar-user-options__email-settings-link'
 
-  it "successfully updates a user's email settings", ->
-    emailSettingsHelper.updateEmailSettings()
-    emailSettingsHelper.visitEmailSettingsPage()
-    expect(emailSettingsHelper.dailySummaryCheckbox().isSelected()).toBeTruthy()
-    expect(emailSettingsHelper.onParticipationCheckbox().isSelected()).toBeTruthy()
-    expect(emailSettingsHelper.proposalClosingSoonCheckbox().isSelected()).toBeTruthy()
-    expect(emailSettingsHelper.mentionedCheckbox().isSelected()).toBeTruthy()
+  describe 'updating email settings', ->
+    it 'lets you update email settings', ->
+      page.click '.email-settings-page__daily-summary',
+                 '.email-settings-page__update-button'
+      page.expectFlash 'Email settings updated'
 
-  it 'redirects the user to the dashboard with flash when settings are updated', ->
-    emailSettingsHelper.updateEmailSettings()
-    page.expectFlash('Email settings updated')
-    page.expectElement('.dashboard-page')
+    it 'lets you set default email settings for all new memberships', ->
+      page.click '.email-settings-page__change-default-link'
+      page.expectText '.change-volume-form__title', 'Email settings for new groups'
+      page.click '#volume-normal',
+                 '.change-volume-form__submit'
+      page.expectFlash 'You will be emailed about new threads and proposals in new groups.'
+      page.expectText  '.email-settings-page__default-description', 'When you join a new group, you will be emailed about new threads and proposals.'
+
+    it 'lets you update email settings for all current memberships', ->
+      page.click '.email-settings-page__change-default-link',
+                 '#volume-normal',
+                 '.change-volume-form__apply-to-all',
+                 '.change-volume-form__submit'
+      page.expectText '.email-settings-page__membership-volume', 'Important activity'

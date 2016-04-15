@@ -164,11 +164,7 @@ module ApplicationHelper
   end
 
   def hosted_by_loomio?
-    ENV['HOSTED_BY_LOOMIO']
-  end
-
-  def third_party_install?
-    !hosted_by_loomio?
+    false
   end
 
   def site_hostname
@@ -181,5 +177,9 @@ module ApplicationHelper
     else
       image_url("navbar-logo-beta.jpg")
     end
+  end
+
+  def show_beta_banner?
+    ENV.has_key?('BETA_BANNER_LINK') && ['dashboard', 'inbox', 'groups', 'discussions', 'users'].include?(controller_name)
   end
 end
