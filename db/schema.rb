@@ -581,6 +581,7 @@ ActiveRecord::Schema.define(version: 20160317031412) do
     t.integer  "votes_count",             default: 0,    null: false
     t.integer  "outcome_author_id"
     t.string   "key"
+    t.integer  "commited_votes_count",    default: 0,    null: false
     t.integer  "members_not_voted_count", default: 0,    null: false
   end
 
@@ -776,11 +777,6 @@ ActiveRecord::Schema.define(version: 20160317031412) do
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                    default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
