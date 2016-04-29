@@ -6,7 +6,7 @@ class BaseMailer < ActionMailer::Base
   include EmailHelper
   include Roadie::Rails::Automatic
 
-  add_template_helper(ReadableUnguessableUrlsHelper)
+  add_template_helper(PrettyUrlHelper)
 
   default :from => "Consenso <notificaciones@#{ENV['SMTP_DOMAIN']}>"
   before_action :utm_hash
