@@ -655,8 +655,6 @@ GEM
     unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
     user_agent_parser (2.3.0)
-    uuid (2.3.7)
-      macaddr (~> 1.0)
     uuidtools (2.1.5)
     warden (1.2.6)
       rack (>= 1.0)

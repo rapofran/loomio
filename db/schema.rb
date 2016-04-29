@@ -270,7 +270,6 @@ ActiveRecord::Schema.define(version: 20160428005646) do
     t.text     "description"
     t.boolean  "uses_markdown",       default: false, null: false
     t.boolean  "is_deleted",          default: false, null: false
-    t.integer  "comments_count",      default: 0,     null: false
     t.integer  "items_count",         default: 0,     null: false
     t.boolean  "private"
     t.string   "key"
@@ -569,18 +568,18 @@ ActiveRecord::Schema.define(version: 20160428005646) do
     t.integer  "discussion_id"
     t.text     "outcome"
     t.datetime "last_vote_at"
-    t.boolean  "uses_markdown",       default: true, null: false
-    t.integer  "yes_votes_count",     default: 0,    null: false
-    t.integer  "no_votes_count",      default: 0,    null: false
-    t.integer  "abstain_votes_count", default: 0,    null: false
-    t.integer  "block_votes_count",   default: 0,    null: false
+    t.boolean  "uses_markdown",        default: true, null: false
+    t.integer  "yes_votes_count",      default: 0,    null: false
+    t.integer  "no_votes_count",       default: 0,    null: false
+    t.integer  "abstain_votes_count",  default: 0,    null: false
+    t.integer  "block_votes_count",    default: 0,    null: false
     t.datetime "closing_at"
-    t.integer  "votes_count",         default: 0,    null: false
+    t.integer  "votes_count",          default: 0,    null: false
     t.integer  "outcome_author_id"
     t.string   "key"
-    t.integer  "commited_votes_count",    default: 0,    null: false
+    t.integer  "commited_votes_count", default: 0,    null: false
     t.integer  "members_count"
-    t.integer  "voters_count",        default: 0,    null: false
+    t.integer  "voters_count",         default: 0,    null: false
   end
 
   add_index "motions", ["author_id"], name: "index_motions_on_author_id", using: :btree
