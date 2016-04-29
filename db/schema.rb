@@ -18,14 +18,14 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   enable_extension "hstore"
 
   create_table "active_admin_comments", force: :cascade do |t|
-    t.string   "resource_id",   null: false
-    t.string   "resource_type", null: false
+    t.string   "resource_id",   limit: 255, null: false
+    t.string   "resource_type", limit: 255, null: false
     t.integer  "author_id"
-    t.string   "author_type"
+    t.string   "author_type",   limit: 255
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "namespace"
+    t.string   "namespace",     limit: 255
   end
 
   add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
@@ -72,17 +72,17 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "announcement_dismissals", ["user_id"], name: "index_announcement_dismissals_on_user_id", using: :btree
 
   create_table "announcements", force: :cascade do |t|
-    t.text     "message",                   null: false
-    t.string   "locale",     default: "en", null: false
-    t.datetime "starts_at",                 null: false
-    t.datetime "ends_at",                   null: false
+    t.text     "message",                               null: false
+    t.string   "locale",     limit: 255, default: "en", null: false
+    t.datetime "starts_at",                             null: false
+    t.datetime "ends_at",                               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "attachments", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "filename"
+    t.string   "filename",          limit: 255
     t.text     "location"
     t.integer  "comment_id"
     t.datetime "created_at"
@@ -114,18 +114,18 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   end
 
   create_table "campaigns", force: :cascade do |t|
-    t.string   "showcase_url"
+    t.string   "showcase_url",  limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",          null: false
-    t.string   "manager_email", null: false
+    t.string   "name",          limit: 255, null: false
+    t.string   "manager_email", limit: 255, null: false
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "position",   default: 0, null: false
+    t.integer  "position",               default: 0, null: false
   end
 
   create_table "cohorts", force: :cascade do |t|
@@ -154,19 +154,19 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "comment_votes", ["user_id"], name: "index_comment_votes_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
-    t.integer  "discussion_id",       default: 0
-    t.text     "body",                default: ""
-    t.string   "subject",             default: ""
-    t.integer  "user_id",             default: 0,     null: false
+    t.integer  "discussion_id",                   default: 0
+    t.text     "body",                            default: ""
+    t.string   "subject",             limit: 255, default: ""
+    t.integer  "user_id",                         default: 0,     null: false
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "uses_markdown",       default: false, null: false
-    t.integer  "comment_votes_count", default: 0,     null: false
-    t.integer  "attachments_count",   default: 0,     null: false
+    t.boolean  "uses_markdown",                   default: false, null: false
+    t.integer  "comment_votes_count",             default: 0,     null: false
+    t.integer  "attachments_count",               default: 0,     null: false
     t.text     "liker_ids_and_names"
     t.datetime "edited_at"
-    t.integer  "versions_count",      default: 0
+    t.integer  "versions_count",                  default: 0
   end
 
   add_index "comments", ["created_at"], name: "index_comments_on_created_at", using: :btree
@@ -175,20 +175,20 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "contact_messages", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",        limit: 255
     t.integer  "user_id"
-    t.string   "email"
+    t.string   "email",       limit: 255
     t.text     "message"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "destination", default: "contact@loomio.org"
+    t.string   "destination", limit: 255, default: "contact@loomio.org"
   end
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "name"
-    t.string   "email"
-    t.string   "source"
+    t.string   "name",       limit: 255
+    t.string   "email",      limit: 255
+    t.string   "source",     limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -205,15 +205,15 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0
-    t.integer  "attempts",   default: 0
+    t.integer  "priority",               default: 0
+    t.integer  "attempts",               default: 0
     t.text     "handler"
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
+    t.string   "locked_by",  limit: 255
+    t.string   "queue",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -265,17 +265,17 @@ ActiveRecord::Schema.define(version: 20160428005646) do
     t.integer  "author_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title"
+    t.string   "title",               limit: 255
     t.datetime "last_comment_at"
     t.text     "description"
     t.boolean  "uses_markdown",       default: false, null: false
     t.boolean  "is_deleted",          default: false, null: false
     t.integer  "items_count",         default: 0,     null: false
     t.boolean  "private"
-    t.string   "key"
+    t.string   "key",                 limit: 255
     t.datetime "archived_at"
-    t.string   "iframe_src"
-    t.integer  "motions_count",       default: 0
+    t.string   "iframe_src",          limit: 255
+    t.integer  "motions_count",                   default: 0
     t.datetime "last_activity_at"
     t.integer  "last_sequence_id",    default: 0,     null: false
     t.integer  "first_sequence_id",   default: 0,     null: false
@@ -300,11 +300,11 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "kind"
+    t.string   "kind",           limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "eventable_id"
-    t.string   "eventable_type"
+    t.string   "eventable_type", limit: 255
     t.integer  "user_id"
     t.integer  "discussion_id"
     t.integer  "sequence_id"
@@ -348,24 +348,24 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "group_measurements", ["period_end_on"], name: "index_group_measurements_on_period_end_on", using: :btree
 
   create_table "group_requests", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                limit: 255
     t.text     "description"
-    t.string   "admin_email"
+    t.string   "admin_email",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "status"
+    t.string   "status",              limit: 255
     t.integer  "group_id"
     t.boolean  "cannot_contribute"
-    t.string   "expected_size"
-    t.integer  "max_size",            default: 300
-    t.string   "robot_trap"
+    t.string   "expected_size",       limit: 255
+    t.integer  "max_size",                        default: 300
+    t.string   "robot_trap",          limit: 255
     t.integer  "distribution_metric"
-    t.string   "sectors"
-    t.string   "other_sector"
-    t.string   "token"
-    t.string   "admin_name"
-    t.string   "country_name"
-    t.boolean  "high_touch",          default: false, null: false
+    t.string   "sectors",             limit: 255
+    t.string   "other_sector",        limit: 255
+    t.string   "token",               limit: 255
+    t.string   "admin_name",          limit: 255
+    t.string   "country_name",        limit: 255
+    t.boolean  "high_touch",                      default: false, null: false
     t.datetime "approved_at"
     t.datetime "defered_until"
     t.integer  "approved_by_id"
@@ -379,20 +379,20 @@ ActiveRecord::Schema.define(version: 20160428005646) do
 
   create_table "group_setups", force: :cascade do |t|
     t.integer  "group_id"
-    t.string   "group_name"
+    t.string   "group_name",             limit: 255
     t.text     "group_description"
-    t.string   "viewable_by",            default: "members"
-    t.string   "members_invitable_by",   default: "admins"
-    t.string   "discussion_title"
+    t.string   "viewable_by",            limit: 255, default: "members"
+    t.string   "members_invitable_by",   limit: 255, default: "admins"
+    t.string   "discussion_title",       limit: 255
     t.text     "discussion_description"
-    t.string   "motion_title"
+    t.string   "motion_title",           limit: 255
     t.text     "motion_description"
     t.date     "close_at_date"
-    t.string   "close_at_time_zone"
-    t.string   "close_at_time"
-    t.string   "admin_email"
+    t.string   "close_at_time_zone",     limit: 255
+    t.string   "close_at_time",          limit: 255
+    t.string   "admin_email",            limit: 255
     t.text     "recipients"
-    t.string   "message_subject"
+    t.string   "message_subject",        limit: 255
     t.text     "message_body"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -413,62 +413,62 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "group_visits", ["visit_id", "group_id"], name: "index_group_visits_on_visit_id_and_group_id", unique: true, using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                               limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_id"
-    t.boolean  "hide_members",                       default: false
+    t.boolean  "hide_members",                                   default: false
     t.text     "description"
     t.datetime "archived_at"
-    t.integer  "memberships_count",                  default: 0,              null: false
-    t.integer  "max_size",                           default: 100,            null: false
-    t.boolean  "cannot_contribute",                  default: false
+    t.integer  "memberships_count",                              default: 0,              null: false
+    t.integer  "max_size",                                       default: 100,            null: false
+    t.boolean  "cannot_contribute",                              default: false
     t.integer  "distribution_metric"
-    t.string   "sectors"
-    t.string   "other_sector"
-    t.integer  "discussions_count",                  default: 0,              null: false
-    t.string   "country_name"
+    t.string   "sectors",                            limit: 255
+    t.string   "other_sector",                       limit: 255
+    t.integer  "discussions_count",                              default: 0,              null: false
+    t.string   "country_name",                       limit: 255
     t.datetime "setup_completed_at"
-    t.boolean  "next_steps_completed",               default: false,          null: false
-    t.string   "full_name"
-    t.string   "payment_plan",                       default: "undetermined"
-    t.boolean  "parent_members_can_see_discussions", default: false,          null: false
-    t.string   "key"
-    t.boolean  "can_start_group",                    default: true
+    t.boolean  "next_steps_completed",                           default: false,          null: false
+    t.string   "full_name",                          limit: 255
+    t.string   "payment_plan",                       limit: 255, default: "undetermined"
+    t.boolean  "parent_members_can_see_discussions",             default: false,          null: false
+    t.string   "key",                                limit: 255
+    t.boolean  "can_start_group",                                default: true
     t.integer  "category_id"
-    t.boolean  "is_visible_to_public",               default: true,           null: false
-    t.boolean  "is_visible_to_parent_members",       default: false,          null: false
-    t.string   "discussion_privacy_options",                                  null: false
-    t.boolean  "members_can_add_members",            default: true,           null: false
-    t.string   "membership_granted_upon",                                     null: false
+    t.boolean  "is_visible_to_public",                           default: true,           null: false
+    t.boolean  "is_visible_to_parent_members",                   default: false,          null: false
+    t.string   "discussion_privacy_options",         limit: 255,                          null: false
+    t.boolean  "members_can_add_members",                        default: true,           null: false
+    t.string   "membership_granted_upon",            limit: 255,                          null: false
     t.text     "enabled_beta_features"
-    t.string   "subdomain"
+    t.string   "subdomain",                          limit: 255
     t.integer  "theme_id"
-    t.string   "cover_photo_file_name"
-    t.string   "cover_photo_content_type"
+    t.string   "cover_photo_file_name",              limit: 255
+    t.string   "cover_photo_content_type",           limit: 255
     t.integer  "cover_photo_file_size"
     t.datetime "cover_photo_updated_at"
-    t.string   "logo_file_name"
-    t.string   "logo_content_type"
+    t.string   "logo_file_name",                     limit: 255
+    t.string   "logo_content_type",                  limit: 255
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
-    t.boolean  "members_can_edit_discussions",       default: true,           null: false
-    t.boolean  "motions_can_be_edited",              default: false,          null: false
-    t.boolean  "members_can_edit_comments",          default: true
-    t.boolean  "members_can_raise_motions",          default: true,           null: false
-    t.boolean  "members_can_vote",                   default: true,           null: false
-    t.boolean  "members_can_start_discussions",      default: true,           null: false
-    t.boolean  "members_can_create_subgroups",       default: false,          null: false
+    t.boolean  "members_can_edit_discussions",                   default: true,           null: false
+    t.boolean  "motions_can_be_edited",                          default: false,          null: false
+    t.boolean  "members_can_edit_comments",                      default: true
+    t.boolean  "members_can_raise_motions",                      default: true,           null: false
+    t.boolean  "members_can_vote",                               default: true,           null: false
+    t.boolean  "members_can_start_discussions",                  default: true,           null: false
+    t.boolean  "members_can_create_subgroups",                   default: false,          null: false
     t.integer  "creator_id"
     t.boolean  "is_commercial"
-    t.boolean  "is_referral",                        default: false,          null: false
+    t.boolean  "is_referral",                                    default: false,          null: false
     t.integer  "cohort_id"
     t.integer  "default_group_cover_id"
     t.integer  "subscription_id"
-    t.integer  "motions_count",                      default: 0,              null: false
-    t.integer  "admin_memberships_count",            default: 0,              null: false
-    t.integer  "invitations_count",                  default: 0,              null: false
-    t.integer  "public_discussions_count",           default: 0,              null: false
+    t.integer  "motions_count",                                  default: 0,              null: false
+    t.integer  "invitations_count",                              default: 0,              null: false
+    t.integer  "admin_memberships_count",                        default: 0,              null: false
+    t.integer  "public_discussions_count",                       default: 0,              null: false
   end
 
   add_index "groups", ["category_id"], name: "index_groups_on_category_id", using: :btree
@@ -485,18 +485,18 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   create_table "invitations", force: :cascade do |t|
     t.string   "recipient_email"
     t.integer  "inviter_id"
-    t.boolean  "to_be_admin",     default: false, null: false
-    t.string   "token",                           null: false
+    t.boolean  "to_be_admin",                 default: false, null: false
+    t.string   "token",           limit: 255,                 null: false
     t.datetime "accepted_at"
-    t.string   "intent"
+    t.string   "intent",          limit: 255
     t.integer  "canceller_id"
     t.datetime "cancelled_at"
-    t.string   "recipient_name"
+    t.string   "recipient_name",  limit: 255
     t.integer  "invitable_id"
-    t.string   "invitable_type"
+    t.string   "invitable_type",  limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "single_use",      default: true,  null: false
+    t.boolean  "single_use",                  default: true,  null: false
     t.text     "message"
   end
 
@@ -505,15 +505,15 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "invitations", ["token"], name: "index_invitations_on_token", using: :btree
 
   create_table "membership_requests", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
+    t.string   "name",         limit: 255
+    t.string   "email",        limit: 255
     t.text     "introduction"
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "requestor_id"
     t.integer  "responder_id"
-    t.string   "response"
+    t.string   "response",     limit: 255
     t.datetime "responded_at"
   end
 
@@ -559,7 +559,7 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "motion_readers", ["user_id", "motion_id"], name: "index_motion_readers_on_user_id_and_motion_id", using: :btree
 
   create_table "motions", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                      limit: 255
     t.text     "description"
     t.integer  "author_id"
     t.datetime "created_at"
@@ -696,12 +696,12 @@ ActiveRecord::Schema.define(version: 20160428005646) do
 
   create_table "omniauth_identities", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "email"
+    t.string   "email",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "provider"
-    t.string   "uid"
-    t.string   "name"
+    t.string   "provider",   limit: 255
+    t.string   "uid",        limit: 255
+    t.string   "name",       limit: 255
   end
 
   add_index "omniauth_identities", ["email"], name: "index_omniauth_identities_on_email", using: :btree
@@ -736,15 +736,15 @@ ActiveRecord::Schema.define(version: 20160428005646) do
 
   create_table "themes", force: :cascade do |t|
     t.text     "style"
-    t.string   "name"
+    t.string   "name",                    limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "pages_logo_file_name"
-    t.string   "pages_logo_content_type"
+    t.string   "pages_logo_file_name",    limit: 255
+    t.string   "pages_logo_content_type", limit: 255
     t.integer  "pages_logo_file_size"
     t.datetime "pages_logo_updated_at"
-    t.string   "app_logo_file_name"
-    t.string   "app_logo_content_type"
+    t.string   "app_logo_file_name",      limit: 255
+    t.string   "app_logo_content_type",   limit: 255
     t.integer  "app_logo_file_size"
     t.datetime "app_logo_updated_at"
     t.text     "javascript"
@@ -752,9 +752,9 @@ ActiveRecord::Schema.define(version: 20160428005646) do
 
   create_table "translations", force: :cascade do |t|
     t.integer  "translatable_id"
-    t.string   "translatable_type"
+    t.string   "translatable_type", limit: 255
     t.hstore   "fields"
-    t.string   "language"
+    t.string   "language",          limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -769,39 +769,39 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "user_deactivation_responses", ["user_id"], name: "index_user_deactivation_responses_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                            default: "",         null: false
-    t.string   "encrypted_password",               default: ""
-    t.string   "reset_password_token"
+    t.string   "email",                            limit: 255, default: "",         null: false
+    t.string   "encrypted_password",               limit: 255, default: ""
+    t.string   "reset_password_token",             limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
+    t.string   "name",                             limit: 255
     t.datetime "deactivated_at"
-    t.string   "avatar_kind",                      default: "initials", null: false
-    t.string   "uploaded_avatar_file_name"
-    t.string   "uploaded_avatar_content_type"
+    t.string   "avatar_kind",                      limit: 255, default: "initials", null: false
+    t.string   "uploaded_avatar_file_name",        limit: 255
+    t.string   "uploaded_avatar_content_type",     limit: 255
     t.integer  "uploaded_avatar_file_size"
     t.datetime "uploaded_avatar_updated_at"
-    t.boolean  "is_admin",                         default: false
-    t.string   "avatar_initials"
-    t.string   "username"
-    t.boolean  "email_when_proposal_closing_soon", default: false,      null: false
-    t.string   "authentication_token"
-    t.string   "unsubscribe_token"
-    t.integer  "memberships_count",                default: 0,          null: false
-    t.boolean  "uses_markdown",                    default: false,      null: false
-    t.string   "selected_locale"
-    t.string   "time_zone"
-    t.string   "key"
-    t.string   "detected_locale"
-    t.boolean  "email_missed_yesterday",           default: true,       null: false
-    t.string   "email_api_key"
-    t.boolean  "email_when_mentioned",             default: true,       null: false
-    t.boolean  "angular_ui_enabled",               default: true,       null: false
-    t.boolean  "email_on_participation",           default: true,       null: false
-    t.integer  "default_membership_volume",        default: 3,          null: false
-    t.boolean  "has_muted",                        default: false,      null: false
+    t.boolean  "is_admin",                                     default: false
+    t.string   "avatar_initials",                  limit: 255
+    t.string   "username",                         limit: 255
+    t.boolean  "email_when_proposal_closing_soon",             default: false,      null: false
+    t.string   "authentication_token",             limit: 255
+    t.string   "unsubscribe_token",                limit: 255
+    t.integer  "memberships_count",                            default: 0,          null: false
+    t.boolean  "uses_markdown",                                default: false,      null: false
+    t.string   "selected_locale",                  limit: 255
+    t.string   "time_zone",                        limit: 255
+    t.string   "key",                              limit: 255
+    t.string   "detected_locale",                  limit: 255
+    t.boolean  "email_missed_yesterday",                       default: true,       null: false
+    t.string   "email_api_key",                    limit: 255
+    t.boolean  "email_when_mentioned",                         default: true,       null: false
+    t.boolean  "angular_ui_enabled",                           default: true,       null: false
+    t.boolean  "email_on_participation",                       default: true,       null: false
+    t.integer  "default_membership_volume",                    default: 3,          null: false
+    t.boolean  "has_muted",                                    default: false,      null: false
   end
 
   add_index "users", ["deactivated_at"], name: "index_users_on_deactivated_at", using: :btree
@@ -812,10 +812,10 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",      null: false
-    t.integer  "item_id",        null: false
-    t.string   "event",          null: false
-    t.string   "whodunnit"
+    t.string   "item_type",      limit: 255, null: false
+    t.integer  "item_id",                    null: false
+    t.string   "event",          limit: 255, null: false
+    t.string   "whodunnit",      limit: 255
     t.text     "object"
     t.datetime "created_at"
     t.jsonb    "object_changes"
@@ -853,11 +853,11 @@ ActiveRecord::Schema.define(version: 20160428005646) do
   create_table "votes", force: :cascade do |t|
     t.integer  "motion_id"
     t.integer  "user_id"
-    t.string   "position"
+    t.string   "position",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "statement"
-    t.integer  "age",              default: 0, null: false
+    t.string   "statement",        limit: 255
+    t.integer  "age",                          default: 0, null: false
     t.integer  "previous_vote_id"
   end
 
