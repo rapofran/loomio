@@ -244,6 +244,8 @@ es:
     statement_over_limit: 'Demasiadas palabras! Las frases cortas ayudan a que todos se pongan al día rápidamente.  '
     i_agree: Estoy de acuerdo
     i_agree_details: Estoy de acuerdo con esto y quiero que siga adelante.
+    i_commited: Me comprometo
+    i_commited_details: Me comprometo a participar activamente con la propuesta.
     i_abstain: Me abstengo
     i_abstain_details: Estoy contento con lo que el grupo decida sin mí.
     i_disagree: No estoy de acuerdo
@@ -326,6 +328,7 @@ es:
     close_proposal: Cerrar propuesta
     closed_badge: Cerrado
   proposal_position_yes: De acuerdo
+  proposal_position_commited: comprometerse
   proposal_position_abstain: Abstenerse
   proposal_position_no: En desacuerdo
   proposal_position_block: Bloquear
@@ -810,10 +813,12 @@ es:
     edited: Editado
   new_vote_item:
     agree: de acuerdo
+    commited: se compromete
     abstain: abstiene
     disagree: en desacuerdo
     block: bloqueado
     agree_with_statement: 'de acuerdo: <span>{{statement}}</span>'
+    commited: 'se compromete: <span>{{statement}}</span>'
     abstain_with_statement: 'abstiene: <span>{{statement}}</span>'
     disagree_with_statement: 'en desacuerdo: <span>{{statement}}</span>'
     block_with_statement: 'bloqueo: <span>{{statement}}</span>'
@@ -967,6 +972,7 @@ es:
     prompt_people_details: 'Si quieres atención de una persona especifica en tu grupo, escribe «@» seguido del nombre de la persona, y recibirá un correo electrónico dejándole saber que lo has mencionado en un comentario.'
     prompt_people_html: "Llama la atención de una persona con <span class='blue'>@nombre</span>"
     positions_agree_description: '<span>Estás de acuerdo</span> y quieres que siga a delante.'
+    positions_commited_description: '<span>Te comprometes</span>, significa que estás comprometido con la propuesta.'
     positions_abstain_description: '<span>Te abstienes</span>, significa que estás indeciso, o que te parece bien que el grupo decida sin ti.'
     positions_disagree_description: '<span>No estás de acuerdo</span>, significa que piensas que hay una mejor alternativa, pero estás dispuesto a seguir con la decisión del grupo.'
     positions_block_description: '<span>Bloquear</span>, significa que tienes serias objeciones y estarías extremadamente en desacuerdo si la propuesta siguiera adelante.'

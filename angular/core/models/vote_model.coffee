@@ -22,7 +22,7 @@ angular.module('loomioApp').factory 'VoteModel', (BaseModel, AppConfig) ->
       switch @position
         when 'yes' then 'agree'
         when 'no' then 'disagree'
-        else @position # abstain and block are the same
+        else @position # commited, abstain and block are the same
 
     hasStatement: ->
       @statement? && @statement.toString().length > 0
@@ -41,6 +41,9 @@ angular.module('loomioApp').factory 'VoteModel', (BaseModel, AppConfig) ->
 
     isBlock: ->
       @position == 'block'
+    
+    isCommited: ->
+      @position == 'commited'
 
     charsLeft: ->
       250 - (@statement or '').toString().length

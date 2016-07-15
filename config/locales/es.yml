@@ -473,10 +473,12 @@ es:
     mute_description: Ocultar este grupo en el panel de control y no notificarme a no ser que sea @mencionado.
   thread_item:
     user_agreed_on_proposal_html: "<strong>%{name}</strong> apoyó la propuesta."
+    user_commited_on_proposal_html: "<strong>%{name}</strong> se comprometió a la propuesta."
     user_abstained_on_proposal_html: "<strong>%{name}</strong> se abstuvo en la propuesta."
     user_disagreed_on_proposal_html: "<strong>%{name}</strong> no estuvo de acuerdo con la propuesta."
     user_blocked_on_proposal_html: "<strong>%{name}</strong> bloqueó la propuesta."
     user_agreed_on_proposal_with_statement_html: "<strong>%{name}</strong> apoyó la propuesta:"
+    user_commited_on_proposal_with_statement_html: "<strong>%{name}</strong> se comprometió en la propuesta:"
     user_abstained_on_proposal_with_statement_html: "<strong>%{name}</strong> se abstuvo en la propuesta:"
     user_disagreed_on_proposal_with_statement_html: "<strong>%{name}</strong> no estuvo de acuerdo con la propuesta:"
     user_blocked_on_proposal_with_statement_html: "<strong>%{name}</strong> bloqueó la propuesta:"
@@ -576,6 +578,8 @@ es:
   positions: Posiciones
   yes_position: Estoy de acuerdo
   yes_details: Estoy de acuerdo con esto y quiero que siga adelante.
+  commited_position: Me comprometo
+  commited_details: Me comprometo a participar activamente en la propuesta.
   abstain_position: Me abstengo
   abstain_details: Estoy contento con lo que el grupo decida sin mí.
   no_position: No estoy de acuerdo
@@ -588,11 +592,13 @@ es:
   position_verbs:
     'yes': De acuerdo
     'no': en desacuerdo
+    commited: Me comprometo
     abstain: Me abstengo
     block: Bloqueo
     past_tense:
       'yes': Estoy de acuerdo
       'no': No estoy de acuerdo
+      commited: Me comprometí
       abstain: Me abstengo
       block: Bloqueo
   unable_to_vote:
@@ -662,6 +668,7 @@ es:
     prompt_people_details: Si quieres atención de una persona especifica en tu grupo, escribe «@» seguido del nombre de la persona, y recibirá un correo electrónico dejándole saber que lo has mencionado en un comentario.
     prompt_people_html: Llama la atención de una persona con <span class='blue'>@nombre</span>
     positions_agree_description: "<span>Estás de acuerdo</span> y quieres que siga a delante."
+    positions_commited: "<span>Te comprometes</span>, significa que estás dispuesto a participar presencialmente de la propuesta del grupo.."
     positions_abstain_description: "<span>Te abstienes</span>, significa que estás indeciso, o que te parece bien que el grupo decida sin ti."
     positions_disagree_description: "<span>No estás de acuerdo</span>, significa que piensas que hay una mejor alternativa, pero estás dispuesto a seguir con la decisión del grupo."
     positions_block_description: "<span>Bloquear</span>, significa que tienes serias objeciones y estarías extremadamente en desacuerdo si la propuesta siguiera adelante."

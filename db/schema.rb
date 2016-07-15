@@ -579,17 +579,18 @@ ActiveRecord::Schema.define(version: 20160615211101) do
     t.integer  "discussion_id"
     t.text     "outcome"
     t.datetime "last_vote_at"
-    t.boolean  "uses_markdown",       default: true, null: false
-    t.integer  "yes_votes_count",     default: 0,    null: false
-    t.integer  "no_votes_count",      default: 0,    null: false
-    t.integer  "abstain_votes_count", default: 0,    null: false
-    t.integer  "block_votes_count",   default: 0,    null: false
+    t.boolean  "uses_markdown",        default: true, null: false
+    t.integer  "yes_votes_count",      default: 0,    null: false
+    t.integer  "no_votes_count",       default: 0,    null: false
+    t.integer  "abstain_votes_count",  default: 0,    null: false
+    t.integer  "block_votes_count",    default: 0,    null: false
     t.datetime "closing_at"
-    t.integer  "votes_count",         default: 0,    null: false
+    t.integer  "votes_count",          default: 0,    null: false
     t.integer  "outcome_author_id"
     t.string   "key"
+    t.integer  "commited_votes_count", default: 0,    null: false
     t.integer  "members_count"
-    t.integer  "voters_count",        default: 0,    null: false
+    t.integer  "voters_count",         default: 0,    null: false
   end
 
   add_index "motions", ["author_id"], name: "index_motions_on_author_id", using: :btree
@@ -784,11 +785,6 @@ ActiveRecord::Schema.define(version: 20160615211101) do
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                    default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
@@ -817,10 +813,10 @@ ActiveRecord::Schema.define(version: 20160615211101) do
     t.boolean  "email_on_participation",           default: false,      null: false
     t.integer  "default_membership_volume",        default: 2,          null: false
     t.boolean  "has_muted",                        default: false,      null: false
-    t.jsonb    "experiences",                      default: {},         null: false
     t.string   "country"
     t.string   "region"
     t.string   "city"
+    t.jsonb    "experiences",                      default: {},         null: false
   end
 
   add_index "users", ["deactivated_at"], name: "index_users_on_deactivated_at", using: :btree

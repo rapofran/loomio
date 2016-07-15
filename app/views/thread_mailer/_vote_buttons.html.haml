@@ -1,3 +1,7 @@
+= link_to t(:"position_verbs.commited").capitalize,
+          motion_url(motion, @utm_hash.merge(position: :commited)),
+          class: 'commited-link'
+= " - "
 = link_to t(:"position_verbs.yes").capitalize,
           motion_url(motion, @utm_hash.merge(position: :yes)),
           class: 'yes-link'

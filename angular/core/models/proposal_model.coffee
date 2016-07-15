@@ -11,7 +11,7 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel, AppConfig, Draf
     defaultValues: ->
       description: ''
       outcome: ''
-      voteCounts: {yes: 0, no: 0, abstain: 0, block: 0}
+      voteCounts: {commited: 0, yes: 0, no: 0, abstain: 0, block: 0}
       closingAt: moment().add(3, 'days').startOf('hour')
 
     relationships: ->
@@ -20,8 +20,8 @@ angular.module('loomioApp').factory 'ProposalModel', (BaseModel, AppConfig, Draf
       @belongsTo 'author', from: 'users'
       @belongsTo 'discussion'
 
-    positionVerbs: ['agree', 'abstain', 'disagree', 'block']
-    positions: ['yes', 'abstain', 'no', 'block']
+    positionVerbs: ['commited', 'agree', 'abstain', 'disagree', 'block']
+    positions: ['commited', 'yes', 'abstain', 'no', 'block']
 
     closingSoon: ->
       @isActive() and @closingAt < moment().add(24, 'hours').toDate()

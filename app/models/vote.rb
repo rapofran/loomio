@@ -1,5 +1,5 @@
 class Vote < ActiveRecord::Base
-  POSITIONS = %w[yes abstain no block]
+  POSITIONS = %w[commited yes abstain no block]
   default_scope { includes(:previous_vote) }
   belongs_to :motion, counter_cache: true, touch: :last_vote_at
   belongs_to :user
@@ -83,6 +83,7 @@ class Vote < ActiveRecord::Base
     when 'no' then 'disagree'
     when 'abstain' then 'abstain'
     when 'block' then 'block'
+    when 'commited' then 'commited'
     end
   end
 

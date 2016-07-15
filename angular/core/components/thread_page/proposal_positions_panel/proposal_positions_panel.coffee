@@ -11,7 +11,7 @@ angular.module('loomioApp').directive 'proposalPositionsPanel', ->
       ModalService.open VoteForm, vote: -> $scope.proposal.lastVoteByUser(Session.user()).clone()
 
     sortValueForVote = (vote) ->
-      positionValues = {yes: 1, abstain: 2, no: 3, block: 4}
+      positionValues = {yes: 1, abstain: 2, no: 3, block: 4, commited: 5}
       if $scope.voteIsMine(vote)
         0
       else

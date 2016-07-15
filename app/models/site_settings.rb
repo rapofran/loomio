@@ -3,6 +3,7 @@ class SiteSettings
     {
       primary: "#E3E4E6",
       agree: "#94D587",
+      commited: "#A020F0",
       abstain: "#EEBC57",
       disagree: "#D1908F",
       block: "#D80D00"

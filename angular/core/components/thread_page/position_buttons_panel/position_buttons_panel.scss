@@ -45,6 +45,12 @@
   border-color: darken($disagree-color, 20%);
 }
 
+.position-button--commited {
+  background-image: url(/img/commited.svg);
+  background-color: $commited-color;
+  border-color: darken($commited-color, 15%);
+}
+
 .position-button--abstain {
   background-image: url(/img/abstain.svg);
   background-color: $abstain-color;
