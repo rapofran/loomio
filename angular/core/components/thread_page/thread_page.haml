@@ -7,7 +7,7 @@
       %section.thread-context{aria-label: "{{ 'thread_context.aria_label' | translate }}"}
         .thread-actions.pull-right.lmo-no-print
           %outlet{name: "before-thread-actions", model: "threadPage.discussion"}
-          %a.btn.btn-info{href: "https://pad.partidopirata.com.ar/p/loomio-{{threadPage.discussion.key}}",target:"_blank"}
+          %a.btn.btn-info{ng-if: pad_url, href: "{{pad_url}}{{threadPage.discussion.key}}",target:"_blank"}
             %i.fa.fa-users{aria-hidden:"true"}
             %span &nbsp;pad
           %star_toggle{thread: "threadPage.discussion"}
