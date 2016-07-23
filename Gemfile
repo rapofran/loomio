@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.3.0'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'rails', '~> 4.2.5.2'
 gem 'rake'
 gem 'pg', '~> 0.18.3'
@@ -72,7 +73,6 @@ group :development, :test do
   gem 'rspec-collection_matchers'
   gem 'rspec-activemodel-mocks'
   gem 'shoulda-matchers'
-  gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
