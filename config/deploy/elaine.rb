@@ -1,6 +1,6 @@
 set :deploy_user, 'app'
 set :deploy_to, '/srv/http/consenso.partidopirata.com.ar'
-set :branch, 'piratas'
+set :branch, 'piratas-ng'
 
 set :rails_env, 'production'
 
