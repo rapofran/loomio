@@ -17,23 +17,16 @@ namespace :deploy do
   end
 end
 
-namespace :lineman do
-  desc 'Instalar dependencias'
-  task :build do
+namespace :loomio do
+  desc 'Correr tareas de loomio'
+  task :deploy do
     on roles(:web) do
-      within "#{release_path}/lineman" do
-        execute :npm, 'install'
-        execute :bower, 'install'
-        execute :lineman, 'build'
-      end
-
       within release_path do
-        execute :cp, '-Rvf lineman/dist/* public/'
-        # not needed here
-        # execute :cp, '-vf lineman/vendor/bower_components/airbrake-js/airbrake-shim.js public/js/airbrake-shim.js'
+        execute :rake, 'deploy:build'
       end
     end
   end
+
 end
 
 namespace :faye do
@@ -62,6 +55,6 @@ namespace :faye do
   end
 end
 
-before 'passenger:restart', 'lineman:build'
+after 'deploy:publishing', 'loomio:deploy'
 after 'deploy:publishing', 'deploy:restart'
 after 'deploy:publishing', 'faye:restart'
