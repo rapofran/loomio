@@ -832,7 +832,7 @@ es:
     disagree: en desacuerdo
     block: bloqueado
     agree_with_statement: 'de acuerdo: <span>{{statement}}</span>'
-    commited: 'se compromete: <span>{{statement}}</span>'
+    commited_with_statement: 'se compromete: <span>{{statement}}</span>'
     abstain_with_statement: 'abstiene: <span>{{statement}}</span>'
     disagree_with_statement: 'en desacuerdo: <span>{{statement}}</span>'
     block_with_statement: 'bloqueo: <span>{{statement}}</span>'
