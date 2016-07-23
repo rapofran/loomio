@@ -26,7 +26,7 @@ angular.module('loomioApp').directive 'pieChart', ->
       positionColors =
         yes: '#00D177'
         abstain: '#F6A82B'
-        commited: '#EE82EE'
+        commited: '#7F2AFF'
         no: '#F96168'
         block: '#CE261B'
 
