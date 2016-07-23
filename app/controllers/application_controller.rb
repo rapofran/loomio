@@ -65,10 +65,18 @@ class ApplicationController < ActionController::Base
 
   def user_return_path
     if invalid_return_urls.include? session[:user_return_to]
-      dashboard_or_root_path
+      case current_user_groups.count
+      when 0 then explore_path
+      when 1 then group_path(current_user_groups.first)
+      else        dashboard_or_root_path
+      end
     else
       session[:user_return_to]
     end
+  end
+  
+  def current_user_groups
+    @current_user_groups ||= current_user_or_visitor.groups
   end
 
   def user_time_zone(&block)
@@ -82,11 +90,11 @@ class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) do |u|
+    devise_parameter_sanitizer.permit(:sign_up) do |u|
       u.permit(:email, :name, :password, :password_confirmation)
     end
 
-    devise_parameter_sanitizer.for(:sign_in) do |u|
+    devise_parameter_sanitizer.permit(:sign_in) do |u|
       u.permit(:email, :password, :remember_me)
     end
   end

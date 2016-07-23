@@ -1,5 +1,5 @@
-angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $location, $routeParams, $scope, Records, Session, MessageChannelService, AbilityService, AppConfig, LmoUrlService, PaginationService, ModalService, SubscriptionSuccessModal, GroupWelcomeModal, LegacyTrialExpiredModal) ->
-  $rootScope.$broadcast 'currentComponent', {page: 'groupPage'}
+angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $location, $routeParams, $scope, Records, Session, MessageChannelService, AbilityService, AppConfig, LmoUrlService, PaginationService, ModalService, SubscriptionSuccessModal, GroupWelcomeModal, ChoosePlanModal) ->
+  $rootScope.$broadcast 'currentComponent', {page: 'groupPage', key: $routeParams.key}
 
   $scope.$on 'joinedGroup', => @handleWelcomeModal()
 
@@ -14,7 +14,7 @@ angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $loca
       Records.drafts.fetchFor(@group)
       @handleSubscriptionSuccess()
       @handleWelcomeModal()
-      LegacyTrialExpiredModal.showIfAppropriate(@group, Session.user())
+      @handlePaymentModal()
 
     maxDiscussions = if AbilityService.canViewPrivateContent(@group)
       @group.discussionsCount
@@ -31,6 +31,7 @@ angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $loca
     $rootScope.$broadcast 'analyticsSetGroup', @group
     $rootScope.$broadcast 'currentComponent',
       page: 'groupPage'
+      key: @group.key
       links:
         canonical:   LmoUrlService.group(@group, {}, absolute: true)
         rss:         LmoUrlService.group(@group, {}, absolute: true, ext: 'xml') if !@group.privacyIsSecret()
@@ -62,16 +63,24 @@ angular.module('loomioApp').controller 'GroupPageController', ($rootScope, $loca
       $location.search 'chargify_success', null
       ModalService.open SubscriptionSuccessModal
 
-  @showWelcomeModel = ->
+  @showWelcomeModal = ->
     @group.isParent() and
     Session.user().isMemberOf(@group) and
     !@group.trialIsOverdue() and
     !@subscriptionSuccess and
     !Session.user().hasExperienced("welcomeModal", @group)
 
+  @showPaymentModal = =>
+    AbilityService.canSeeTrialCard(@group) and
+    $location.search().payment?
+
   @handleWelcomeModal = =>
-    if @showWelcomeModel()
+    if @showWelcomeModal()
       ModalService.open GroupWelcomeModal, group: => @group
       Records.memberships.saveExperience("welcomeModal", Session.user().membershipFor(@group))
+
+  @handlePaymentModal = =>
+    if @showPaymentModal()
+      ModalService.open(ChoosePlanModal, group: => @group)
 
   return

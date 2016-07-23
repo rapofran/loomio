@@ -3,5 +3,4 @@ loomio_webhooks:
 
 loomio_tags:
   repo:         loomio/loomio_tags
-  branch:       to-production-and-beyond
   experimental: true
