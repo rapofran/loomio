@@ -89,6 +89,10 @@ group :development do
   gem 'bullet'
   gem 'launchy'
   gem 'awesome_print'
+  gem 'capistrano-rails'
+  gem 'capistrano-passenger'
+  gem 'capistrano3-delayed-job'
+  gem 'capistrano-rbenv'
 end
 
 group :test do
