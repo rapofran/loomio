@@ -26,27 +26,38 @@ en:
       content: 'You''ve been invited to participate in the discussion: %{discussion}'
       message_intro: "%{who} says:"
       link: Join the discussion
+    value_proposition: "Loomio is a place for groups to make decisions together"
+    view_group: View group
     to_join_group:
       subject: "%{member} has invited you to join %{group_name} on Loomio"
+      invitation_text: "%{member} has invited you to join their group %{group_name}."
       invitation_text_html: "has invited you to join their group"
+      link_help: "Click the link below to accept the invitation:"
       accept_invitation: "Accept invitation"
-      place_for_groups: "Loomio is a place for groups to"
-      make_decisions_together: "make decisions together"
     resend_to_join_group:
       subject: "%{member} is still waiting for you to join %{group_name} on Loomio"
     to_start_group:
-      subject: 'Set up your new Loomio group: %{group_name}'
-    user_added_to_a_group:
-      subject: "%{who} has added you to %{which_group}"
-      content: "%{who} has added you to %{which_group} on Loomio. Click here to go to the group:"
+      subject: "Set up your new Loomio group: %{group_name}"
+      hi: "Hi %{name},"
+      intro: "Click the link below to set up your group %{group_name}:"
+      intro_html: "Click below to set up your group:"
+      start_group: "Start my group"
+      closing_message: "If you need help or have a question, just reply to this email."
+      thanks: "Thanks,"
+      loomio_team: "The Loomio Team"
+    user_added_to_group:
+      subject: "%{who} has added you to %{which_group} on Loomio"
+      content: "%{who} has added you to %{which_group}."
+      content_html: "<strong>%{who}</strong> has added you to <strong>%{which_group}</strong>."
+      link_help: "Click the link below to go to the group:"
     unsubscribe: 'Unsubscribe or change your email preferences:'
     unsubscribe_html: "<a href='%{link_path}'>%{link_text}</a> to unsubscribe or change your email preferences."
     view_comment: Click here to view the comment on Loomio
     view_discussion: Click here to view this discussion
-    view_group: Click here to view the group on Loomio
     view_proposal: View this proposal on Loomio
     create_discussion:
-      intro: "%{who} started a discussion in %{which_group}:"
+      intro_html: "started a thread:"
+      intro: "%{who} started a thread:"
     create_proposal:
       intro: A new proposal was created in a Loomio group that you belong to.
       closes_in: Closes in
@@ -63,28 +74,29 @@ en:
       heres_what_happened: "Here’s what happened on Loomio yesterday."
       marked_as_read_success: Everything from the email has been marked as read
     comment_replied_to:
-      context: '%{author_name} replied to your comment in the discussion "%{discussion_title}"'
+      context_html: 'replied to your comment in'
+      context: '%{author_name} replied to your comment in %{discussion_title}'
       subject: "%{who} replied to your comment in the %{which} group on Loomio"
+    new_comment:
+      context: 'commented in'
     group_membership_approved:
-      intro: Your request for access to the group '%{group_name}' on Loomio has been approved.
-      subject: "%{prefix} Membership approved"
-    invitation:
-      hi: Hi %{name},
-      intro: 'Click the link below to set up your group %{group_name}:'
-      closing_message: If you’ve got any questions or if there’s anything at all we can do to help you get up and running, we’d love to hear from you - just reply to this email.
-      thanks: |
-        Thanks!
-        The Loomio Team
+      intro: "Your request for access to the group %{group_name} has been approved."
+      intro_html: "Your request for access to the group <strong>%{group_name}</strong> has been approved."
+      link_help: "Click the link below to join %{group_name} and get started:"
+      subject: "Your request to join %{group_name} on Loomio has been approved"
+      join_group: "Join group"
+      view_group_text: "Click below to view the group on Loomio:"
     membership_request:
       intro: "%{name} (%{email}) has requested access to one of your Loomio groups."
       subject: "%{who} has requested to join %{which_group}"
       view_group: You can approve or decline the request here
     mentioned:
-      context: '%{author_name} mentioned you while discussing "%{discussion_title}"'
+      context_html: "mentioned you while discussing"
+      context: "%{author_name} mentioned you while discussing %{discussion_title}"
       subject: '%{who} mentioned you while discussing "%{which}"'
     new_motion_created:
       subject: 'Proposal: %{proposal_title}'
-      context: "%{author} created a proposal in %{group_full_name}:"
+      context: "started a proposal in %{group_full_name}:"
     proposal_closed:
       proposal_has_closed: The proposal has closed.
       specify_outcome_and_notify_group: Create an outcome and send it to your group!
@@ -108,12 +120,14 @@ en:
       turn_on_notifications_text: 'Turn on email to receive further activity in this discussion: %{url}'
       change_email_preferences_html: Change your <a href='%{email_preferences_url}'>email preferences</a> to unsubscribe from these emails.
       change_preferences: 'Change your email preferences:'
-      new_motion: "%{who} proposed:"
+      new_motion_html: 'started a proposal:'
+      new_motion: '%{who} started a proposal:'
       motion_closing_soon: 'Proposal closing in 24 hours:'
       proposal_closed: 'Proposal closed:'
       specify_outcome_html: Your proposal has closed. <a href='%{link}'>Specify an outcome</a> to let everyone know what the result is.
       specify_outcome: 'Your proposal has closed. Specify an outcome to let everyone know what the result is:'
-      outcome_created: "%{who} set a proposal outcome:"
+      outcome_created_html: "shared an outcome for the proposal:"
+      outcome_created: "%{who} shared an outcome for the proposal:"
       you_agreed: You %{past_tense_position}
     analytics:
       subject: "%{which_group}'s week on Loomio"
