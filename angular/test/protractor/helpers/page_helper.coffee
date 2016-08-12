@@ -34,8 +34,14 @@ module.exports = new class PageHelper
   clickFirst: (selector) ->
     element.all(By.css(selector)).first().click()
 
+  clickLast: (selector) ->
+    element.all(By.css(selector)).last().click()
+
   findFirst: (selector) ->
     element.all(By.css(selector)).first()
+
+  clickLast: (selector) ->
+    element.all(By.css(selector)).last().click()
 
   fillIn: (selector, value) ->
     element(By.css(selector)).clear().sendKeys(value)
