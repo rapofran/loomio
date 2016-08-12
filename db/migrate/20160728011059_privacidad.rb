@@ -1,9 +1,9 @@
 class Privacidad < ActiveRecord::Migration
   def change
-    remove_column :users, :sign_in_count
-    remove_column :users, :current_sign_in_at
-    remove_column :users, :last_sign_in_at
-    remove_column :users, :current_sign_in_ip
-    remove_column :users, :last_sign_in_ip
+    [:sign_in_count, :current_sign_in_at, :last_sign_in_at,
+     :current_sign_in_ip, :last_sign_in_ip].each do |column|
+
+      remove_column :users, column if column_exists? :users, column
+    end
   end
 end
