@@ -21,6 +21,7 @@ class API::RestfulController < ActionController::Base
   end
 
   def current_user
+    binding.pry 
     super || token_user || restricted_user || LoggedOutUser.new
   end
 
