@@ -75,6 +75,6 @@ namespace :faye do
 end
 
 before 'deploy:migrate', 'deploy:backup'
-before 'deploy:publishing', 'loomio:deploy'
+before 'deploy:migrate', 'loomio:deploy'
 after 'deploy:publishing', 'deploy:restart'
 after 'deploy:publishing', 'faye:restart'
