@@ -1,4 +1,4 @@
-es:
+es-AHR:
   validate:
     motion:
       must_close_in_future: La propuesta debe cerrar en el futuro.
