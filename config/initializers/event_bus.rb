@@ -6,6 +6,15 @@ EventBus.configure do |config|
   config.listen('motion_create')     { |motion|     Draft.purge(user: motion.author, draftable: motion.discussion, field: :motion) }
   config.listen('vote_create')       { |vote|       Draft.purge(user: vote.user, draftable: vote.motion, field: :vote) }
 
+  # Add creator to group on group creation
+  config.listen('group_create') do |group, actor|
+    if actor.is_logged_in?
+      group.add_admin! actor
+    elsif actor.email.present?
+      InvitationService.invite_creator_to_group(group: group, creator: actor)
+    end
+  end
+
   # Index search vectors after model creation
   config.listen('discussion_create', 'discussion_update') { |discussion| SearchVector.index! discussion.id }
   config.listen('motion_create', 'motion_update')         { |motion|     SearchVector.index! motion.discussion_id }
@@ -13,11 +22,7 @@ EventBus.configure do |config|
 
   # send bulk emails after events
   Event::BULK_MAIL_KINDS.each do |kind|
-    config.listen("#{kind}_event") do |event|
-      BaseMailer.send_bulk_mail(to: Queries::UsersToEmailQuery.send(kind, event.eventable)) do |user|
-        ThreadMailer.delay(priority: 2).send(kind, user, event)
-      end
-    end
+    config.listen("#{kind}_event") { |event| SendBulkEmailJob.perform_later(event.id) }
   end
 
   # send individual emails after thread events
@@ -129,5 +134,7 @@ EventBus.configure do |config|
 
   # collect user deactivation response
   config.listen('user_deactivate') { |user, actor, params| UserDeactivationResponse.create(user: user, body: params[:deactivation_response]) }
+
+  config.listen('group_archive') { |group| SubscriptionService.new(group).end_subscription! }
 
 end

@@ -1,4 +1,4 @@
-angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routeParams, $location, $rootScope, $window, Records, MessageChannelService, KeyEventService, ThreadService, ModalService, DiscussionForm, MoveThreadForm, DeleteThreadForm, ScrollService, AbilityService, Session, ChangeVolumeForm, PaginationService, LmoUrlService, TranslationService, RevisionHistoryModal, ProposalOutcomeForm, PrintModal, AppConfig) ->
+angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routeParams, $location, $rootScope, $window, $timeout, Records, MessageChannelService, KeyEventService, ThreadService, ModalService, DiscussionForm, MoveThreadForm, DeleteThreadForm, ScrollService, AbilityService, Session, ChangeVolumeForm, PaginationService, LmoUrlService, TranslationService, RevisionHistoryModal, ProposalOutcomeForm, PrintModal, AppConfig) ->
   $rootScope.$broadcast('currentComponent', { page: 'threadPage'})
   $scope.pad_url = AppConfig.pad_url
 
@@ -129,8 +129,11 @@ angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routePa
     ModalService.open RevisionHistoryModal, model: => @discussion
 
   @requestPagePrinted = ->
-    ModalService.open PrintModal, preventClose: -> true
-    $rootScope.$broadcast 'fetchRecordsForPrint'
+    unless @discussion.allEventsLoaded()
+      ModalService.open PrintModal, preventClose: -> true
+      $rootScope.$broadcast 'fetchRecordsForPrint'
+    else
+      $timeout -> $window.print()
 
   TranslationService.listenForTranslations($scope, @)
 
