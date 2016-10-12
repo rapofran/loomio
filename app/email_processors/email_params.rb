@@ -8,7 +8,7 @@ class EmailParams
     email_hash = email.to.select{|h| h[:host] == reply_host }.first || {}
     params = {}
 
-    email_hash[:token].to_s.split('&').each do |segment|
+    email_hash[:token].to_s.split('+', 2).last.split('&').each do |segment|
       key_and_value = segment.split('=')
       params[key_and_value[0]] = key_and_value[1]
     end
