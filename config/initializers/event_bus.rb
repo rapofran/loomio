@@ -37,6 +37,9 @@ EventBus.configure do |config|
   # send individual emails after user events
   config.listen('membership_request_approved_event') { |event, user| UserMailer.delay(priority: 2).group_membership_approved(user, event.group) }
 
+  # add creator to group if one doesn't exist
+  config.listen('membership_join_group') { |group, actor| group.update(creator: actor) unless group.creator_id.present? }
+
   # send memos to client side after comment change
   config.listen('comment_destroy') { |comment|      Memos::CommentDestroyed.publish!(comment) }
   config.listen('comment_update')  { |comment|      Memos::CommentUpdated.publish!(comment) }
@@ -119,14 +122,9 @@ EventBus.configure do |config|
                 'invitation_accepted_event',
                 'new_coordinator_event') { |event, user| event.notify!(user) }
 
-  # notify users of motion closing soon
-  config.listen('motion_closing_soon_event') do |event|
-    Queries::UsersByVolumeQuery.normal_or_loud(event.discussion).find_each { |user| event.notify!(user) }
-  end
-
-  # notify users of motion outcome created
-  config.listen('motion_outcome_created_event') do |event|
-    Queries::UsersByVolumeQuery.normal_or_loud(event.discussion).without(event.motion.outcome_author).find_each { |user| event.notify!(user) }
+  # notify users of motion closing soon and motion outcome created
+  config.listen('motion_outcome_created_event', 'motion_closing_soon_event') do |event|
+    event.notifications.import event.users_to_notify.map { |user| event.notifications.build(user: user) }
   end
 
   # notify users of comment liked
@@ -135,6 +133,7 @@ EventBus.configure do |config|
   # collect user deactivation response
   config.listen('user_deactivate') { |user, actor, params| UserDeactivationResponse.create(user: user, body: params[:deactivation_response]) }
 
+  # end subscription for archived groups
   config.listen('group_archive') { |group| SubscriptionService.new(group).end_subscription! }
 
 end
