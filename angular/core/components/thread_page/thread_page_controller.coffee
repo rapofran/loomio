@@ -93,7 +93,7 @@ angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routePa
     ModalService.open DeleteThreadForm, discussion: => @discussion
 
   @showContextMenu = =>
-    @canEditThread(@discussion)
+    AbilityService.canChangeThreadVolume(@discussion)
 
   @canStartProposal = ->
     AbilityService.canStartProposal(@discussion)

@@ -19,7 +19,7 @@ angular.module('loomioApp').directive 'notifications', ->
       'invitation_accepted',
       'new_coordinator'
     ]
-    eventFilter = (notification) -> _.contains kinds, notification.event().kind
+    eventFilter = (notification) -> _.contains kinds, notification.kind()
 
     notificationsView = Records.notifications.collection.addDynamicView("notifications")
                                .applyWhere(eventFilter)
@@ -32,9 +32,6 @@ angular.module('loomioApp').directive 'notifications', ->
 
     $scope.broadcastThreadEvent = (notification) ->
       $rootScope.$broadcast 'threadPageEventsLoaded', notification.event()
-
-    $scope.loading = ->
-      !AppConfig.notificationsLoaded
 
     $scope.toggled = (open) ->
       Records.notifications.viewed() if open
