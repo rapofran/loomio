@@ -71,6 +71,7 @@ es-AHR:
     set_outcome_btn: Establece el resultado de la propuesta
     edit_outcome_link: Editar el resultado de la propuesta
   proposal_outcome_form:
+    aria_label: Formulario del resultado de la propuesta
     set_outcome: Establece el resultado de la propuesta
     update_outcome: Actualiza el resultado de la propuesta
     outcome_label: Resultado de la propuesta
@@ -93,6 +94,7 @@ es-AHR:
     mute: 'Silenciado '
     unmute: 'Des-silenciar '
   change_volume_form:
+    aria_label: Formulario para cambiar las notificaciones de email
     loud_label: Toda la actividad
     normal_label: Actividad importante
     quiet_label: No enviar correo
@@ -133,6 +135,7 @@ es-AHR:
         normal: Recibirás correo electrónico sobre nuevos hilos y propuestas en todos los nuevos barco en los que participes.
         quiet: No recibirás correo electrónico de los nuevos barcos.
   mute_explanation_modal:
+    aria_label: 'Silenciar hilo '
     mute_thread: Silenciar hilo
     body_html: >
       <p>Silenciar significa<strong>que no recibirás notificaciones sobre
@@ -145,6 +148,7 @@ es-AHR:
       lateral de navegación:</p>
     image_alt: 'Opción de hilos silenciados en la barra lateral '
   dismiss_explanation_modal:
+    aria_label: Ignorar hilo
     dismiss_thread: Ignorar hilo
     body_html: >
       <p>Ignorar un hilo lo remueve de tu lista de no leídos. Si alguna nueva
@@ -157,6 +161,7 @@ es-AHR:
     unread: No leído
     closing_in: Cerrando
   sign_in_form:
+    aria_label: Formulario de entrada
     title: Ingresa a Loomio
     email_label: 'Email:'
     email_placeholder: tu@ejemplo.com
@@ -172,6 +177,7 @@ es-AHR:
       google: Iniciar sesión con Google
       github: Iniciar sesión con Github
   sign_up_form:
+    aria_label: Formulario de entrada
     title: '¡Bienvenido/a a Loomio! Te haremos comenzar enseguida'
     name_label: Tu nombre
     name_placeholder: Fulano de tal
@@ -183,7 +189,8 @@ es-AHR:
     sign_in: Entrar
     sign_up: Crear una Cuenta
   signed_out_modal:
-    title: 'Tu sesión ha sido terminada  '
+    aria_label: 'Sesión cerrada '
+    title: 'Tu sesión ha terminado '
     message: 'Tu sesión ha sido terminada en Loomio desde otra pestaña del navegador. Por favor vuelve a entrar para continuar. '
     ok: listo
   comment_form:
@@ -240,7 +247,8 @@ es-AHR:
     toggle_sidebar: Alternar barra lateral
     logo_title: Página principal
   start_menu:
-    title: 'Botones de acción '
+    label: 'Acciones de usuario '
+    title: 'Acción '
     start_group: Crear un barco nuevo
     start_subgroup: Crear subbarco nuevo
     start_thread: Iniciar hilo nuevo
@@ -302,16 +310,19 @@ es-AHR:
   proposal_pie_chart:
     participation_statement: '{{percentage}}% de los piratas ha manifestado su decisión ({{number}}/{{total}})'
   close_proposal_form:
+    aria_label: Cerrar propuesta
     close_proposal: Cerrar propuesta
     helptext: ¿Estás seguro de querer cerrar esta propuesta ahora?
     close_proposal_submit: 'Sí, cerrar propuesta'
     messages:
       success: Propuesta cerrada
   extend_proposal_form:
+    aria_label: Cambiar fecha de cierre
     title: Cambiar fecha de cierre
     success: Fecha de cierre de la propuesta actualizada
     submit: Actualizar fecha de cierre
   proposal_form:
+    aria_label: Formulario de la propuesta
     messages:
       created: Propuesta iniciada
       updated: Propuesta actualizada
@@ -332,6 +343,7 @@ es-AHR:
     created: 'El hilo {{title}} ha sido creado con éxito en {{groupName}}'
     updated: 'Guardar cambios en {{title}}'
   discussion_form:
+    aria_label: Formulario del hilo
     messages:
       created: Hilo iniciado
       updated: Hilo actualizado
@@ -374,29 +386,23 @@ es-AHR:
       nuestros planes de pago y le estamos pidiendo a los barcos que han
       utilizado Loomio por un tiempo que elijan un plan que les convenga.</p>
     submit: Muéstrame los planes
-  angular_welcome_modal:
-    heading: '¡Bienvenido/a al nuevo Loomio!'
-    context: 'Hemos estado trabajando duro desarrollando un nuevo y mejor Loomio. Todas tus discusiones y tus funciones favoritas de Loomio siguen estando aquí, y también hay nuevos cambios:  '
-    cleaner: 'Una interface más clara e intuitiva: más fácil comenzar barcos, invitar gente y configurar tus preferencias. '
-    interactive: 'El escritorio interactivo facilita estar al día con tus hilos: las actualizaciones suceden en directo en la pantalla. '
-    mobile_ready: 'Esta diseñado para todos tus dispositivos, desde el móvil al escritorio. '
-    accessible: "Es accesible para gente ciega y esta traducido a <a href='https://loomio.org/translation' target='_blank'>un montón de idiomas</a>."
-    emojis: '¡Y puedes usar emojies!'
-    ok_got_it: 'Bien, ¡lo tengo!'
   group_welcome_modal:
+    aria_label: Bienvenid@
     creator_heading: Bienvenido/a a tu nuevo barco
     member_heading: Bienvenido/a a Loomio
     creator_info: 'Eres el <strong>coordinador</strong> del barco, que es como ser el anfitrión. Mira el vídeo y los hilos de ejemplo.'
     member_info: 'Mira éste vídeo para tener una idea de como funciona Loomio. Luego, pruébalo haciendo un comentario en un hilo de discusión, o inicia un hilo nuevo.'
     creator_footer: 'Cuando estés listo, <strong>invita gente</strong> a sumarse. '
     ok_got_it: 'Bien, ¡lo tengo!'
-  group_cover_modal:
+  cover_photo_form:
+    aria_label: 'Formulario de carga para la foto de portada '
     heading: 'Nueva foto de portada '
-    upload_link: 'Carga una nueva foto de portada '
-    helptext: '¿Buscando inspiración? hecha un vistazo en <a href="https://unsplash.com/">Unsplash</a>, una galería de hermosas fotos gratis  '
+    upload_link: Subir nueva foto de portada
+    helptext: '¿Buscando inspiración? hecha un vistazo en <a href="https://unsplash.com/">Unsplash</a>, una galería de hermosas fotos gratis.  '
     image_size_helptext: El tamaño de imagen ideal es 1400 x 320px
     upload_success: La foto de portada ha sido actualizada con éxito
-  group_logo_modal:
+  logo_photo_form:
+    aria_label: Formulario de cambio del logo del barco
     heading: Nuevo logo del barco
     upload_link: cargar nuevo logo del barco
     image_size_helptext: El tamaño ideal de la imagen es 100 x 100px
@@ -408,6 +414,7 @@ es-AHR:
     messages:
       joined_group: 'Ahora eres pirata de {{group}}'
   membership_request_form:
+    aria_label: Formulario de petición de membresías
     heading: Solicita unirte al barco
     name_label: Nombre
     email_label: Correo electrónico
@@ -416,6 +423,7 @@ es-AHR:
     messages:
       membership_requested: 'Ya has solicitado unirte a {{group}}'
   revision_history_modal:
+    aria_label: Historial de revisión
     thread_header: Historial de revisión del contexto del hilo
     comment_header: Historial de revisión del comentario
     started_by: 'Iniciado por <strong>{{name}}</strong>'
@@ -441,6 +449,8 @@ es-AHR:
       archive_group_success: 'Este barco ha sido desactivado '
     group_logo: Logo del barco
     new_photo: 'Nueva foto '
+    new_cover_photo: 'Carga una nueva foto de portada '
+    new_group_logo: Cargar nuevo logo del barco
     description: 'Descripción del barco '
     description_placeholder: 'Los coordinadores pueden usar esta área para describir el propósito del barco, para que todos sepan para que están aquí. '
     discussions: Hilos
@@ -463,16 +473,6 @@ es-AHR:
       email_settings: Ajustes de correo
       leave_group: Dejar el barco
       deactivate_group: Desactivar el barco
-    deactivate_group:
-      title: Desactivar el barco
-      question: ¿Estás seguro de que quieres desactivar este barco?
-      submit: 'Sí, desactivar este barco'
-    leave_group:
-      title: Abandonar el barco
-      question: ¿Estás seguro de que quieres dejar este barco?
-      submit: 'Sí, dejar este barco'
-      cannot_leave_group: No puedes irte de este barco porque eres el último coordinador. Tendrás que elegir a otro coordinador o desactivar el barco.
-      add_coordinator: Añadir coordinador
     volume:
       loud: Enviar correo electrónico siempre que haya actividad.
       loud_aria_description: El volumen de notificaciones para este barco está establecido como Alto. Se te enviará un correo electrónico siempre que haya actividad.
@@ -491,6 +491,18 @@ es-AHR:
       parent_members: 'Privacidad: Este barco es visible para los piratas de {{parentGroupName}} y piratas de {{groupName}} '
       public: 'Privacidad: Este barco es visible en la red '
       aria_label: 'Privacidad del barco: {{privacy}}'
+  leave_group_form:
+    aria_label: Abandonar el barco
+    title: 'Abandonar el barco '
+    question: ¿Estás seguro de que quieres abandonar este barco?
+    submit: 'Sí, quiero abandonar este barco'
+    cannot_leave_group: No puedes irte de este barco porque eres el último coordinador. Tendrás que elegir a otro coordinador o desactivar el barco.
+    add_coordinator: Añadir coordinador
+  archive_group_form:
+    aria_label: Desactivar el barco
+    title: 'Desactivar el barco '
+    question: ¿Estás seguro de que quieres desactivar este barco?
+    submit: 'Sí, desactivar este barco'
   confirm_gift_plan_modal:
     heading: 'Barcos Gratis son soportados a donación  '
     body: Las donaciones hacen posible que barcos sin presupuesto usen Loomio de forma gratuita. Ocasionalmente invitaremos a los piratas de barco en plan Gratis a realizar una donación voluntaria.
@@ -517,6 +529,7 @@ es-AHR:
     in_progress_body: 'Gracias por probar Loomio con <strong>{{name}}</strong>. En cualquier momento puedes elegir un plan de pago que funcione para tu barco.'
     expired_body_html: '<strong>{{name}}</strong> ha llegado al final de su prueba de Loomio. Si quieres seguir usándolo tienes que elegir un plan de pago a la medida de tu barco.'
   choose_plan_modal:
+    aria_label: Elige el plan de pago
     heading: Por favor elige un plan de pago para tu barco.
     free: 'Gratis '
     standard: 'Estándar '
@@ -541,6 +554,7 @@ es-AHR:
     need_help_please: ¿Necesitas algo más?
     select: 'Selecciona '
   subscription_success_modal:
+    aria_label: 'Exitosa suscripción '
     heading: 'Estás listo!'
     receipt: 'Recibirás un correo electrónico con el recibo y un enlace de acceso al portal de clientes, desde donde podrás cambiar o cancelar tu suscripción y acceder al historial de pago.  '
     change_subscription: 'Si deseas configurar tu integración con Slack.com o tu dominio personalizado,'
@@ -548,6 +562,7 @@ es-AHR:
     sign_off: ❤ de parte del equipo de Loomio
     ok_got_it: 'Bien, ¡lo tengo!'
   group_form:
+    aria_label: Formulario de barco
     start_group_heading: Empieza un barco
     start_subgroup_heading: 'Comienza un sub-barco '
     edit_group_heading: Editar la configuración del barco
@@ -563,17 +578,17 @@ es-AHR:
       private_to_parent_members: 'El nombre y la descripción serán visibles para los piratas de {{parent}}'
     privacy: Privacidad
     group_privacy_is_open_description: Cualquier persona puede encontrar el barco y pedir membresía. Solo los piratas pueden ver quien pertenece al barco. Todos los hilos son públicos.
-    group_privacy_is_closed_description: Cualquier persona puede encontrar el barco y pedir membresía. Solo los piratas pueden ver quien pertenece al barco. Todos los hilos son privados.
-    group_privacy_is_closed_public_threads_description: Cualquier persona puede encontrar el barco y pedir membresía. Solo los piratas pueden ver quien pertenece al barco. Los hilos pueden ser públicos o privados.
-    group_privacy_is_secret_description: 'Solo piratas que han sido invitados pueden encontrar el barco, ver el listado de piratas y los hilos de discusión.  '
+    group_privacy_is_closed_description: Cualquier persona puede encontrar este barco y pedir membresía. Sólo los piratas pueden ver quien pertenece al mismo. Todos los hilos son privados.
+    group_privacy_is_closed_public_threads_description: Cualquier persona puede encontrar este barco y pedir membresía. Sólo los piratas pueden ver quien pertenece al mismo. Los hilos pueden ser públicos o privados.
+    group_privacy_is_secret_description: 'Sólo piratas que han sido invitados pueden encontrar este barco, ver quien pertenece al mismo y los hilos.  '
     confirm_change_to_secret: 'Si procedes, todos los hilo en este barco y sus subbarcos se harán privados.'
     confirm_change_to_secret_subgroup: Si continuas todos los hilos se harán privados.
     confirm_change_to_public: 'Si continúas, todos los hilos de este barco se harán públicos en internet.  '
     confirm_change_to_private_discussions_only: 'Si continuas cualquier hilo público en este barco se hará privado. '
-    subgroup_privacy_is_open_description: Cualquier persona puede encontrar el barco y pedir membresía. Solo los piratas pueden ver quien pertenece al barco. Todos los hilos son públicos.
+    subgroup_privacy_is_open_description: Cualquier persona puede encontrar este subbarco y pedir membresía. Solo los piratas pueden ver quien pertenece al mismo. Todos los hilos son públicos.
     subgroup_privacy_is_closed_description: Cualquier persona puede encontrar este subbarco y pedir membresía. Sólo los piratas pueden ver quien pertenece al mismo. Todos los hilos son privados.
     subgroup_privacy_is_closed_public_threads_description: Cualquier persona puede encontrar este subbarco y pedir membresía. Sólo los piratas pueden ver quien pertenece al mismo. Los hilos pueden ser públicos o privados.
-    subgroup_privacy_is_closed_secret_parent_description: 'Piratas de {{parent}} pueden encontrar este subbarco y pedir membresía. Solo los piratas pueden ver quien pertenece al barco. Todos los hilos son privados.'
+    subgroup_privacy_is_closed_secret_parent_description: 'Piratas de {{parent}} puede encontrar este subbarco y pedir membresía. Solo los piratas pueden ver quien pertenece al mismo. Todos los hilos son privados.'
     subgroup_privacy_is_secret_description: 'Sólo piratas que han sido invitados pueden encontrar este subbarco, ver quien pertenece al mismo y los hilos.  '
     advanced_settings: 'Configuración avanzada '
     how_do_people_join: ¿Cómo se unen las personas a este barco?
@@ -624,6 +639,7 @@ es-AHR:
     heading: Propuestas previas
     see_more: Ver más
   invitation_form:
+    aria_label: Formulario de invitación
     invite_people: Invita gente
     group: Barco
     group_placeholder: Selecciona un barco
@@ -649,6 +665,7 @@ es-AHR:
       no_invitations: 'Por favor verifica que la dirección de correo electrónico es correcta e intenta de nuevo. '
       max_invitations: 'Si quieres enviar mas de 100 invitaciones, utiliza un enlace.'
   add_members_modal:
+    aria_label: Añadir piratas del barco principal
     heading: 'Adherir piratas de {{name}}'
     add_members: 'Incluye piratas '
     user_added_to_subgroup: '{{name}} incluido al Subbarco '
@@ -664,12 +681,13 @@ es-AHR:
       remove_member_success: '{{name}} eliminado'
       make_admin_success: 'Ahora {{name}} es un coordinador'
       remove_admin_success: '{{name}} ya no es un coordinador'
-    remove_membership:
-      title: Eliminar pirata
-      question: '¿Estás seguro de que quieres eliminar a {{name}} del barco {{group}}?'
-      submit: Eliminar
     remove_admin_from_self:
       question: '¿Estás seguro que ya no quieres ser un coordinador? '
+  remove_membership_form:
+    aria_label: Eliminar pirata
+    title: 'Eliminar pirata '
+    question: '¿Estás seguro de que quieres eliminar a {{name}} como pirata de {{group}}?'
+    submit: Eliminar
   pending_invitations_card:
     heading: Invitaciones pendientes
     email: 'correo electrónico '
@@ -688,34 +706,6 @@ es-AHR:
       picture_changed: Imagen de perfil actualizada
       password_changed: Contraseña actualizada
       deactivated: Cuanta desactivada
-    change_picture:
-      title: Cambiar imagen
-      helptext: 'Puedes subir tu propia imagen de perfil, o si tienes una cuenta en <a href="https://en.gravatar.com/support/what-is-gravatar/">Gravatar</a>, puedes usar esa.'
-      use_initials: Usar iniciales
-      use_gravatar: Usar Gravatar
-      use_uploaded: Subir una imagen nueva
-    change_password:
-      title: Cambiar la contraseña
-      helptext: 'Las contraseñas deben tener 8 caracteres. La contraseñas común como "contraseña" está prohibida para mantener tu cuenta segura.'
-      current_password_label: Contraseña actual
-      new_password_label: Nueva contraseña
-      password_confirmation_label: Confirmar nueva contraseña
-      submit: Actualizar contraseña
-    deactivate_user:
-      title: Desactiva tu cuenta
-      question: ¿Nos contarías por qué estás desactivando tu cuenta?
-      placeholder: 'Contestar a esta pregunta es opcional. Cualquier información que compartas nos ayudará a mejorar Loomio :)'
-      submit: Desactiva tu cuenta
-    deactivation_modal:
-      introduction: 'Cuando desactivas tu cuenta:'
-      no_longer_group_member: Ya no serás listado como pirata en ningún barco
-      name_removed: 'Comentarios, propuestas e hilos que has realizado permanecerán, pero tu nombre será removido de los mismos'
-      no_emails: Ya no recibirás correo relacionados con Loomio
-      contact_for_reactivation: Deberás contactarnos para reactivar su cuenta
-      submit: 'Si, quiero desactivar mi cuenta'
-    only_coordinator_modal:
-      explanation: 'Un barco debe tener al menos un coordinador. Tú eres el único coordinador de los siguientes barcos:'
-      instructions: 'Para poder desactivar su cuenta, necesitarás visitar cada uno de los barco mencionados arriba y o bien nombrar a otro coordinador o desactivar el barco.'
     change_picture_link: Cambiar imagen
     change_password_link: Cambiar la contraseña
     deactivate_user_link: Desactivar cuenta...
@@ -727,6 +717,40 @@ es-AHR:
     email_label: Correo electrónico
     locale_label: Idioma
     update_profile: Actualizar perfil
+    deactivate_account: Desactiva cuenta
+  change_picture_form:
+    aria_label: Formulario de cambio de imagen
+    title: Cambiar imagen
+    helptext: 'Puedes subir tu propia imagen de perfil, o si tienes una cuenta en <a href="https://en.gravatar.com/support/what-is-gravatar/">Gravatar</a>, puedes usar esa.'
+    use_initials: Usar iniciales
+    use_gravatar: Usar Gravatar
+    use_uploaded: Subir una imagen nueva
+  change_password_form:
+    aria_label: Formulario de cambio de contraseña
+    title: Cambiar la contraseña
+    helptext: 'Las contraseñas deben tener 8 caracteres. La contraseñas común como "contraseña" está prohibida para mantener tu cuenta segura.'
+    current_password_label: Contraseña actual
+    new_password_label: Nueva contraseña
+    password_confirmation_label: Confirmar nueva contraseña
+    submit: Actualizar contraseña
+  deactivation_modal:
+    aria_label: 'Desactiva cuenta '
+    introduction: 'Cuando desactivas tu cuenta:'
+    no_longer_group_member: Ya no serás listado como pirata en ningún barco
+    name_removed: 'Comentarios, propuestas e hilos que has realizado permanecerán, pero tu nombre será removido de los mismos'
+    no_emails: Ya no recibirás correo relacionados con Loomio
+    contact_for_reactivation: Deberás contactarnos para reactivar su cuenta
+    submit: 'Si, quiero desactivar mi cuenta'
+  deactivate_user_form:
+    aria_label: 'Confirmar la desactivación de la cuenta '
+    title: 'Desactiva cuenta '
+    question: ¿Nos contarías por qué estás desactivando tu cuenta?
+    placeholder: 'Contestar a esta pregunta es opcional. Cualquier información que compartas nos ayudará a mejorar Loomio :)'
+    submit: 'Desactiva cuenta '
+  only_coordinator_modal:
+    aria_label: No hemos podido desactivar la cuenta
+    explanation: 'Un barco debe tener al menos un coordinador. Tú eres el único coordinador de los siguientes barcos:'
+    instructions: 'Para poder desactivar su cuenta, necesitarás visitar cada uno de los barco mencionados arriba y o bien nombrar a otro coordinador o desactivar el barco.'
   email_settings_page:
     header: Ajustes de correo
     all_groups: 'Configuración para todos los barcos. '
@@ -852,12 +876,14 @@ es-AHR:
     print_thread: 'Imprimir '
     delete_thread: Eliminar
   delete_thread_form:
+    aria_label: 'Borrar hilo '
     title: 'Borrar hilo '
     body: ¿Estás seguro que quieres eliminar este hilo?
     confirm: 'Sí, elimina este hilo'
     messages:
       success: Hilo eliminado
   move_thread_form:
+    aria_label: Mover hilo
     title: Mover hilo
     body: 'Barco de destino:'
     confirm: 'Mover hilo '
