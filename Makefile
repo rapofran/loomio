@@ -12,3 +12,10 @@ editar:
 	vim -p $(es)
 
 ahr: $(es_ahr)
+
+ng:
+	git stash
+	git checkout master
+	git pull
+	git checkout piratas-ng
+	if ! git merge master ; then git mergetool; git commit; fi
