@@ -1,5 +1,8 @@
 %section.context-panel{aria-label: "{{ 'thread_context.aria_label' | translate }}"}
   .context-panel__thread-actions.pull-right.lmo-no-print
+    %a.btn.btn-info{href: "{{pad_url}}{{discussion.key}}",target:"_blank"}
+      %i.fa.fa-users{aria-hidden:"true"}
+      %span &nbsp;pad
     %outlet{name: "before-thread-actions", model: "discussion"}
     %star_toggle{thread: "discussion"}
     %span{uib-dropdown: "true",  ng-if: "showContextMenu()"}

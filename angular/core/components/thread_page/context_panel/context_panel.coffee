@@ -3,7 +3,8 @@ angular.module('loomioApp').directive 'contextPanel', ->
   restrict: 'E'
   replace: true
   templateUrl: 'generated/components/thread_page/context_panel/context_panel.html'
-  controller: ($scope, $rootScope, $window, $timeout, AbilityService, Session, ModalService, ChangeVolumeForm, DiscussionForm, ThreadService, MoveThreadForm, PrintModal, DeleteThreadForm, RevisionHistoryModal) ->
+  controller: ($scope, $rootScope, $window, $timeout, AbilityService, Session, ModalService, ChangeVolumeForm, DiscussionForm, ThreadService, MoveThreadForm, PrintModal, DeleteThreadForm, RevisionHistoryModal, AppConfig) ->
+    $scope.pad_url = AppConfig.pad_url
 
     $scope.showContextMenu = ->
       AbilityService.canChangeThreadVolume($scope.discussion)
