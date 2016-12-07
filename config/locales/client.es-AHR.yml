@@ -266,7 +266,7 @@ es-AHR:
     new_comment: '<strong>{{name}}</strong> ha comentado en <strong>{{discussion}}</strong>'
     comment_replied_to: '<strong>{{name}}</strong> ha contestado a tu comentario en <strong>{{discussion}}</strong>'
     comment_liked: '<strong>{{name}}</strong> le ha gustado tu comentario en <strong>{{discussion}}</strong>'
-    user_mentioned: '<strong>{{name}}</strong> te ha mencionado en <strong>{{title}}</strong>'
+    user_mentioned: '<strong>{{name}}</strong> te ha mencionado en <strong>{{discussion}}</strong>'
     membership_requested: '<strong>{{name}}</strong> ha solicitado unirse a <strong>{{group}}</strong>'
     membership_request_approved: '<strong>{{name}}</strong> ha aprobado tu solicitud para unirte a <strong>{{group}}</strong>'
     user_added_to_group: '<strong>{{name}}</strong> te ha añadido al barco <strong>{{group}}</strong>'
@@ -459,7 +459,8 @@ es-AHR:
     members: 'Piratas '
     members_placeholder: 'Estás solo aquí: ¡invita a algunas personas para unirse a ti! '
     member_options: Opciones de membresía
-    all_members: 'Todos los piratas ({{count}})'
+    see_all_members: 'Ve todos los ({{count}}) piratas'
+    pending_invitations: '+ ({{count}}) pendientes'
     subgroups: Subbarcos
     subgroups_placeholder: Los subbarcos te permiten dividir el barco en diferentes equipos
     invite_people: Invitar personas
