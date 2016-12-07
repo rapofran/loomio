@@ -13,4 +13,5 @@ loomio_onboarding:
   repo: loomio/loomio_onboarding
 
 loomio_content_preview:
-  repo:         loomio/loomio_content_preview
+  repo:         piratas-ar/loomio_content_preview
+  version:      piratas-ng
