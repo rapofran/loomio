@@ -1,9 +1,9 @@
 source 'http://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.3.1'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'rails', '~> 4.2.5.2'
-gem 'rake'
+gem 'rake', '11.3.0'
 gem 'pg', '~> 0.18.4'
 gem 'haml-rails', '~> 0.9.0'
 gem 'devise', '~> 4.2.0'
@@ -70,10 +70,6 @@ group :development, :test do
   gem 'rb-readline'
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'rspec-rails'
-  gem 'rspec-its'
-  gem 'rspec-collection_matchers'
-  gem 'rspec-activemodel-mocks'
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'database_cleaner'
@@ -84,7 +80,7 @@ end
 
 group :development do
   gem 'sqlite3'
-  gem 'derailed'
+  # gem 'derailed'
   gem "stackprof"
   gem 'spring'
   gem "spring-commands-cucumber"
@@ -106,6 +102,10 @@ group :test do
   gem 'webmock'
   gem "codeclimate-test-reporter", require: false
   gem 'rack_session_access'
+  gem 'rspec-rails'
+  gem 'rspec-its'
+  gem 'rspec-collection_matchers'
+  gem 'rspec-activemodel-mocks'
 end
 
 group :production do
