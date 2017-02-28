@@ -4,7 +4,7 @@ set :linked_files, %w{.env}
 set :linked_dirs, %w{public/system log tmp/pids db/backups angular/node_modules}
 
 set :rbenv_type, :user
-set :rbenv_ruby, '2.3.0'
+set :rbenv_ruby, '2.3.1'
 
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
@@ -12,6 +12,8 @@ set :rbenv_roles, :all # default value
 
 set :bundle_flags, '--deployment'
 set :delayed_job_bin_path, 'script'
+
+set :default_env, path: '/home/app/.nvm/versions/node/v4.8.0/bin:$PATH'
 
 namespace :deploy do
   desc 'Reiniciar delayed jobs'
@@ -45,7 +47,6 @@ namespace :loomio do
       end
     end
   end
-
 end
 
 namespace :faye do
