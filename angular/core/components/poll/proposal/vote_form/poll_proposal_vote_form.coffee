@@ -20,6 +20,7 @@ angular.module('loomioApp').directive 'pollProposalVoteForm', ->
 
     TranslationService.eagerTranslate $scope,
       defaultPlaceholder:  'poll_proposal_vote_form.default_reason_placeholder'
+      commitedPlaceholder: 'poll_proposal_vote_form.commited_reason_placeholder'
       agreePlaceholder:    'poll_proposal_vote_form.agree_reason_placeholder'
       abstainPlaceholder:  'poll_proposal_vote_form.abstain_reason_placeholder'
       disagreePlaceholder: 'poll_proposal_vote_form.disagree_reason_placeholder'

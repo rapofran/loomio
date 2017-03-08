@@ -1417,6 +1417,7 @@ en:
   poll_proposal_vote_form:
     default_reason_placeholder: Please explain your reasoning
     abstain_reason_placeholder: Let people know why you’re opting out of this decision
+    commited_reason_placeholder: What kind of tasks are you commiting to?
     agree_reason_placeholder: What do you like about the proposal and how will it benefit the group?
     disagree_reason_placeholder: How could this proposal be improved so that you can support it?
     block_reason_placeholder: Explain your objection to this proposal and why it should not go ahead
@@ -1424,6 +1425,9 @@ en:
     stance_updated: Vote updated
 
   poll_proposal_options:
+    commited: Commited
+    commited_verb: "commited"
+    commited_meaning: I'm going to help on this proposal
     agree: Agree
     agree_verb: "agreed"
     agree_meaning: This proposal is good enough to be adopted by the group

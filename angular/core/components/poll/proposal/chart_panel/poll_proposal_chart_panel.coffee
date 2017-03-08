@@ -4,7 +4,7 @@ angular.module('loomioApp').directive 'pollProposalChartPanel', (Records) ->
   controller: ($scope, $translate) ->
 
     $scope.pollOptionNames = ->
-      ['agree', 'abstain', 'disagree', 'block']
+      ['commited', 'agree', 'abstain', 'disagree', 'block']
 
     $scope.countFor = (name) ->
       $scope.poll.stanceData[name] or 0
