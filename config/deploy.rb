@@ -13,7 +13,7 @@ set :rbenv_roles, :all # default value
 set :bundle_flags, '--deployment'
 set :delayed_job_bin_path, 'script'
 
-set :default_env, path: '/home/app/.nvm/versions/node/v4.8.0/bin:$PATH'
+set :default_env, path: '/home/app/.nvm/versions/node/v6.10.0/bin:$PATH'
 
 namespace :deploy do
   desc 'Reiniciar delayed jobs'
