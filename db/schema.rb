@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20170314040259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "resource_id",   null: false
@@ -405,8 +404,8 @@ ActiveRecord::Schema.define(version: 20170314040259) do
     t.integer  "default_group_cover_id"
     t.integer  "subscription_id"
     t.integer  "motions_count",                      default: 0,     null: false
-    t.integer  "admin_memberships_count",            default: 0,     null: false
     t.integer  "invitations_count",                  default: 0,     null: false
+    t.integer  "admin_memberships_count",            default: 0,     null: false
     t.integer  "public_discussions_count",           default: 0,     null: false
     t.string   "country"
     t.string   "region"
@@ -525,17 +524,17 @@ ActiveRecord::Schema.define(version: 20170314040259) do
     t.integer  "discussion_id"
     t.text     "outcome"
     t.datetime "last_vote_at"
-    t.integer  "yes_votes_count",     default: 0, null: false
-    t.integer  "no_votes_count",      default: 0, null: false
-    t.integer  "abstain_votes_count", default: 0, null: false
-    t.integer  "block_votes_count",   default: 0, null: false
+    t.integer  "yes_votes_count",      default: 0, null: false
+    t.integer  "no_votes_count",       default: 0, null: false
+    t.integer  "abstain_votes_count",  default: 0, null: false
+    t.integer  "block_votes_count",    default: 0, null: false
     t.datetime "closing_at"
-    t.integer  "votes_count",         default: 0, null: false
+    t.integer  "votes_count",          default: 0, null: false
     t.integer  "outcome_author_id"
     t.string   "key"
-    t.integer  "commited_votes_count", default: 0,    null: false
-    t.integer  "members_count",       default: 0, null: false
-    t.integer  "voters_count",        default: 0, null: false
+    t.integer  "commited_votes_count", default: 0, null: false
+    t.integer  "members_count",        default: 0, null: false
+    t.integer  "voters_count",         default: 0, null: false
   end
 
   add_index "motions", ["author_id"], name: "index_motions_on_author_id", using: :btree
@@ -795,17 +794,6 @@ ActiveRecord::Schema.define(version: 20170314040259) do
     t.text     "javascript"
   end
 
-  create_table "translations", force: :cascade do |t|
-    t.integer  "translatable_id"
-    t.string   "translatable_type"
-    t.hstore   "fields"
-    t.string   "language"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "translations", ["translatable_type", "translatable_id"], name: "index_translations_on_translatable_type_and_translatable_id", using: :btree
-
   create_table "user_deactivation_responses", force: :cascade do |t|
     t.integer "user_id"
     t.text    "body"
@@ -846,10 +834,10 @@ ActiveRecord::Schema.define(version: 20170314040259) do
     t.boolean  "angular_ui_enabled",               default: true,       null: false
     t.boolean  "email_on_participation",           default: false,      null: false
     t.integer  "default_membership_volume",        default: 2,          null: false
-    t.jsonb    "experiences",                      default: {},         null: false
     t.string   "country"
     t.string   "region"
     t.string   "city"
+    t.jsonb    "experiences",                      default: {},         null: false
   end
 
   add_index "users", ["deactivated_at"], name: "index_users_on_deactivated_at", using: :btree

@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '2.3.1'
+
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'rails', '~> 4.2.5.2'
 gem 'rake', '11.3.0'
@@ -81,6 +82,10 @@ group :development, :test do
 end
 
 group :development do
+  gem 'net-ssh'
+  gem 'net-scp'
+  gem 'method_source'
+
   gem 'sqlite3'
   # gem 'derailed'
   gem "stackprof"

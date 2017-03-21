@@ -494,6 +494,7 @@ GEM
       nokogiri (>= 1.5.9)
     macaddr (1.7.1)
       systemu (~> 2.6.2)
+    method_source (0.8.2)
     mime-types (2.99.3)
     mimemagic (0.3.0)
     mini_portile2 (2.1.0)
@@ -502,6 +503,9 @@ GEM
     multi_test (0.1.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (4.1.0)
     newrelic_rpm (3.12.0.288)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -812,7 +816,10 @@ DEPENDENCIES
   jstz-rails!
   launchy
   mail!
+  method_source
   minitest
+  net-scp
+  net-ssh
   newrelic_rpm
   nokogiri
   oj
@@ -867,4 +874,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.14.4
+   1.14.5
