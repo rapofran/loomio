@@ -188,7 +188,7 @@ class Motion < ActiveRecord::Base
     # set the activity count
     self[:votes_count] = votes.count
 
-    save!
+    save(validate: false)
   end
 
   def user_has_voted?(user)
