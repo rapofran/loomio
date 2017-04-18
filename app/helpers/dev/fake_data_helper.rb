@@ -44,9 +44,14 @@ module Dev::FakeDataHelper
       poll_option_names: option_names[args.fetch(:poll_type, :poll)],
       closing_at: 3.days.from_now,
       multiple_choice: false,
-      details: Faker::Hipster.paragraph,
-      custom_fields: {dots_per_person: 10}
+      details: with_markdown(Faker::Hipster.paragraph),
+      custom_fields: {}
     }.merge args
+
+    case options[:poll_type].to_s
+    when 'dot_vote' then options[:custom_fields][:dots_per_person] = 10
+    when 'meeting'  then options[:custom_fields][:time_zone] = 'Asia/Seoul'
+    end
 
     Poll.new(options).tap { |p| p.community_of_type(:email, build: true) }
   end
@@ -73,7 +78,7 @@ module Dev::FakeDataHelper
     poll = fake_poll
     Outcome.new({poll: poll,
                 author: poll.author,
-                statement: Faker::Hipster.sentence}.merge(args))
+                statement: with_markdown(Faker::Hipster.sentence)}.merge(args))
   end
 
   def fake_visitor(args = {})
@@ -82,6 +87,12 @@ module Dev::FakeDataHelper
       email: Faker::Internet.email,
       community: Communities::Public.new
     }.merge(args))
+  end
+
+  private
+
+  def with_markdown(text)
+    "#{text} - **(markdown!)**"
   end
 
 end
