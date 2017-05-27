@@ -2,9 +2,11 @@ class Poll < ActiveRecord::Base
   include ReadableUnguessableUrls
   include HasMentions
   include MakesAnnouncements
-  TEMPLATES = YAML.load_file('config/poll_templates.yml')
-  COLORS    = YAML.load_file('config/colors.yml')
-  TIMEZONES = YAML.load_file('config/timezones.yml')
+  include MessageChannel
+
+  TEMPLATES = YAML.load_file(Rails.root.join("config", "poll_templates.yml"))
+  COLORS    = YAML.load_file(Rails.root.join("config", "colors.yml"))
+  TIMEZONES = YAML.load_file(Rails.root.join("config", "timezones.yml"))
   TEMPLATE_FIELDS = %w(material_icon translate_option_name
                        can_add_options can_remove_options
                        must_have_options chart_type has_option_icons
@@ -15,6 +17,8 @@ class Poll < ActiveRecord::Base
     define_method field, -> { TEMPLATES.dig(self.poll_type, field) }
   end
 
+  include Translatable
+  is_translatable on: [:title, :details]
   is_mentionable on: :details
 
   belongs_to :author, class_name: "User", required: true
@@ -37,7 +41,7 @@ class Poll < ActiveRecord::Base
 
   has_many :events, -> { includes(:eventable) }, as: :eventable, dependent: :destroy
 
-  has_many :poll_options, ->(object) { order(object.poll_option_order) }, dependent: :destroy
+  has_many :poll_options, dependent: :destroy
   accepts_nested_attributes_for :poll_options, allow_destroy: true
 
   has_many :poll_did_not_votes, dependent: :destroy
@@ -50,6 +54,8 @@ class Poll < ActiveRecord::Base
   has_many :poll_communities, dependent: :destroy
   has_many :communities, through: :poll_communities
 
+  delegate :locale, to: :author
+
   scope :active, -> { where(closed_at: nil) }
   scope :closed, -> { where("closed_at IS NOT NULL") }
   scope :search_for, ->(fragment) { where("polls.title ilike :fragment", fragment: "%#{fragment}%") }
@@ -57,6 +63,14 @@ class Poll < ActiveRecord::Base
   scope :active_or_closed_after, ->(since) { where("closed_at IS NULL OR closed_at > ?", since) }
   scope :participation_by, ->(participant) { joins(:stances).where("stances.participant_type": participant.class.to_s, "stances.participant_id": participant.id) }
   scope :authored_by, ->(user) { where(author: user) }
+  scope :chronologically, -> { order('created_at asc') }
+  scope :with_includes, -> { includes(
+    :attachments,
+    :poll_options,
+    :outcomes,
+    {poll_communities: [:community]},
+    {stances: [:stance_choices]})
+  }
 
   scope :closing_soon_not_published, ->(timeframe, recency_threshold = 2.days.ago) do
      active
@@ -71,10 +85,13 @@ class Poll < ActiveRecord::Base
 
   validates :title, presence: true
   validates :poll_type, inclusion: { in: TEMPLATES.keys }
+  validates :details, length: {maximum: Rails.application.secrets.max_message_length }
 
   validate :poll_options_are_valid
   validate :closes_in_future
   validate :require_custom_fields
+
+  attr_accessor :community_id
 
   alias_method :user, :author
 
@@ -85,7 +102,8 @@ class Poll < ActiveRecord::Base
   # creates a hash which has a PollOption as a key, and a list of stance
   # choices associated with that PollOption as a value
   def grouped_stance_choices(since: nil)
-    @grouped_stance_choices ||= stance_choices.where("stance_choices.created_at > ?", since || 100.years.ago)
+    @grouped_stance_choices ||= stance_choices.reasons_first
+                                              .where("stance_choices.created_at > ?", since || 100.years.ago)
                                               .includes(:poll_option, stance: :participant)
                                               .to_a
                                               .group_by(&:poll_option)
@@ -121,10 +139,6 @@ class Poll < ActiveRecord::Base
     closed_at.nil?
   end
 
-  def poll_option_order
-    if dates_as_options then { name: :asc } else :id end
-  end
-
   def poll_option_names
     poll_options.pluck(:name)
   end
@@ -134,6 +148,11 @@ class Poll < ActiveRecord::Base
     existing = Array(poll_options.pluck(:name))
     (names - existing).each_with_index { |name, priority| poll_options.build(name: name, priority: priority) }
     @poll_option_removed_names = (existing - names)
+  end
+
+  def is_new_version?
+    !self.poll_options.map(&:persisted?).all? ||
+    (['title', 'details', 'closing_at'] & self.changes.keys).any?
   end
 
   def anyone_can_participate
@@ -148,21 +167,21 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def discussion=(discussion)
-    super.tap { self.group_id = self.discussion&.group_id }
-  end
-
   def discussion_id=(discussion_id)
     super.tap { self.group_id = self.discussion&.group_id }
   end
 
+  def discussion=(discussion)
+    super.tap { self.group_id = self.discussion&.group_id }
+  end
+
   def group_id=(group_id)
-    return if self[:group_id] == group_id
+    self.group = Group.find_by(id: group_id)
+  end
+
+  def group=(group)
+    sync_poll_communities(group) if self[:group_id] != group&.id
     super
-    poll_communities.where(community: community_of_type(:loomio_group)).destroy_all
-    if g = Group.find_by(id: group_id)
-      poll_communities.build(community: g.community)
-    end
   end
 
   def community_of_type(community_type, build: false)
@@ -170,6 +189,11 @@ class Poll < ActiveRecord::Base
   end
 
   private
+
+  def sync_poll_communities(group)
+    poll_communities.where(community: community_of_type(:loomio_group)).destroy_all
+    poll_communities.build(community: group.community) if group
+  end
 
   def build_community(community_type)
     poll_communities.build(community: "Communities::#{community_type.to_s.camelize}".constantize.new).community

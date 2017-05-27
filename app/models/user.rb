@@ -9,11 +9,10 @@ class User < ActiveRecord::Base
   MAX_AVATAR_IMAGE_SIZE_CONST = 100.megabytes
 
   devise :database_authenticatable, :recoverable, :registerable, :rememberable, :trackable, :omniauthable, :validatable
-  attr_accessor :honeypot
+  attr_accessor :recaptcha
   attr_accessor :restricted
 
   validates :email, presence: true, uniqueness: true, email: true
-  #validates :name, presence: true
   validates_inclusion_of :uses_markdown, in: [true,false]
 
   has_many :stances, as: :participant
@@ -36,6 +35,7 @@ class User < ActiveRecord::Base
 
   validates_length_of :password, minimum: 8, allow_nil: true
   validates :password, nontrivial_password: true, allow_nil: true
+  validate  :ensure_recaptcha, if: :recaptcha
 
   has_many :contacts, dependent: :destroy
   has_many :admin_memberships,
@@ -82,8 +82,14 @@ class User < ActiveRecord::Base
            dependent: :destroy
 
   has_many :polls, foreign_key: :author_id
-  has_many :communities, through: :polls, class_name: "Communities::Base"
-  has_many :visitors, through: :communities
+
+  has_many :identities, class_name: "Identities::Base", dependent: :destroy
+  has_many :communities, through: :identities, class_name: "Communities::Base"
+  has_many :email_communities,
+           -> { where(community_type: [:email, :public]) },
+           through: :polls,
+           source: :communities,
+           class_name: "Communities::Base"
 
   has_many :votes, dependent: :destroy
   has_many :comment_votes, dependent: :destroy
@@ -91,12 +97,12 @@ class User < ActiveRecord::Base
   has_many :participated_polls, through: :stances, source: :poll
 
   has_many :discussion_readers, dependent: :destroy
-  has_many :omniauth_identities, dependent: :destroy
 
   has_many :notifications, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :attachments, dependent: :destroy
   has_many :drafts, dependent: :destroy
+  has_many :login_tokens, dependent: :destroy
 
   has_one :deactivation_response,
           class_name: 'UserDeactivationResponse',
@@ -127,6 +133,37 @@ class User < ActiveRecord::Base
     where('users.email_when_proposal_closing_soon = ?', true)
   }
 
+  scope :without, -> (users) {
+    users = Array(users).compact
+
+    if users.size > 0
+      where('users.id NOT IN (?)', users)
+    else
+      all
+    end
+  }
+
+  def slack_identity
+    identities.find_by(identity_type: :slack)
+  end
+
+  def facebook_identity
+    identities.find_by(identity_type: :facebook)
+  end
+
+  def associate_with_identity(identity)
+    if existing = identities.find_by(uid: identity.uid, identity_type: identity.identity_type)
+      existing.update(access_token: identity.access_token)
+    else
+      identities.push(identity)
+      identity.assign_logo! if avatar_kind == 'initials'
+    end
+  end
+
+  def remember_me
+    true
+  end
+
   def user_id
     id
   end
@@ -139,8 +176,12 @@ class User < ActiveRecord::Base
     true
   end
 
+  def email_status
+    if deactivated_at.present? then :inactive else :active end
+  end
+
   def first_name
-    name.split(' ').first
+    name.to_s.split(' ').first
   end
 
   def name_and_email
@@ -176,10 +217,6 @@ class User < ActiveRecord::Base
 
   def time_zone
     self[:time_zone] || 'UTC'
-  end
-
-  def group_membership(group)
-    memberships.for_group(group).first
   end
 
   def self.find_by_email(email)
@@ -254,6 +291,11 @@ class User < ActiveRecord::Base
 
   def ensure_email_api_key
     self.email_api_key ||= SecureRandom.hex(16)
+  end
+
+  def ensure_recaptcha
+    return if Clients::Recaptcha.instance.validate(self.recaptcha)
+    self.errors.add(:recaptcha, I18n.t(:"user.error.recaptcha"))
   end
 
   def ensure_unsubscribe_token

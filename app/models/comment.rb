@@ -7,6 +7,7 @@ class Comment < ActiveRecord::Base
   is_mentionable  on: :body
 
   belongs_to :discussion
+  has_one :group, through: :discussion
   belongs_to :user
   belongs_to :parent, class_name: 'Comment'
 
@@ -23,6 +24,7 @@ class Comment < ActiveRecord::Base
   validate :has_body_or_attachment
   validate :parent_comment_belongs_to_same_discussion
   validate :attachments_owned_by_author
+  validates :body, {length: {maximum: Rails.application.secrets.max_message_length}}
 
   default_scope { includes(:user).includes(:attachments).includes(:discussion) }
 
@@ -33,7 +35,6 @@ class Comment < ActiveRecord::Base
   delegate :email, to: :user, prefix: :user
   delegate :author, to: :parent, prefix: :parent, allow_nil: true
   delegate :participants, to: :discussion, prefix: :discussion
-  delegate :group, to: :discussion
   delegate :full_name, to: :group, prefix: :group
   delegate :title, to: :discussion, prefix: :discussion
   delegate :locale, to: :user
