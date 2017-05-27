@@ -28,9 +28,13 @@ EventBus.configure do |config|
                 'poll_create',
                 'poll_update') { |model| SearchVector.index! model.discussion_id }
 
-  # sync poll's discussion with it's group
-  config.listen('poll_create', 'poll_update') do |poll|
-    poll.update(group_id: poll.discussion.group_id) if poll.discussion
+  # publish to designated community after creation
+  config.listen('poll_create') do |poll|
+    community = Communities::Base.find_by(id: poll.community_id)
+    if poll.author.can?(:show, community)
+      poll.communities << community
+      Events::PollPublished.publish!(poll, poll.author, community)
+    end
   end
 
   # add creator to group if one doesn't exist
@@ -86,6 +90,11 @@ EventBus.configure do |config|
   # email and notify users of events
   Event::KINDS.each do |kind|
     config.listen("#{kind}_event") { |event| event.trigger! }
+  end
+
+  # notify communities of outcome creation
+  config.listen("outcome_create") do |outcome|
+    outcome.communities.with_identity.each { |community| Events::OutcomePublished.publish!(outcome, community) }
   end
 
   # nullify parent_id on children of destroyed comment

@@ -12,7 +12,6 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
 
     afterConstruction: ->
       @newAttachmentIds = _.clone(@attachmentIds) or []
-      @customFields.dots_per_person = 8 if @pollType == 'dot_vote'
 
     # the polls which haven't closed have the highest importance
     # (and so have the lowest value here)
@@ -44,9 +43,13 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       @hasMany   'pollOptions'
       @hasMany   'stances', sortBy: 'createdAt', sortDesc: true
       @hasMany   'pollDidNotVotes'
+      @hasMany   'communities'
 
     group: ->
-      @discussion().group() if @discussion()
+      if @discussion()
+        @discussion().group()
+      else
+        @recordStore.groups.find(@groupId)
 
     voters: ->
       @recordStore.users.find(_.pluck(@stances(), 'userId'))
@@ -65,6 +68,12 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
         @group().membershipsCount
       else
         0
+
+    announcementSize: ->
+      if @isNew()
+        @communitySize()
+      else
+        @stancesCount
 
     percentVoted: ->
       (100 * @stancesCount / @communitySize()).toFixed(0) if @communitySize() > 0
@@ -98,9 +107,6 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
     uniqueStances: (order, limit) ->
       _.slice(_.sortBy(@recordStore.stances.find(pollId: @id, latest: true), order), 0, limit)
 
-    group: ->
-      @discussion().group() if @discussion()
-
     cookedDetails: ->
       MentionLinkService.cook(@mentionedUsernames, @details)
 
@@ -114,4 +120,12 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       @customFields.goal or @communitySize()
 
     close: =>
-      @remote.postMember(@id, 'close')
+      @remote.postMember(@key, 'close')
+
+    publish: (community, message) =>
+      @remote.postMember(@key, 'publish', community_id: community.id, message: message).then =>
+        @published = true
+
+    enableCommunities: ->
+      @group() and @group().features.enable_communities or
+      @author().experiences.enable_communities

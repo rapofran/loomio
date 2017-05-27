@@ -1,10 +1,12 @@
 .poll-poll-form__add-option-field,
 .poll-poll-form__option-text {
   flex-grow: 1;
+  width: 100%;
+  @include truncateText;
 }
 
 .poll-poll-form__option-button {
-  display: flex;
+  @include displayFlex;
 }
 
 .poll-poll-form__option-icon {

@@ -3,7 +3,7 @@ angular.module('loomioApp').directive 'contextPanel', ->
   restrict: 'E'
   replace: true
   templateUrl: 'generated/components/thread_page/context_panel/context_panel.html'
-  controller: ($scope, $rootScope, $window, $timeout, AbilityService, Session, ModalService, ChangeVolumeForm, DiscussionForm, ThreadService, MoveThreadForm, PrintModal, DeleteThreadForm, RevisionHistoryModal, ScrollService, AppConfig) ->
+  controller: ($scope, $rootScope, $window, $timeout, AbilityService, Session, ModalService, ChangeVolumeForm, DiscussionForm, ThreadService, MoveThreadForm, PrintModal, DeleteThreadForm, RevisionHistoryModal, TranslationService, ScrollService, AppConfig) ->
     $scope.pad_url = AppConfig.pad_url
 
     $scope.showContextMenu = ->
@@ -58,3 +58,5 @@ angular.module('loomioApp').directive 'contextPanel', ->
 
     $scope.canAddComment = ->
       AbilityService.canAddComment($scope.discussion)
+
+    TranslationService.listenForTranslations($scope)
