@@ -606,7 +606,6 @@ es-AHR:
     abstain: 'Me abstengo'
     'no': 'En desacuerdo'
     block: 'Bloqueo'
-    commited: 'Me comprometo'
   unable_to_vote:
     permission_denied: No tienes permiso para votar en esta propuesta.
     motion_closed: Esta propuesta ya se ha cerrado
