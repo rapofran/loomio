@@ -81,6 +81,8 @@ group :development, :test do
 end
 
 group :development do
+  gem 'rbnacl'
+  gem 'bcrypt_pbkdf'
   gem 'net-ssh'
   gem 'net-scp'
   gem 'method_source'
