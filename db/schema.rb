@@ -675,8 +675,8 @@ ActiveRecord::Schema.define(version: 20170523015010) do
     t.string   "uid"
     t.string   "name"
     t.string   "access_token",  default: ""
-    t.jsonb    "custom_fields", default: {}, null: false
     t.string   "logo"
+    t.jsonb    "custom_fields", default: {}, null: false
   end
 
   add_index "omniauth_identities", ["email"], name: "index_omniauth_identities_on_email", using: :btree
@@ -864,6 +864,7 @@ ActiveRecord::Schema.define(version: 20170523015010) do
     t.string   "country"
     t.string   "region"
     t.string   "city"
+    t.jsonb    "experiences",                      default: {},         null: false
     t.integer  "facebook_community_id"
     t.integer  "slack_community_id"
     t.string   "remember_token"
