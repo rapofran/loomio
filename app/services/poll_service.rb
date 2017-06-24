@@ -60,7 +60,7 @@ class PollService
     poll.poll_did_not_votes.delete_all
     non_voters = poll.group.members - poll.participants
     poll.poll_did_not_votes.import non_voters.map { |user| PollDidNotVote.new(user: user, poll: poll) }, validate: false
-    poll.update_did_not_votes_count
+    poll.update_undecided_user_count
   end
 
   def self.update(poll:, params:, actor:)
@@ -100,7 +100,7 @@ class PollService
     actor.ability.authorize! :create_visitors, poll
 
     VisitorsBatchCreateJob.perform_later(emails, poll.id, actor.id)
-    poll.custom_fields['pending_emails'] = []
+    poll.pending_emails = []
     poll.save(validate: false)
 
     EventBus.broadcast('poll_create_visitors', poll, emails, actor)
@@ -115,7 +115,7 @@ class PollService
       # convert motion to poll
       poll = Poll.new(
         poll_type:               "proposal",
-        poll_options_attributes: Poll::TEMPLATES.dig('proposal', 'poll_options_attributes'),
+        poll_options_attributes: AppConfig.poll_templates.dig('proposal', 'poll_options_attributes'),
         key:                     motion.key,
         discussion:              motion.discussion,
         motion:                  motion,
@@ -155,7 +155,7 @@ class PollService
   end
 
   def self.cleanup_examples
-    Poll.where(example: true).where('created_at < ?', 1.hour.ago).destroy_all
+    Poll.where(example: true).where('created_at < ?', 1.day.ago).destroy_all
   end
 
 end

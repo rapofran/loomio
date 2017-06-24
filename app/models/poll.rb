@@ -1,21 +1,21 @@
 class Poll < ActiveRecord::Base
+  extend  HasCustomFields
   include ReadableUnguessableUrls
   include HasMentions
   include MakesAnnouncements
   include MessageChannel
   include SelfReferencing
 
-  TEMPLATES = YAML.load_file(Rails.root.join("config", "poll_templates.yml"))
-  COLORS    = YAML.load_file(Rails.root.join("config", "colors.yml"))
-  TIMEZONES = YAML.load_file(Rails.root.join("config", "timezones.yml"))
+  set_custom_fields :meeting_duration, :time_zone, :dots_per_person, :pending_emails
+
   TEMPLATE_FIELDS = %w(material_icon translate_option_name
-                       can_add_options can_remove_options
+                       can_add_options can_remove_options author_receives_outcome
                        must_have_options chart_type has_option_icons
                        has_variable_score voters_review_responses
                        dates_as_options required_custom_fields
                        require_stance_choice poll_options_attributes).freeze
   TEMPLATE_FIELDS.each do |field|
-    define_method field, -> { TEMPLATES.dig(self.poll_type, field) }
+    define_method field, -> { AppConfig.poll_templates.dig(self.poll_type, field) }
   end
 
   include Translatable
@@ -54,9 +54,16 @@ class Poll < ActiveRecord::Base
 
   has_paper_trail only: [:title, :details, :closing_at, :group_id]
 
-  define_counter_cache(:stances_count)       { |poll| poll.stances.latest.count }
-  define_counter_cache(:visitors_count)      { |poll| poll.visitors.count }
-  define_counter_cache(:did_not_votes_count) { |poll| poll.poll_did_not_votes.count }
+  define_counter_cache(:stances_count)           { |poll| poll.stances.latest.count }
+  define_counter_cache(:visitors_count)          { |poll| poll.visitors.count }
+  define_counter_cache(:undecided_visitor_count) { |poll| Visitor.undecided_for(poll).count }
+  define_counter_cache(:undecided_user_count)   do |poll|
+    if community = poll.community_of_type(:loomio_users) || poll.group&.community
+      community.members
+    else
+      User.where(id: poll.author_id)
+    end.without(poll.participants).count
+  end
 
   has_many :poll_communities, dependent: :destroy, autosave: true
   has_many :communities, through: :poll_communities
@@ -91,7 +98,7 @@ class Poll < ActiveRecord::Base
   end
 
   validates :title, presence: true
-  validates :poll_type, inclusion: { in: TEMPLATES.keys }
+  validates :poll_type, inclusion: { in: AppConfig.poll_templates.keys }
   validates :details, length: {maximum: Rails.application.secrets.max_message_length }
 
   validate :poll_options_are_valid
@@ -143,7 +150,7 @@ class Poll < ActiveRecord::Base
   end
 
   def is_single_vote?
-    TEMPLATES.dig(self.poll_type, 'single_choice') && !self.multiple_choice
+    AppConfig.poll_templates.dig(self.poll_type, 'single_choice') && !self.multiple_choice
   end
 
   def poll_option_names

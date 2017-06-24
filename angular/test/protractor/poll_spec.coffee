@@ -58,6 +58,19 @@ describe 'Polls', ->
 
     page.expectText '.poll-common-outcome-panel', 'This is an outcome'
 
+  it 'can send a calendar invite', ->
+    page.loadPath 'polls/test_meeting_poll_closed'
+    page.click '.poll-common-set-outcome-panel__submit'
+
+    page.fillIn '.poll-common-outcome-form__statement', 'Here is a statement'
+    page.fillIn '.poll-common-calendar-invite__summary', 'This is a meeting title'
+    page.fillIn '.poll-common-calendar-invite__location', '123 Any St, USA'
+    page.fillIn '.poll-common-calendar-invite__description', 'Here is a meeting agenda'
+
+    page.click '.poll-common-outcome-form__submit'
+    page.expectFlash 'Outcome created'
+    page.expectText '.poll-common-outcome-panel', 'Here is a statement'
+
   it 'can start a standalone poll', ->
     page.loadPath 'polls/start_poll'
     page.click '.poll-common-choose-type__poll-type--proposal'
@@ -115,3 +128,10 @@ describe 'Polls', ->
     page.click '.poll-common-share-form__option-button'
 
     page.expectFlash 'Invitation email sent to loo@m.io'
+
+  it 'can show undecided users', ->
+    page.loadPath 'polls/test_poll_in_discussion_with_guest'
+    page.expectText '.poll-common-undecided-panel__button', 'SHOW 4 UNDECIDED'
+    page.click '.poll-common-undecided-panel__button'
+    page.expectText '.poll-common-undecided-panel__users', 'Undecided Group Members (2)'
+    page.expectText '.poll-common-undecided-panel__visitors', 'Undecided Guests (2)'

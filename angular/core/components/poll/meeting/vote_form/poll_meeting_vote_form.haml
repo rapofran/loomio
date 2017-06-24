@@ -1,4 +1,5 @@
-%form.poll-meeting-vote-form
+%form.poll-meeting-vote-form{ng-submit: "submit()"}
+  %poll_common_participant_form{stance: "stance"}
   %h3.lmo-card-subheading{translate: "poll_meeting_vote_form.your_response"}
   .lmo-flex.lmo-flex__flex-end
     %time_zone_select
@@ -15,8 +16,7 @@
       %input.lmo-primary-form-input{type: "text", placeholder: "{{'poll_meeting_vote_form.reason_placeholder' | translate}}", ng-model: "stance.reason", md-maxlength: "250"}
       %validation_errors{subject: "stance", field: "reason"}
 
-  %poll_common_participant_form{stance: "stance"}
-
-  .poll-common-form-actions
+  .poll-common-form-actions.lmo-flex.lmo-flex__space-between
     %show_results_button{ng-if: "stance.isNew()"}
-    %md-button.md-primary.md-raised{ng-click: "submit()", translate: "poll_common.vote", aria-label: "{{ 'poll_meeting_vote_form.vote' | translate }}"}
+    %div{ng-if: "!stance.isNew()"}
+    %md-button.md-primary.md-raised{type: "submit", translate: "poll_common.vote", aria-label: "{{ 'poll_meeting_vote_form.vote' | translate }}"}

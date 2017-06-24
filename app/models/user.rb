@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   include HasAvatar
   include UsesWithoutScope
   include SelfReferencing
+  include NoForbiddenEmails
 
   MAX_AVATAR_IMAGE_SIZE_CONST = 100.megabytes
 
@@ -35,7 +36,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username
   validates_length_of :username, maximum: 30
   validates_length_of :short_bio, maximum: 250
-  validates_format_of :username, with: /\A[a-z0-9]*\z/, message: I18n.t(:'error.username_must_be_alphanumeric')
+  validates_format_of :username, with: /\A[a-z0-9]*\z/, message: I18n.t(:'profile_page.username_must_be_alphanumeric')
 
   validates_length_of :password, minimum: 8, allow_nil: true
   validates :password, nontrivial_password: true, allow_nil: true
@@ -136,14 +137,6 @@ class User < ActiveRecord::Base
     .joins(:memberships)
     .where('memberships.group_id': group.id)
   }
-
-  def slack_identity
-    identities.find_by(identity_type: :slack)
-  end
-
-  def facebook_identity
-    identities.find_by(identity_type: :facebook)
-  end
 
   def associate_with_identity(identity)
     if existing = identities.find_by(user: self, uid: identity.uid, identity_type: identity.identity_type)

@@ -1,5 +1,8 @@
 class Events::OutcomeCreated < Event
   include Events::PollEvent
+  include Events::Notify::Author
+  include Events::Notify::Visitors
+  include Events::LiveUpdate
 
   def self.publish!(outcome)
     create(kind: "outcome_created",
@@ -12,9 +15,13 @@ class Events::OutcomeCreated < Event
 
   private
 
+  def notify_author?
+    poll.author_receives_outcome
+  end
+
   def email_visitors
     if announcement
-      poll.community_of_type(:email).visitors
+      poll.visitors
     else
       Visitor.none
     end
