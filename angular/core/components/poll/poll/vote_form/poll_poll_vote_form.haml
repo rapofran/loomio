@@ -1,4 +1,6 @@
-%form.poll-poll-vote-form
+%form.poll-poll-vote-form{ng-submit: "submit()"}
+  %poll_common_participant_form{stance: "stance"}
+  
   %h3.lmo-card-subheading{translate: "poll_common.your_response"}
   .poll-common-vote-form__options
     .poll-poll-vote-form__options{ng-if: "!stance.poll().multipleChoice"}
@@ -17,8 +19,8 @@
       %input.lmo-primary-form-input{type: "text", placeholder: "{{'poll_common.reason_placeholder' | translate}}", ng-model: "stance.reason", md-maxlength: "250"}
       %validation_errors{subject: "stance", field: "reason"}
 
-  %poll_common_participant_form{stance: "stance"}
 
-  .poll-common-form-actions
+  .poll-common-form-actions.lmo-flex.lmo-flex__space-between
     %show_results_button{ng-if: "stance.isNew()"}
-    %md-button.md-primary.md-raised{ng-click: "submit()", translate: "poll_common.vote", aria-label: "{{ 'poll_poll_vote_form.vote' | translate }}"}
+    %div{ng-if: "!stance.isNew()"}
+    %md-button.md-primary.md-raised{type: "submit", translate: "poll_common.vote", aria-label: "{{ 'poll_poll_vote_form.vote' | translate }}"}

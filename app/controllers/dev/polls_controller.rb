@@ -18,6 +18,20 @@ class Dev::PollsController < Dev::BaseController
     redirect_to poll_url(poll)
   end
 
+  def test_poll_in_discussion_with_guest
+    group = create_group_with_members
+    user  = saved fake_user
+    group.add_member!(user)
+    sign_in user
+    discussion = saved fake_discussion(group: group)
+    poll = saved fake_poll(discussion: discussion)
+    Stance.create(poll: poll, participant: user, choice: poll.poll_option_names.first)
+    poll.community_of_type(:email, build: true).visitors.create(name: Faker::Name.name)
+    poll.community_of_type(:email, build: true).visitors.create(name: Faker::Name.name)
+    poll.update_undecided_visitor_count
+    redirect_to poll_url(poll)
+  end
+
   def start_poll
     sign_in saved fake_user
     redirect_to new_poll_url
@@ -42,7 +56,7 @@ class Dev::PollsController < Dev::BaseController
   end
 
   def self.observe_scenario(scenario_name, email: false)
-    Poll::TEMPLATES.keys.each do |poll_type|
+    AppConfig.poll_templates.keys.each do |poll_type|
       define_method :"test_#{poll_type}_#{scenario_name}#{'_email' if email}" do
         sign_out :user
         scenario = send(:"#{scenario_name}_scenario", poll_type: poll_type)

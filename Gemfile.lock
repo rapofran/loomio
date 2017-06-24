@@ -35,6 +35,13 @@ GIT
       uuidtools
 
 GIT
+  remote: git://github.com/icalendar/icalendar.git
+  revision: 97ed9d301448350de15da4ba3b2323bd685d358c
+  ref: 97ed9d3
+  specs:
+    icalendar (2.4.1)
+
+GIT
   remote: git://github.com/loomio/griddler-mailin.git
   revision: 82df9ea881c70b94a346fecac11c523a166394f4
   specs:
@@ -780,6 +787,7 @@ DEPENDENCIES
   heroku-deflater
   http_accept_language
   httparty
+  icalendar!
   launchy
   mail!
   minitest

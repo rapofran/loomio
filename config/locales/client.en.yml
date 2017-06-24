@@ -845,6 +845,7 @@ en:
     locale_placeholder: Select your preferred language
     update_profile: 'Update profile'
     deactivate_account: 'Deactivate account'
+    username_must_be_alphanumeric: Username must contain only lowercase letters and digits.
 
   change_picture_form:
     aria_label: 'Change picture form'
@@ -1316,6 +1317,7 @@ en:
 
   decision_tools_card:
     title: Decision tools
+    help_text: <a href="https://www.loomio.school/beginner/decision_tools.html" target="_blank">Help</a>
     proposal_title: Proposal
     count_title: Check
     poll_title: Poll
@@ -1374,6 +1376,19 @@ en:
     members_count: "{{count}} people will be notified"
     participants_count: "The {{count}} people who have voted will be notified"
 
+  poll_common_calendar_invite:
+    calendar_invite: Include a calendar invitation with this outcome
+    poll_option_id: Meeting time
+    helptext_on: Users will be able to add this meeting to their calendar
+    helptext_off: No meeting invite will be sent
+    event_duration: Duration
+    event_summary: Summary
+    event_summary_placeholder: What would you like to call this meeting?
+    event_description: Meeting description
+    event_description_placeholder: What is the agenda for this meeting?
+    location: Location
+    location_placeholder: Where will this meeting take place?
+
   poll_common_notify_on_participate:
     notify_on_participate: Notify me when people participate
     helptext_on: You will be notified whenever someone participates
@@ -1407,12 +1422,13 @@ en:
     priority_last: Block first
     no_votes_yet: No votes have been placed yet.
     change_results_order: Change results order
-    show_undecided: Show undecided
     none_of_the_above: (None of the above)
 
-  poll_common_did_not_votes_panel:
-    undecided: Undecided ({{count}})
-    show_undecided: Show undecided
+  poll_common_undecided_panel:
+    show_undecided: Show {{count}} undecided
+    undecided_users: Undecided Group Members ({{count}})
+    undecided_visitors: Undecided Guests ({{count}})
+    hidden_visitors: Only group coordinators or the poll author may view undecided guests
 
   poll_common_set_outcome_panel:
     share_outcome: Share outcome
@@ -1505,7 +1521,7 @@ en:
     edit_header: Edit check
     tip: Engage people with an offer or request
     title_placeholder: E.g. Who wants to join the working group?
-    details_placeholder: Explain what committment is involved, or give details about how to participate.
+    details_placeholder: Explain what commitment is involved, or give details about how to participate.
     count_created: Check started
     count_updated: Check updated
 
@@ -1543,7 +1559,14 @@ en:
     details_placeholder: Provide any clarifying details people might need to participate
     meeting_created: Time poll created
     meeting_updated: Time poll updated
-    add_option_placeholder: Enter a time
+    timeslots: Time slots
+    no_options: "You haven't added any time slots yet."
+    meeting_duration: Meeting duration
+    add_option_placeholder: Enter a new time
+
+  poll_meeting_time_field:
+    new_time_slot: New time slot
+    closing_hour: Closing hour
 
   poll_proposal_vote_form:
     default_reason_placeholder: Please explain your reasoning
@@ -1592,10 +1615,10 @@ en:
     your_response: When can you attend?
     stance_created: Availability saved
     stance_updated: Availability updated
-    reason_placeholder: Explain when you're busy or free, incase the author needs to add new options
+    reason_placeholder: Explain when you're free (or busy), in case the author wants to add options.
 
   poll_dot_vote_vote_form:
-    dots_remaining: You have {{count}} dots remaining.
+    dots_remaining: "{{count}} dots remaining."
     too_many_dots: You have used too many dots.
     stance_created: Vote created
     stance_updated: Vote updated
@@ -1745,7 +1768,6 @@ en:
     invalid_email: "Sorry, that doesn't look like a valid email address"
     invalid_password: "Sorry, that password doesn't match the one we have on file"
     email_not_found: "Sorry, we couldn't find an account with that email address"
-
     email_placeholder: you@example.com
     login_link_helptext: |
       Click the button below and we'll send you a link to sign in instantly.
