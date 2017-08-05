@@ -28,22 +28,8 @@ EventBus.configure do |config|
                 'poll_create',
                 'poll_update') { |model| SearchVector.index! model.discussion_id }
 
-  # TODO: find the common thread between these poll_published / poll_created logics
-  # publish to designated community after creation
-  config.listen('poll_create') do |poll, actor|
-    community = Communities::Base.find_by(id: poll.community_id)
-    if poll.author.can?(:show, community)
-      poll.communities << community
-      Events::PollPublished.publish!(poll, actor, community)
-    end
-  end
-
-  # publish to linked slack team after creation
-  config.listen('poll_create') do |poll, actor|
-    if poll.group&.community&.identity.present?
-      Events::PollPublished.publish!(poll, actor, poll.group.community)
-    end
-  end
+  # add poll creator as admin of guest group
+  config.listen('poll_create') { |poll, actor| poll.guest_group.add_admin!(actor) }
 
   # publish to new group if group has changed
   config.listen('poll_update') do |poll, actor|
@@ -51,6 +37,7 @@ EventBus.configure do |config|
       Events::PollCreated.publish!(poll, actor)
     end
   end
+
 
   # add creator to group if one doesn't exist
   config.listen('membership_join_group') { |group, actor| group.update(creator: actor) unless group.creator_id.present? }
@@ -100,16 +87,6 @@ EventBus.configure do |config|
                 'discussion_create',
                 'discussion_update') do |model, actor|
     Queries::UsersToMentionQuery.for(model).each { |user| Events::UserMentioned.publish!(model, actor, user) }
-  end
-
-  # email and notify users of events
-  Event::KINDS.each do |kind|
-    config.listen("#{kind}_event") { |event| event.trigger! }
-  end
-
-  # notify communities of outcome creation
-  config.listen("outcome_create") do |outcome|
-    outcome.communities.with_identity.each { |community| Events::OutcomePublished.publish!(outcome, community) }
   end
 
   # nullify parent_id on children of destroyed comment

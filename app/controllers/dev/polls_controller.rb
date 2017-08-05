@@ -3,6 +3,25 @@ class Dev::PollsController < Dev::BaseController
   include Dev::PollsScenarioHelper
   skip_before_filter :cleanup_database
 
+  def test_verify_vote_by_unverified_user
+    poll = saved fake_poll
+    unverified_user = saved fake_user(email_verified: false)
+    poll.guest_group.add_member! unverified_user
+    stance = fake_stance(poll: poll, participant: unverified_user)
+    StanceService.create(stance: stance, actor: unverified_user)
+    last_email
+  end
+
+  def test_verify_vote_by_verified_user
+    poll = saved fake_poll
+    verified_user = saved fake_user(email: 'user@example.com', email_verified: true)
+    unverified_user = saved fake_user(email: 'user@example.com', email_verified: false)
+    poll.guest_group.add_member! unverified_user
+    stance = fake_stance(poll: poll, participant: unverified_user)
+    StanceService.create(stance: stance, actor: unverified_user)
+    last_email
+  end
+
   def test_discussion
     group = create_group_with_members
     discussion = saved fake_discussion(group: group)
@@ -15,20 +34,6 @@ class Dev::PollsController < Dev::BaseController
     sign_in group.admins.first
     discussion = saved fake_discussion(group: group)
     poll = saved fake_poll(discussion: discussion)
-    redirect_to poll_url(poll)
-  end
-
-  def test_poll_in_discussion_with_guest
-    group = create_group_with_members
-    user  = saved fake_user
-    group.add_member!(user)
-    sign_in user
-    discussion = saved fake_discussion(group: group)
-    poll = saved fake_poll(discussion: discussion)
-    Stance.create(poll: poll, participant: user, choice: poll.poll_option_names.first)
-    poll.community_of_type(:email, build: true).visitors.create(name: Faker::Name.name)
-    poll.community_of_type(:email, build: true).visitors.create(name: Faker::Name.name)
-    poll.update_undecided_visitor_count
     redirect_to poll_url(poll)
   end
 
@@ -55,8 +60,8 @@ class Dev::PollsController < Dev::BaseController
     redirect_to discussion_url(discussion)
   end
 
-  def self.observe_scenario(scenario_name, email: false)
-    AppConfig.poll_templates.keys.each do |poll_type|
+  def self.observe_scenario(scenario_name, email: false, except: [])
+    (AppConfig.poll_templates.keys - except).each do |poll_type|
       define_method :"test_#{poll_type}_#{scenario_name}#{'_email' if email}" do
         sign_out :user
         scenario = send(:"#{scenario_name}_scenario", poll_type: poll_type)
@@ -80,6 +85,10 @@ class Dev::PollsController < Dev::BaseController
   observe_scenario :poll_outcome_created,        email: true
   observe_scenario :poll_missed_yesterday,       email: true
   observe_scenario :poll_stance_created,         email: true
+  observe_scenario :poll_options_added,          email: true, except: [:check, :proposal]
+  observe_scenario :poll_options_added_author,   email: true, except: [:check, :proposal]
+  observe_scenario :poll_with_guest
+  observe_scenario :poll_with_guest_as_author
   observe_scenario :poll_notifications
   observe_scenario :poll_created_as_visitor
   observe_scenario :poll_created_as_logged_out

@@ -4,19 +4,17 @@ class ApplicationController < ActionController::Base
   include AngularHelper
   include ProtectedFromForgery
   include LoadAndAuthorize
-  include PendingActionsHelper
   include CurrentUserHelper
 
-  helper :analytics_data
   helper :locales
   helper_method :current_user
   helper_method :dashboard_or_root_path
 
+  before_filter :set_invitation_token
   before_filter :set_application_locale
-  around_filter :user_time_zone, if: :user_signed_in?
 
-  # intercom
-  skip_after_filter :intercom_rails_auto_include
+  around_filter :user_time_zone, if: :user_signed_in?
+  after_filter :save_detected_locale, if: :user_signed_in?
 
   rescue_from(ActionView::MissingTemplate)  { |exception| raise exception unless %w[txt text gif png].include?(params[:format]) }
   rescue_from(ActiveRecord::RecordNotFound) { respond_with_error :"error.not_found", status: :not_found }
@@ -39,10 +37,6 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def sign_in(user_or_resource, user = nil)
-    super && handle_pending_actions(user || user_or_resource)
-  end
-
   def respond_with_error(message, status: :bad_request)
     render 'application/display_error', locals: { message: t(message) }, status: status
   end
@@ -62,5 +56,4 @@ class ApplicationController < ActionController::Base
   def user_time_zone(&block)
     Time.use_zone(TimeZoneToCity.convert(current_user.time_zone), &block)
   end
-
 end

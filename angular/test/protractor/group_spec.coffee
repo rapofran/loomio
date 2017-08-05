@@ -11,76 +11,35 @@ describe 'Group Page', ->
       page.click '.navbar__sidenav-toggle'
       page.expectElement '.sidebar__list-item--selected'
 
-  xdescribe 'start group from home page', ->
-    it 'allows starting a group via the start_group route', ->
-      staticPage.loadPath 'view_homepage_as_visitor'
-      staticPage.click '.header__item--start-button'
-      staticPage.fillIn '#group_name', 'My First Group'
-      staticPage.fillIn '#group_description', 'Building a Better Bolshevik'
-      staticPage.fillIn '#name', 'Test Example'
-      staticPage.fillIn '#email', 'test@example.com'
-      staticPage.click '#sign-up-submit'
-
-      staticPage.loadPath 'last_email'
-      staticPage.click 'a[href]'
-
-      staticPage.fillIn '#user_password', 'vivalarevolucion'
-      staticPage.fillIn '#user_password_confirmation', 'vivalarevolucion'
-      staticPage.click  '#create-account'
-
-      page.expectFlash 'Welcome! You have signed up successfully'
-      page.expectText '.group-theme__name', 'My First Group'
-
-    it 'allows starting a group with an existing email', ->
-      staticPage.loadPath 'view_homepage_as_visitor'
-      staticPage.click '.header__item--start-button'
-      staticPage.fillIn '#group_name', 'My First Group'
-      staticPage.fillIn '#group_description', 'Building a Better Bolshevik'
-      staticPage.fillIn '#name', 'Test Example'
-      staticPage.fillIn '#email', 'patrick_swayze@example.com'
-      staticPage.click '#sign-up-submit'
-
-      staticPage.loadPath 'last_email'
-      staticPage.click 'a[href]'
-
-      staticPage.fillIn '#user_password', 'gh0stmovie'
-      staticPage.click '#sign-in-btn'
-
-      page.expectFlash 'Signed in successfully'
-      page.expectText '.group-theme__name', 'My First Group'
-
   describe 'non-member views group', ->
     describe 'logged out user', ->
-      xit 'should allow you to join an open group', ->
-        staticPage.ignoreSynchronization ->
-          page.loadPath 'view_open_group_as_visitor'
-          page.click '.join-group-button__join-group'
-          browser.driver.sleep(2000)
-          staticPage.fillIn '#user_name', 'Name'
-          staticPage.fillIn '#user_email', 'test@example.com'
-          staticPage.fillIn '#user_password', 'complex_password'
-          staticPage.fillIn '#user_password_confirmation', 'complex_password'
-          staticPage.click '#create-account'
-          browser.driver.sleep(2000)
-          page.expectElement '.sidebar__content'
-          page.expectElement '.group-theme__name', 'Open Dirty Dancing Shoes'
-
-      it 'should allow you to request to join a closed group', ->
-        page.loadPath 'view_closed_group_as_visitor'
-        page.click '.join-group-button__ask-to-join-group'
-        page.fillIn '#membership-request-name', 'Chevy Chase'
-        page.fillIn '#membership-request-email', 'chevychase@example.com'
-        page.click '.membership-request-form__submit-btn'
-        page.expectFlash 'You have requested membership to Closed Dirty Dancing Shoes'
+      it 'should allow you to join an open group', ->
+        page.loadPath 'view_open_group_as_visitor'
+        page.click '.join-group-button__join-group'
+        page.signInViaEmail('new@account.com')
+        page.click '.join-group-button__join-group'
+        page.expectElement '.sidebar__content'
+        page.expectElement '.group-theme__name', 'Open Dirty Dancing Shoes'
 
       it 'does not allow mark as read or mute', ->
         page.loadPath('view_open_group_as_visitor')
         page.expectNoElement('.thread-preview__dismiss')
         page.expectNoElement('.thread-preview__mute')
 
-      xit 'open group displays previous proposals', ->
-        page.loadPath('view_open_group_as_visitor')
-        page.expectText('.group-decisions-card', 'Let\'s go to the moon!')
+    describe 'signed in user', ->
+      it 'join an open group', ->
+        page.loadPath 'view_open_group_as_non_member'
+        page.click '.join-group-button__join-group'
+        page.sleep(1000) # you can sleep when you're dead
+        page.expectFlash 'You are now a member'
+
+      it 'request to join a closed group group', ->
+        page.loadPath 'view_closed_group_as_non_member'
+        page.click '.join-group-button__ask-to-join-group'
+        page.fillIn '.membership-request-form__introduction', 'I have a reason'
+        page.click '.membership-request-form__submit-btn'
+        page.sleep(2000)
+        page.expectFlash 'You have requested membership'
 
     describe 'see joining option for each privacy type', ->
       it 'secret group', ->
@@ -105,7 +64,7 @@ describe 'Group Page', ->
     it 'redirects to dashboard and opens modal for logged in user with angular enabled', ->
       page.loadPath('setup_new_group')
       browser.get('start_group')
-      page.expectText '.group-form', 'Start a group'
+      page.expectText '.start-group-page', 'Start a group'
 
     it 'starts an open group', ->
       page.loadPath('setup_new_group')
@@ -151,8 +110,7 @@ describe 'Group Page', ->
     describe 'with a public parent', ->
       beforeEach ->
         page.loadPath('setup_open_group')
-        page.click('.group-page-actions__button',
-                   '.group-page-actions__add-subgroup-link')
+        page.click '.subgroups-card__start'
         page.click '.group-form__advanced-link'
 
       it 'open subgroup', ->
@@ -176,8 +134,7 @@ describe 'Group Page', ->
     describe 'with a closed parent', ->
       beforeEach ->
         page.loadPath('setup_closed_group')
-        page.click('.group-page-actions__button',
-                   '.group-page-actions__add-subgroup-link')
+        page.click '.subgroups-card__start'
         page.click '.group-form__advanced-link'
 
       it 'open subgroup', ->
@@ -201,8 +158,7 @@ describe 'Group Page', ->
     describe 'with a secret parent', ->
       beforeEach ->
         page.loadPath('setup_secret_group')
-        page.click('.group-page-actions__button',
-                   '.group-page-actions__add-subgroup-link')
+        page.click '.subgroups-card__start'
         page.click '.group-form__advanced-link'
 
       it 'open subgroup', ->
@@ -220,14 +176,6 @@ describe 'Group Page', ->
         page.expectNoElement '.group-form__joining'
         page.expectNoElement '.group-form__parent-members-can-see-discussions'
         page.expectNoElement '.group-form__allow-public-threads'
-
-    # it 'successfully starts a subgroup', ->
-    #   page.click('.group-page-actions__button',
-    #              '.group-page-actions__add-subgroup-link')
-    #   page.fillIn('#group-name', 'The Breakfast Club')
-    #   page.click('.group-form__submit-button')
-    #   page.expectText('.group-theme__name', 'Dirty Dancing Shoes')
-    #   page.expectText('.group-theme__name', 'The Breakfast Club')
 
   describe 'editing group description from description card', ->
     it 'allows coordinators to edit description inline', ->
@@ -331,8 +279,6 @@ describe 'Group Page', ->
       page.click('.group-page-actions__button',
                  '.group-page-actions__leave-group')
       page.expectText('.leave-group-form', 'You cannot leave this group')
-      # page.click('.leave-group-form__add-coordinator')
-      # page.expectElement('.memberships-page__memberships h2')
 
   describe 'archiving a group', ->
 

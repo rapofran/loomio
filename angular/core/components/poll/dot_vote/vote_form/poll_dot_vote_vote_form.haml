@@ -2,7 +2,7 @@
   %poll_common_participant_form{stance: "stance"}
 
   %h3.lmo-card-subheading{translate: "poll_common.your_response"}
-  .poll-common-helptext
+  .lmo-hint-text
     .poll-dot-vote-vote-form__too-many-dots{ng-if: "tooManyDots()", translate: "poll_dot_vote_vote_form.too_many_dots"}
     .poll-dot-vote-vote-form__dots-remaining{ng-if: "!tooManyDots()", translate: "poll_dot_vote_vote_form.dots_remaining", translate-value-count: "{{dotsRemaining()}}"}
   %md-list.poll-common-vote-form__options
@@ -16,6 +16,8 @@
           %button.poll-dot-vote-vote-form__dot-button{type: "button", ng-click: "adjust(choice, 1)", ng-disabled: "dotsRemaining() == 0"}
             .material-icons add
   %validation_errors{subject: "stance", field: "stanceChoices"}
+
+  %poll_common_add_option_button{ng-if: "stance.isNew() && stance.poll().voterCanAddOptions", poll: "stance.poll()"}
 
   .poll-common-vote-form__reason
     %md-input-container.md-block

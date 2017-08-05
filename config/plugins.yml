@@ -1,13 +1,12 @@
 loomio_webhooks:
-  repo:         loomio/loomio_webhooks
+  repo:         https://github.com/loomio/loomio_webhooks.git
 
 loomio_tags:
-  repo:         loomio/loomio_tags
+  repo:         https://github.com/loomio/loomio_tags.git
 
 loomio_truncate_comment:
-  repo:         loomio/loomio_truncate_comment
-  experimental: true
+  repo:         https://github.com/loomio/loomio_truncate_comment.git
 
 loomio_content_preview:
-  repo:         piratas-ar/loomio_content_preview
+  repo:         https://github.com/piratas-ar/loomio_content_preview.git
   version:      piratas-ng
