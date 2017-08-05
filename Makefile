@@ -1,5 +1,5 @@
 
-es :=  config/locales/es.yml $(wildcard config/locales/*.es.yml)
+es := $(wildcard config/locales/*.es.yml)
 es_ahr := $(patsubst %.yml,%-AHR.yml,$(es))
 
 $(es_ahr): %-AHR.yml: $(es)
