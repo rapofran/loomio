@@ -82,6 +82,9 @@ en:
       delete: Delete
       unsubscribe: Unsubscribe
       subscribe: Subscribe
+      remind: Remind
+      resend: Resend
+      resent: Invitation resent
     formatting_help:
       label: 'Formatting'
       title: 'Learn how to use Markdown to format your text on Loomio'
@@ -303,6 +306,7 @@ en:
     comment_replied_to: "<strong>{{name}}</strong> replied to your comment in <strong>{{title}}</strong>"
     comment_liked: "<strong>{{name}}</strong> liked your comment in <strong>{{title}}</strong>"
     user_mentioned: "<strong>{{name}}</strong> mentioned you in <strong>{{title}}</strong>"
+    user_reminded: "<strong>{{name}}</strong> is waiting on you to participate in <strong>{{title}}</strong>"
     membership_requested: "<strong>{{name}}</strong> requested membership to <strong>{{title}}</strong>"
     membership_request_approved: '<strong>{{name}}</strong> approved your request to join <strong>{{title}}</strong>'
     user_added_to_group: "<strong>{{name}}</strong> added you to the group <strong>{{title}}</strong>"
@@ -316,6 +320,7 @@ en:
     poll_edited: "<strong>{{name}}</strong> edited a {{poll_type}}: <strong>{{title}}</strong>"
     poll_closing_soon: "{{poll_type}} is closing soon: <strong>{{title}}</strong>"
     poll_expired: "{{poll_type}} closed: <strong>{{title}}</strong>"
+    poll_option_added: "<strong>{{name}}</strong> added options to a {{poll_type}}: <strong>{{title}}</strong>"
     outcome_created: "<strong>{{name}}</strong> shared an outcome: <strong>{{title}}</strong>"
     stance_created: "<strong>{{name}}</strong> participated in: <strong>{{title}}</strong>"
 
@@ -347,13 +352,6 @@ en:
     heading: Positions
     no_votes_yet: Nobody has voted on this proposal yet.
     change_your_vote: Change your position.
-
-  undecided_panel:
-    aria_label: 'Undecided members'
-    show: Show
-    remind: Remind
-    undecided: undecided
-    hide_undecided: Hide undecided members
 
   proposal_pie_chart:
     participation_statement: '{{percentage}}% of members have stated their position ({{number}}/{{total}})'
@@ -517,7 +515,7 @@ en:
     see_all_members: 'See all: ({{count}}) members'
     pending_invitations: '+ ({{count}}) pending'
     subgroups: 'Subgroups'
-    subgroups_placeholder: 'Subgroups let you break the group up into different teams.'
+    subgroups_placeholder: 'Subgroups give teams their own space and keep notifications focused to the right people.'
     invite_people: 'Invite'
     visibility_label: 'Visibility'
     options_label: 'Options'
@@ -603,62 +601,6 @@ en:
     in_progress_body: 'Thanks for trying out Loomio with <strong>{{name}}</strong>. You can pick a pricing plan that suits your group at any time.'
     expired_body_html: "<strong>{{name}}</strong> has reached the end of its Loomio trial. To keep using it, you’ll need to pick a pricing plan that suits your group."
 
-  choose_plan_modal:
-    aria_label: Choose plan
-    heading: Please choose a plan for your group
-    free: Free
-    standard: Standard
-    pro: Pro
-    per_month: /month
-    standard_group_description: Everything you need for one group.
-    free_group_description: Donation supported plan for community groups.
-    pro_group_description: For organisations with <nobr>multiple groups.</nobr>
-    benefit_1_group: 1 group
-    benefit_10_groups: 10 groups
-    benefit_unlimited_members: Unlimited members
-    benefit_unlimited_decisions: Unlimited decisions
-    benefit_priority_support: Premium support
-    benefit_help_with_setup: Help with initial setup
-    benefit_community_support: Community support
-    benefit_slack_integration: Slack integration
-    benefit_custom_domain: Custom domain
-    benefit_analytics_reports: Analytics reports
-    benefit_data_export: Data export
-    # free_trial_html: "We'll ask you to choose your pricing plan after a <span>30day free trial</span>. No credit card required."
-    # start_group: "Start group"
-    # gift_body: For groups without a budget
-    # support_before: I'm happy to
-    support_link: Let's talk!
-    prices_in_us_dollars: Prices are in US dollars, plus sales tax where applicable.
-    need_help_please: Need something else?
-    # support_after: about extending your trial, or with any other questions you may have.
-    # remind_me_later: Remind me later
-    # gift_donation_ask: We’ll ask your group members to donate
-    # unlimited_members: unlimited members
-    # unlimited_decisions: unlimited decisions
-    # email_support: email support
-    # slack_integration_html: |
-    #   <strong>Slack</strong> integration
-    # standard_price_html: |
-    #   US<strong>$19</strong>/month<br><span>or</span> $190/year
-    # plus_body: 'Everything in Standard, plus:'
-    # multiple_groups: multiple groups
-    # premium_support: premium support
-    # custom_subdomain_html: |
-    #   custom subdomain,<br />
-    #   e.g. <strong>yourgroup</strong>.loomio.org
-    # plus_price_html: |
-    #   US<strong>$179</strong>/month<br><span>or</span> $1790/year
-    select: Select
-
-  subscription_success_modal:
-    aria_label: Supscription success
-    heading: You're all set!
-    receipt: You'll receive an email with your receipt, including a link to the customer portal, where you can change, upgrade, or cancel your subscription, and access billing history.
-    change_subscription: "If you'd like to set up Slack integration or your custom domain name, "
-    contact_link: please contact us.
-    sign_off: ❤ from the Loomio team
-    ok_got_it: Ok, got it!
 
   group_form:
     aria_label: 'Group form'
@@ -801,6 +743,10 @@ en:
     remove_admin_from_self:
       question: 'Are you sure you no longer want to be a coordinator?'
 
+  memberships_panel:
+    add_coordinator: Make coordinator
+    remove_coordinator: Demote coordinator
+
   remove_membership_form:
     aria_label: 'Remove member'
     title: 'Remove member'
@@ -812,6 +758,9 @@ en:
     email: Email
     invitation_link: Invitation link
     sent: Sent
+    sent_at: Sent {{date}}
+    copy_url: Copy URL
+    revoke_invitation: Revoke
 
   cancel_invitation_form:
     heading: Cancel invitation
@@ -841,11 +790,10 @@ en:
     email_label: 'Email'
     short_bio_label: 'Introduction'
     locale_label: 'Language'
-    short_bio_placeholder: 'Enter a short introduction (max 250 characters)'
+    short_bio_placeholder: 'Enter a short introduction (max 500 characters)'
     locale_placeholder: Select your preferred language
     update_profile: 'Update profile'
     deactivate_account: 'Deactivate account'
-    username_must_be_alphanumeric: Username must contain only lowercase letters and digits.
 
   change_picture_form:
     aria_label: 'Change picture form'
@@ -1099,6 +1047,8 @@ en:
     discussion_moved: 'moved the thread from <span>{{group}}</span>'
 
   contact_message_form:
+    helptext: "Want to get in touch? Just enter a message below and you'll hear from us shortly."
+    contact_us_email: "(You can also always reach us at <a href=\"mailto:contact@loomio.org\">contact@loomio.org</a>)"
     contact_us: 'Contact Us'
     name_label: 'Your name'
     name_placeholder: 'Enter your name...'
@@ -1107,7 +1057,7 @@ en:
     message_label: 'Your message'
     message_placeholder: 'Your message...'
     send_message: 'Send Message'
-    new_contact_message: 'Thanks for your message; we''ll be in touch soon!'
+    new_contact_message: "Thanks for getting in touch; we''ll get back to you soon!"
 
   help_page:
     coordinating: 'Coordinating your Loomio group'
@@ -1350,6 +1300,15 @@ en:
   poll_common_attachment_form:
     label: Attachments
 
+  poll_common_add_option:
+    button:
+      add_option: Add another option
+    modal:
+      title: Add an option
+    form:
+      add_options: Add options
+      options_added: New options added
+
   poll_common_card:
     show_results: Show results
 
@@ -1361,7 +1320,7 @@ en:
   current_polls_card:
     title: Current decisions
     start_poll: New decision
-    no_polls: There are no active polls right now.
+    no_polls: There are no active decisions right now.
 
   poll_common_collapsed:
     by_who: "by {{name}}"
@@ -1369,6 +1328,11 @@ en:
   poll_common_select_group:
     loomio_group: Loomio group
     loomio_group_placeholder: (no group selected)
+
+  poll_common_voter_add_options:
+    add_options: Voters may add options
+    helptext_on: Participants may add their own options when voting
+    helptext_off: Participants will select from the options you provide
 
   poll_common_notify_group:
     notify_group: Announcement
@@ -1425,10 +1389,15 @@ en:
     none_of_the_above: (None of the above)
 
   poll_common_undecided_panel:
-    show_undecided: Show {{count}} undecided
-    undecided_users: Undecided Group Members ({{count}})
-    undecided_visitors: Undecided Guests ({{count}})
-    hidden_visitors: Only group coordinators or the poll author may view undecided guests
+    show_undecided: "Show {{count}} undecided"
+    show_invitations: Show Pending Invitations
+    undecided_users: "Undecided ({{count}})"
+    invitation_count_singular: "1 additional person has been invited to participate via email"
+    invitation_count_plural: "{{count}} additional people have been invited to participate via email"
+
+  poll_common_undecided_user:
+    reminded: Reminder sent!
+    reminder_sent: Reminder notification sent
 
   poll_common_set_outcome_panel:
     share_outcome: Share outcome
@@ -1468,6 +1437,7 @@ en:
     details: Details
     options: Options
     options_placeholder: Enter a new option...
+    no_options: You haven't added any options yet.
     closing: Closing
     start: Start
     update: Update
@@ -1801,8 +1771,11 @@ en:
     modal_title: Install Slack
 
     card:
-      title: Connected to Slack
-      helptext: This group has been connected to the slack team <strong><a target='_blank' href='https://{{team}}.slack.com'>{{team}}</a></strong>. Events from this group will appear in the <strong>{{channel}}</strong> channel.
+      install_title: Connect to Slack
+      install_helptext: Loomio bot notifies your Slack team of discussions and decisions on Loomio. You can also start decisions and vote from within Slack.
+      installed_title: Connected to Slack
+      installed_helptext: This group has been connected to the slack team <strong><a target='_blank' href='https://{{team}}.slack.com'>{{team}}</a></strong>. Events from this group will appear in the <strong>{{channel}}</strong> channel.
+      install_slack: Connect Slack
 
     progress:
       install: Install

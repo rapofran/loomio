@@ -1,7 +1,12 @@
 class StanceService
   def self.create(stance:, actor:)
-    actor.community ||= stance.poll.communities.detect { |c| c.includes?(actor) } unless actor.is_logged_in?
     actor.ability.authorize! :create, stance
+
+    actor = actor.create_user if !actor.is_logged_in?
+
+    if invitation = stance.poll.invitations.useable.find_by(token: actor.token)
+      InvitationService.redeem(invitation, actor)
+    end
 
     stance.assign_attributes(participant: actor)
     return false unless stance.valid?

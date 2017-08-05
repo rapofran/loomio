@@ -16,9 +16,7 @@ class Stance < ActiveRecord::Base
   belongs_to :participant, polymorphic: true, required: true
 
   update_counter_cache :poll, :stances_count
-  update_counter_cache :poll, :visitors_count
   update_counter_cache :poll, :undecided_user_count
-  update_counter_cache :poll, :undecided_visitor_count
 
   scope :latest, -> { where(latest: true) }
 
@@ -37,6 +35,7 @@ class Stance < ActiveRecord::Base
   validate :enough_stance_choices
   validate :total_score_is_valid
   validate :participant_is_complete
+  validates :reason, length: { maximum: 250 }
 
   has_many :events, as: :eventable, dependent: :destroy
 

@@ -35,7 +35,6 @@ ActiveAdmin.register User do
       f.input :email
       f.input :username
       f.input :is_admin
-      f.input :angular_ui_enabled
     end
     f.actions
   end
@@ -67,7 +66,7 @@ ActiveAdmin.register User do
           table_for user.adminable_groups.published.select{|g| g.admins.count == 1}.each do |group|
             column :id
             column :name do |group|
-              link_to group.name, [:admin, group]
+              link_to group.name, admin_group_path(group)
             end
           end
         end
@@ -87,7 +86,7 @@ ActiveAdmin.register User do
         column :group_id
         column :group_name do |g|
           group = g.group
-          link_to group.full_name, [:admin, group]
+          link_to group.full_name, admin_group_path(group)
         end
       end
     end
