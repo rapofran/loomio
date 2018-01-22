@@ -1,10 +1,14 @@
-angular.module('loomioApp').factory 'StanceModel', (DraftableModel, AppConfig, MentionLinkService) ->
-  class StanceModel extends DraftableModel
+angular.module('loomioApp').factory 'StanceModel', (BaseModel, HasDrafts, AppConfig, MentionLinkService) ->
+  class StanceModel extends BaseModel
     @singular: 'stance'
     @plural: 'stances'
-    @indices: ['pollId', 'authorId']
+    @indices: ['pollId']
     @serializableAttributes: AppConfig.permittedParams.stance
     @draftParent: 'poll'
+    @draftPayloadAttributes: ['reason']
+
+    afterConstruction: ->
+      HasDrafts.apply @
 
     defaultValues: ->
       reason: ''
@@ -13,9 +17,13 @@ angular.module('loomioApp').factory 'StanceModel', (DraftableModel, AppConfig, M
     relationships: ->
       @belongsTo 'poll'
       @hasMany 'stanceChoices'
+      @belongsTo 'participant', from: 'users'
 
-    participant: ->
-      @recordStore.users.find(@userId) or @recordStore.visitors.find(@visitorId)
+    reactions: ->
+      @recordStore.reactions.find(reactableId: @id, reactableType: "Stance")
+
+    author: ->
+      @participant()
 
     stanceChoice: ->
       _.first @stanceChoices()
@@ -45,3 +53,6 @@ angular.module('loomioApp').factory 'StanceModel', (DraftableModel, AppConfig, M
 
     votedFor: (option) ->
       _.contains _.pluck(@pollOptions(), 'id'), option.id
+
+    verify: () =>
+      @remote.postMember(@id, 'verify').then => @unverified = false

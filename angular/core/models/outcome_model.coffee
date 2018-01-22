@@ -1,13 +1,19 @@
-angular.module('loomioApp').factory 'OutcomeModel', (DraftableModel, AppConfig, MentionLinkService) ->
-  class OutcomeModel extends DraftableModel
+angular.module('loomioApp').factory 'OutcomeModel', (BaseModel, HasDrafts, HasDocuments, AppConfig, MentionLinkService) ->
+  class OutcomeModel extends BaseModel
     @singular: 'outcome'
     @plural: 'outcomes'
     @indices: ['pollId', 'authorId']
     @serializableAttributes: AppConfig.permittedParams.outcome
     @draftParent: 'poll'
+    @draftPayloadAttributes: ['statement']
 
     defaultValues: ->
       statement: ''
+      customFields: {}
+
+    afterConstruction: ->
+      HasDrafts.apply @
+      HasDocuments.apply @
 
     relationships: ->
       @belongsTo 'author', from: 'users'
@@ -16,5 +22,8 @@ angular.module('loomioApp').factory 'OutcomeModel', (DraftableModel, AppConfig, 
     group: ->
       @poll().group() if @poll()
 
-    communitySize: ->
-      @poll().communitySize()
+    announcementSize: ->
+      @poll().announcementSize @notifyAction()
+
+    notifyAction: ->
+      'publish'

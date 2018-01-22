@@ -19,6 +19,7 @@ end
 
 module Loomio
   class Application < Rails::Application
+    config.middleware.use Rack::Attack if ENV['USE_RACK_ATTACK']
     config.active_job.queue_adapter = :delayed_job
 
     config.generators do |g|
@@ -92,7 +93,6 @@ module Loomio
       }
     end
 
-    config.force_ssl = ENV.has_key?('FORCE_SSL')
     config.action_mailer.raise_delivery_errors = true
     config.action_mailer.perform_deliveries = true
 
@@ -120,5 +120,6 @@ module Loomio
     config.action_mailer.asset_host = lmo_asset_host
     config.action_dispatch.tld_length = (ENV['TLD_LENGTH'] || 1).to_i
 
+    config.action_controller.include_all_helpers = false
   end
 end

@@ -1,68 +1,43 @@
-angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routeParams, $location, $rootScope, $window, $timeout, Records, MessageChannelService, KeyEventService, ModalService, ScrollService, AbilityService, Session, PaginationService, LmoUrlService, TranslationService, ProposalOutcomeForm, PollService) ->
+angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routeParams, $location, $rootScope, $window, $timeout, Records, KeyEventService, ModalService, ScrollService, AbilityService, Session, PaginationService, LmoUrlService,  PollService) ->
   $rootScope.$broadcast('currentComponent', { page: 'threadPage', skipScroll: true })
 
-  @requestedProposalKey = $routeParams.proposal or $location.search().proposal
-  @requestedCommentId   = parseInt($routeParams.comment or $location.search().comment)
+  requestedCommentId = ->
+    parseInt($routeParams.comment or $location.search().comment)
 
-  handleCommentHash = do ->
-    if match = $location.hash().match /comment-(\d+)/
-      $location.search().comment = match[1]
-      $location.hash('')
+  if requestedCommentId()
+    Records.events.fetch
+      path: 'comment'
+      params:
+        discussion_id: $routeParams.key
+        comment_id: requestedCommentId()
+    .then =>
+      comment = Records.comments.find(requestedCommentId())
+      @discussion = comment.discussion()
+      @discussion.requestedSequenceId = comment.createdEvent().sequenceId
+      $scope.$broadcast 'initActivityCard'
 
-  @performScroll = ->
-    ScrollService.scrollTo @elementToFocus(), 150
-    $rootScope.$broadcast 'triggerVoteForm', $location.search().position if @openVoteModal()
-    (ModalService.open ProposalOutcomeForm, proposal: => @proposal) if @openOutcomeModal()
-    $location.url($location.path())
-
-  @openVoteModal = ->
-    $location.search().position and
-    @discussion.hasActiveProposal() and
-    @discussion.activeProposal().key == ($routeParams.proposal or $location.search().proposal or $routeParams.proposal) and
-    AbilityService.canVoteOn(@discussion.activeProposal())
-
-  @openOutcomeModal = ->
-    AbilityService.canCreateOutcomeFor(@proposal) and
-    $routeParams.outcome? and
-    (delete $routeParams.outcome)
-
-  @elementToFocus = ->
-    if @proposal
-      "#proposal-#{@proposal.key}"
-    else if @comment
-      "#comment-#{@comment.id}"
-    else if Records.events.findByDiscussionAndSequenceId(@discussion, @sequenceIdToFocus)
-      '.activity-card__last-read-activity'
-    else
-      '.context-panel'
-
-  @threadElementsLoaded = ->
-    @eventsLoaded and @proposalsLoaded
-
+  chompRequestedSequenceId = ->
+    requestedSequenceId = parseInt($location.search().from || $routeParams.sequence_id)
+    $location.search('from', null)
+    requestedSequenceId
 
   @init = (discussion) =>
     if discussion and !@discussion?
       @discussion = discussion
-
-      # use new poll functionality
-      if @usePolls = PollService.usePollsFor(@discussion)
-        Records.polls.fetchByDiscussion(@discussion.key)
-        Records.stances.fetchMyStancesByDiscussion(@discussion.key)
-
-      @sequenceIdToFocus = parseInt($location.search().from or @discussion.lastReadSequenceId)
+      @discussion.markAsSeen()
+      @discussion.requestedSequenceId = chompRequestedSequenceId()
 
       @pageWindow = PaginationService.windowFor
-        current:  @sequenceIdToFocus
-        min:      @discussion.firstSequenceId
-        max:      @discussion.lastSequenceId
+        current:  @discussion.requestedSequenceId || @discussion.firstSequenceId()
+        min:      @discussion.firstSequenceId()
+        max:      @discussion.lastSequenceId()
         pageType: 'activityItems'
 
-      $rootScope.$broadcast 'viewingThread', @discussion
-      $rootScope.$broadcast 'setTitle', @discussion.title
-      $rootScope.$broadcast 'analyticsSetGroup', @discussion.group()
       $rootScope.$broadcast 'currentComponent',
+        title: @discussion.title
         page: 'threadPage'
         group: @discussion.group()
+        discussion: @discussion
         links:
           canonical:   LmoUrlService.discussion(@discussion, {}, absolute: true)
           rss:         LmoUrlService.discussion(@discussion) + '.xml' if !@discussion.private
@@ -74,33 +49,8 @@ angular.module('loomioApp').controller 'ThreadPageController', ($scope, $routePa
   Records.discussions.findOrFetchById($routeParams.key).then @init, (error) ->
     $rootScope.$broadcast('pageError', error)
 
-  $scope.$on 'threadPageEventsLoaded',    (e, event) =>
-    $window.location.reload() if @discussion.requireReloadFor(event)
-    @eventsLoaded = true
-    @comment = Records.comments.find(@requestedCommentId) unless isNaN(@requestedCommentId)
-    @performScroll() if @proposalsLoaded or !@discussion.anyClosedProposals()
-  $scope.$on 'threadPageProposalsLoaded', (event) =>
-    @proposalsLoaded = true
-    @proposal = Records.proposals.find(@requestedProposalKey)
-    $rootScope.$broadcast 'setSelectedProposal', @proposal
-    @performScroll() if @eventsLoaded
-
-  @hasClosedPolls = ->
-    _.any @discussion.closedPolls()
-
-  @canStartProposal = ->
-    @eventsLoaded && AbilityService.canStartProposal(@discussion)
-
-  @canViewMemberships = ->
-    @eventsLoaded && AbilityService.canViewMemberships(@discussion.group())
-
-  @proposalInView = ($inview) ->
-    $rootScope.$broadcast 'proposalInView', $inview
-
-  @proposalButtonInView = ($inview) ->
-    $rootScope.$broadcast 'proposalButtonInView', $inview
-
-  TranslationService.listenForTranslations($scope, @)
+  $scope.$on 'threadPageScrollToSelector', (e, selector) =>
+    ScrollService.scrollTo selector, offset: 150
 
   checkInView = ->
     angular.element(window).triggerHandler('checkInView')

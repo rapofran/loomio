@@ -1,20 +1,20 @@
-angular.module('loomioApp').factory 'CommentModel', (DraftableModel, AppConfig) ->
-  class CommentModel extends DraftableModel
+angular.module('loomioApp').factory 'CommentModel', (BaseModel, HasDrafts, HasDocuments, AppConfig) ->
+  class CommentModel extends BaseModel
     @singular: 'comment'
     @plural: 'comments'
     @indices: ['discussionId', 'authorId']
     @serializableAttributes: AppConfig.permittedParams.comment
     @draftParent: 'discussion'
+    @draftPayloadAttributes: ['body', 'document_ids']
 
     afterConstruction: ->
-      @newAttachmentIds = _.clone(@attachmentIds) or []
+      HasDrafts.apply @
+      HasDocuments.apply @
 
     defaultValues: ->
       usesMarkdown: true
       discussionId: null
       body: ''
-      likerIds:           []
-      attachmentIds:      []
       mentionedUsernames: []
 
     relationships: ->
@@ -23,10 +23,13 @@ angular.module('loomioApp').factory 'CommentModel', (DraftableModel, AppConfig) 
       @belongsTo 'parent', from: 'comments', by: 'parentId'
       @hasMany  'versions', sortBy: 'createdAt'
 
-    serialize: ->
-      data = @baseSerialize()
-      data.comment.attachment_ids = @newAttachmentIds
-      data
+    createdEvent: ->
+      @recordStore.events.find(kind: "new_comment", eventableId: @id)[0]
+
+    reactions: ->
+      @recordStore.reactions.find
+        reactableId: @id
+        reactableType: _.capitalize(@constructor.singular)
 
     group: ->
       @discussion().group()
@@ -37,20 +40,14 @@ angular.module('loomioApp').factory 'CommentModel', (DraftableModel, AppConfig) 
     isReply: ->
       @parentId?
 
-    hasContext: ->
+    hasDescription: ->
       !!@body
 
     parent: ->
       @recordStore.comments.find(@parentId)
 
-    likers: ->
-      @recordStore.users.find(@likerIds)
-
-    newAttachments: ->
-      @recordStore.attachments.find(@newAttachmentIds)
-
-    attachments: ->
-      @recordStore.attachments.find(attachableId: @id, attachableType: 'Comment')
+    reactors: ->
+      @recordStore.users.find(_.pluck(@reactions(), 'userId'))
 
     authorName: ->
       @author().name
@@ -61,20 +58,14 @@ angular.module('loomioApp').factory 'CommentModel', (DraftableModel, AppConfig) 
     authorAvatar: ->
       @author().avatarOrInitials()
 
-    addLiker: (user) ->
-      @likerIds.push user.id
-
-    removeLiker: (user) ->
-      @removeLikerId(user.id)
-
-    removeLikerId: (id) ->
-      @likerIds = _.without(@likerIds, id)
-
     cookedBody: ->
       cooked = @body
       _.each @mentionedUsernames, (username) ->
         cooked = cooked.replace(///@#{username}///g, "[[@#{username}]]")
       cooked
+
+    beforeDestroy: ->
+      _.invoke @recordStore.events.find(kind: 'new_comment', eventableId: @id), 'remove'
 
     edited: ->
       @versionsCount > 1

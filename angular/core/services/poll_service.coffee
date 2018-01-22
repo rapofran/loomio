@@ -1,4 +1,4 @@
-angular.module('loomioApp').factory 'PollService', ($window, $location, AppConfig, Records, FormService, LmoUrlService, AbilityService, AttachmentService) ->
+angular.module('loomioApp').factory 'PollService', ($window, $rootScope, $location, AppConfig, Records, Session, SequenceService, FormService, LmoUrlService, ScrollService, AbilityService) ->
   new class PollService
 
     # NB: this is an intersection of data and code that's a little uncomfortable at the moment.
@@ -9,42 +9,79 @@ angular.module('loomioApp').factory 'PollService', ($window, $location, AppConfi
     # and add this poll type to the yml data', at the same time.
     # This will also make it easier to switch poll types on and off per instance, and per group.
 
-    activePollTemplates: ->
-      # this could have group-specific logic later.
-      AppConfig.pollTemplates
-
     fieldFromTemplate: (pollType, field) ->
       return unless template = @templateFor(pollType)
       template[field]
 
     templateFor: (pollType) ->
-      @activePollTemplates()[pollType]
+      AppConfig.pollTemplates[pollType]
 
     lastStanceBy: (participant, poll) ->
       criteria =
-        latest:    true
-        pollId:    poll.id
-        visitorId: AppConfig.currentVisitorId or null
-        userId:    AppConfig.currentUserId or null
+        latest: true
+        pollId: poll.id
+        participantId: AppConfig.currentUserId
       _.first _.sortBy(Records.stances.find(criteria), 'createdAt')
 
-    hasVoted: (participant, poll) ->
-      @lastStanceBy(participant, poll)?
+    hasVoted: (user, poll) ->
+      @lastStanceBy(user, poll)?
 
     iconFor: (poll) ->
       @fieldFromTemplate(poll.pollType, 'material_icon')
 
-    usePollsFor: (model) ->
-      model.group().features.use_polls && !$location.search().proposalView
+    optionByName: (poll, name) ->
+      _.find poll.pollOptions(), (option) -> option.name == name
+
+    applyPollStartSequence: (scope, options = {}) ->
+      SequenceService.applySequence scope,
+        steps: ->
+          if scope.poll.group()
+            ['choose', 'save']
+          else
+            ['choose', 'save', 'share']
+        initialStep: if scope.poll.pollType then 'save' else 'choose'
+        emitter: options.emitter or scope
+        chooseComplete: (_, pollType) ->
+          scope.poll.pollType = pollType
+        saveComplete: (_, poll) ->
+          scope.poll = poll
+          $location.path LmoUrlService.poll(poll)
+          options.afterSaveComplete(poll) if typeof options.afterSaveComplete is 'function'
+
+    submitOutcome: (scope, model, options = {}) ->
+      actionName = if scope.outcome.isNew() then 'created' else 'updated'
+      FormService.submit(scope, model, _.merge(
+        flashSuccess: "poll_common_outcome_form.outcome_#{actionName}"
+        drafts: true
+        failureCallback: ->
+          ScrollService.scrollTo '.lmo-validation-error__message', container: '.poll-common-modal'
+        successCallback: (data) ->
+          scope.$emit 'outcomeSaved', data.outcomes[0].id
+      , options))
 
     submitPoll: (scope, model, options = {}) ->
       actionName = if scope.poll.isNew() then 'created' else 'updated'
       FormService.submit(scope, model, _.merge(
         flashSuccess: "poll_#{model.pollType}_form.#{model.pollType}_#{actionName}"
+        drafts: true
+        prepareFn: =>
+          scope.$emit 'processing'
+          switch model.pollType
+            # for polls with default poll options (proposal, check)
+            when 'proposal', 'count'
+              model.pollOptionNames = _.pluck @fieldFromTemplate(model.pollType, 'poll_options_attributes'), 'name'
+            # for polls with user-specified poll options (poll, dot_vote, ranked_choice, meeting
+            else
+              $rootScope.$broadcast 'addPollOption'
+        failureCallback: ->
+          ScrollService.scrollTo '.lmo-validation-error__message', container: '.poll-common-modal'
         successCallback: (data) ->
-          scope.$emit 'pollSaved', data.polls[0].key
-          AttachmentService.cleanupAfterUpdate(data.polls[0], 'poll')
-        draftFields: ['title', 'details']
+          _.invoke Records.documents.find(model.removedDocumentIds), 'remove'
+          poll = Records.polls.find(data.polls[0].key)
+          poll.removeOrphanOptions()
+          scope.$emit 'nextStep', poll
+        cleanupFn: ->
+          scope.$emit 'doneProcessing'
       , options))
 
     submitStance: (scope, model, options = {}) ->
@@ -52,9 +89,14 @@ angular.module('loomioApp').factory 'PollService', ($window, $location, AppConfi
       pollType   = model.poll().pollType
       FormService.submit(scope, model, _.merge(
         flashSuccess: "poll_#{pollType}_vote_form.stance_#{actionName}"
+        drafts: true
+        prepareFn: ->
+          scope.$emit 'processing'
         successCallback: (data) ->
           model.poll().clearStaleStances()
-          AppConfig.currentVisitorId = data.stances[0].visitor_id
+          ScrollService.scrollTo '.poll-common-card__results-shown'
           scope.$emit 'stanceSaved', data.stances[0].key
-        draftFields: ['reason']
+          Session.login(current_user_id: data.stances[0].participant_id) unless Session.user().emailVerified
+        cleanupFn: ->
+          scope.$emit 'doneProcessing'
       , options))

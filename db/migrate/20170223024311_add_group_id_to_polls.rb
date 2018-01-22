@@ -7,5 +7,4 @@ class AddGroupIdToPolls < ActiveRecord::Migration
     Poll.all.each do |poll|
       poll.update(group_id: poll.discussion.group_id) if poll.discussion
     end
-  end
 end

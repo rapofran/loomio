@@ -4,12 +4,13 @@
 }
 
 .decision-tools-card__poll-type {
-  line-height: 24px;
+  // line-height: 24px;
   list-style-type: none;
+  height: 56px;
 }
 
 .decision-tools-card__poll-type-link {
-  @include displayFlex;
+  display: flex;
   cursor: pointer;
   // padding: 15px 0;
   text-decoration: none;

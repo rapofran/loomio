@@ -28,9 +28,9 @@ You will need PostgreSQL 9.4+ for the `jsonb` data type.
 
 ```
 $ sudo apt-get update
-$ sudo apt-get install git-core postgresql-9.4 postgresql-contrib-9.4 build-essential \
+$ sudo apt-get install git-core postgresql-9.6 postgresql-contrib-9.6 build-essential \
                        libssl-dev libpq-dev libffi-dev libmagickwand-dev \
-                       libreadline-gplv2-dev nodejs imagemagick wget
+                       libreadline-gplv2-dev nodejs imagemagick wget libsqlite3-dev
 ```
 
 ## Install Ruby with rbenv
@@ -41,7 +41,7 @@ From here onwards the instructions apply to both OSX and Linux.
 
 I recommend that you don't use managed (Homebrew, APT etc) versions of ruby, rbenv and ruby-build. They're no easier to use, and they tend to be out of date just when you need the latest version.
 
-First we install [rbenv](https://github.com/sstephenson/rbenv). (Replace ~/.bash_profile with  ~/.zshrc, ~/.profile, or ~/.bashrc depending on what filename you use).
+First we install [rbenv](https://github.com/sstephenson/rbenv). (Replace ```~/.bash_profile``` with  ```~/.zshrc```, ```~/.profile```, or ```~/.bashrc``` depending on what filename you use).
 
 ```
 $ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
@@ -74,30 +74,38 @@ $ cd ~/.rbenv/plugins/ruby-build
 $ git pull
 ```
 
-### Build and Install Ruby
+### Build and Install Ruby and dependencies
 
-At the time of writing 2.3.0 is the latest version.
-
+At the time of writing 2.3.5 is the latest version. Check the required version and use it in the commands below:
 ```
-$ rbenv install 2.3.0
-$ rbenv global 2.3.0
+$ cat .ruby-version
+$ rbenv install 2.3.5
+$ rbenv global 2.3.5
 $ gem install bundler
-$ rbenv rehash
+$ bundle install
 ```
 
 ## Install Node.js
 
 You'll need Node.js and it's best if you use `nvm` to install it. From [https://github.com/creationix/nvm](https://github.com/creationix/nvm) You'll find that you need to run:
 ```
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
 ```
 
 Now build and install node
 
 ```
-nvm install 4.4.5
-nvm alias default 4.4.5
-npm install -g gulp
+$ nvm install 8.4.0
+$ nvm alias default 8.4.0
+$ bundle install
+$ npm install -g yarn gulp
+$ cd angular
+$ yarn
+```
+
+Ensure your node version matches with the version specified in the `engines` field of `angular/package.json`
+```
+$ grep angular/package.json -e 'engines' -A 3
 ```
 
 Ok that's it, you're now ready to [install Loomio](quickstart.md) (or any other ruby or node app)

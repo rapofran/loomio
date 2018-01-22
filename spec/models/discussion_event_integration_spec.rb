@@ -16,7 +16,7 @@ describe "Discussions and Discussion Items Working together as one beautiful eco
       let(:user) { FactoryGirl.create(:user) }
       let(:commentor){ FactoryGirl.create(:user) }
       let(:discussion) { FactoryGirl.build(:discussion) }
-      let(:group) { FactoryGirl.create(:group) }
+      let(:group) { FactoryGirl.create(:formal_group) }
       let(:first_comment) { FactoryGirl.build(:comment, discussion: discussion) }
       let(:second_comment) { FactoryGirl.build(:comment, discussion: discussion) }
 
@@ -40,7 +40,11 @@ describe "Discussions and Discussion Items Working together as one beautiful eco
       end
 
       def view_discussion
-        discussion_reader.viewed!(discussion_reader.discussion.last_activity_at)
+        discussion_reader.viewed!
+      end
+
+      def view_item(id)
+        discussion_reader.viewed!(id)
       end
 
       def discussion_reader
@@ -59,8 +63,8 @@ describe "Discussions and Discussion Items Working together as one beautiful eco
         create_second_comment
         delete_first_comment
         reload_everything
-        expect(discussion.salient_items_count -
-               discussion_reader.read_salient_items_count).to eq 1
+        expect(discussion.items_count -
+               discussion_reader.read_items_count).to eq 1
       end
 
       it "user sees discussion before the comments" do
@@ -69,18 +73,7 @@ describe "Discussions and Discussion Items Working together as one beautiful eco
         create_second_comment
         delete_first_comment
         reload_everything
-        expect(discussion.salient_items_count -
-               discussion_reader.read_salient_items_count).to eq 1
-      end
-
-      it "user sees discussion before second comment" do
-        create_first_comment
-        view_discussion
-        create_second_comment
-        delete_first_comment
-        reload_everything
-        expect(discussion.salient_items_count -
-               discussion_reader.read_salient_items_count).to eq 1
+        expect(discussion.items_count - discussion_reader.read_items_count).to eq 1
       end
     end
   end

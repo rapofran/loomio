@@ -1,95 +1,53 @@
-/* let's only use semantic names for our colours */
-$grey-on-grey:  #666;
-$grey-on-white: #767676;
-$light-grey-on-white: #999999;
-$primary-text-color: #262626;
-$border-color: #dcdcdc;
-$list-hover-color: #E0E0E0;
-$list-hover-transparent-color: rgba(224,224,224,0.8);
-$background-color: #ebebeb;
-$card-background-color: #fff;
-$modal-background-color: #f6f6f6;
-$highlight-red: #D0021B;
-$link-color: #337ab7;
-
-$item-highlight-color: #FFFFE8;
-$progress-bar-color: #176EE3;
-$loomio-orange: #F6A82B;
-
-$navbar-height: 48px;
-$tiny-max:      480;
-$small-max:     768;
-$medium-max:    992;
-$tiny-max-px:   $tiny-max   + px;
-$small-max-px:  $small-max  + px;
-$medium-max-px: $medium-max + px;
-$max-container-size: 1120px;
-
-$agree-color: #00d374;
-$abstain-color: #F6A82B;
-$disagree-color: #F96168;
-$block-color: #CE261B;
-
-// z-indexes
-$over-intercom: 2147483001; // On top of Intercom's arbitrarily high widget
-
-.lmo-grey-on-white {
-  color: $grey-on-white;  
+// NB: mixins are deprecated; please don't use them! We want to get rid of them in our app!
+@mixin md-headline {
+  font-size: $headline-font-size-base;
+  font-weight: 400;
+  line-height: rem(3.2);
 }
 
+@mixin md-caption {
+  font-size: $caption-font-size-base;
+  letter-spacing: 0.020em;
+}
+
+
 @mixin fontTiny {
-  font-size: 12px;
-  line-height: 14px;
+  font-size: $caption-font-size-base;
+  // font-size: 12px;
+  // line-height: 14px;
 }
 
 @mixin fontSmall {
-  font-size: 13px;
-  line-height: 19px;
+  @include md-body-1;
+  // font-size: 13px;
+  // line-height: 19px;
 }
 
 @mixin fontMedium {
-  font-size: 15px;
-  line-height: 23px;
+  @include md-body-1();
+  // font-size: 15px;
+  // line-height: 23px;
 }
 
 @mixin fontMedLarge {
-  font-size: 18px;
-  line-height: 25px;
+  @include md-subhead();
+  // font-size: 18px;
+  // line-height: 25px;
 }
 
 @mixin fontLarge {
-  font-size: 20px;
-  line-height: 28px;
+  @include md-title();
+  // font-size: 20px;
+  // line-height: 28px;
 }
+
 
 @mixin fontGrande {
-  font-size: 24px;
-  line-height: 32px;
+  @include md-headline();
+  // font-size: 24px;
+  // line-height: 32px;
 }
 
-@mixin fontHelvetica {
-  font-family: "HelveticaNeue", "Helvetica Neue", "HelveticaNeueRoman", "HelveticaNeue-Roman", "Helvetica Neue Roman", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
-  font-weight:400;
-  font-stretch:normal;
-}
-@mixin fontHelveticaLight {
-  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
-  font-weight:300;
-  font-stretch:normal;
-}
-@mixin fontHelveticaBold {
-  font-family: "HelveticaNeueBold", "HelveticaNeue-Bold", "Helvetica Neue Bold",
-    "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosBold', "Helvetica", "Tahoma",
-    "Geneva", "Arial", sans-serif;
-  font-weight:600;
-  font-stretch:normal;
-}
-
-@mixin fontHelveticaMedium{
-  font-family: "HelveticaNeueMedium", "HelveticaNeue-Medium", "Helvetica Neue Medium", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
-  font-weight:500;
-  font-stretch:normal;
-}
 
 @mixin truncateText {
   white-space: nowrap;
@@ -97,52 +55,27 @@ $over-intercom: 2147483001; // On top of Intercom's arbitrarily high widget
   text-overflow: ellipsis;
 }
 
-@mixin roundedCorners {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+@mixin lmoH1{
+  @include fontGrande;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  outline: 0;
 }
 
-@mixin smallIcon {
-  @include roundedCorners;
-  width: 30px;
-  height: 30px;
+@mixin lmoBtnLink {
+  background: none;
+  border: none;
+  padding: 0;
+  &:hover{ text-decoration: underline; }
 }
 
-@mixin boxTiny {
-  width: 20px;
-  height: 20px;
-}
-
-$boxSmallSize: 30px;
-@mixin boxSmall {
-  width: $boxSmallSize;
-  height: $boxSmallSize;
-}
-
-
-$boxMediumSize: 50px;
-@mixin boxMedium {
-  width: $boxMediumSize;
-  height: $boxMediumSize;
-}
-
-$boxMediumCircularSize: 48px;
-@mixin boxMediumCircular {
-  width: $boxMediumCircularSize;
-  height: $boxMediumCircularSize;
-}
-
-$boxLargeSize: 80px;
-@mixin boxLarge {
-  width: $boxLargeSize;
-  height: $boxLargeSize;
-}
-
-$boxFeaturedSize: 175px;
-@mixin boxFeatured {
-  width: $boxFeaturedSize;
-  height: $boxFeaturedSize;
+@mixin lmoRow {
+  @media (min-width: $tiny-max-px){
+    /* outer padding on all but tiny screens */
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
 @mixin card{
@@ -151,52 +84,38 @@ $boxFeaturedSize: 175px;
 }
 
 @mixin cardNoPadding {
+  @include md-body-1;
   @include roundedCorners;
-  @include box_shadow(1);
-  border: 1px solid $border-color;
-  background: #fff;
-  margin-bottom: 10px;
-  i{ color: $grey-on-white; }
+  box-shadow: $whiteframe-shadow-1dp;
+  background: $card-background-color;
+  margin-bottom: 12px;
+  max-width: 100%;
 }
 
-$thinPaddingSize: 8px;
-$cardPaddingSize: 16px;
+@mixin cardHeadingPadding {
+  padding: $cardPaddingSize $cardPaddingSize 0 $cardPaddingSize;
+}
 @mixin cardPadding {
   padding: $cardPaddingSize;
 }
 
-@mixin thinRoundedBorder {
-  border: 1px solid $border-color;
-  @include roundedCorners;
-}
-
-@mixin fontReset{
+@mixin listTransition {
+  transition: 0.25s background-color ease-in-out;
   color: $primary-text-color;
-  text-transform: none;
-  @include fontHelvetica;
-  @include fontMedium;
-  margin: 0;
-  padding: 0;
+  &:hover {
+    background: $background-color;
+    text-decoration: none;
+  }
 }
 
-@mixin box_shadow ($level) {
-
-  @if $level == 1 {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  } @else if $level == 2 {
-    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
-  } @else if $level == 3 {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  } @else if $level == 4 {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-  } @else if $level == 5 {
-    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
-  }
-
+@mixin cardButton {
+  position: relative;
+  top: -7px;
+  right: -9px;
+  float: right;
 }
 
 @mixin cardMinorAction {
-  @include fontHelveticaLight;
   color: $grey-on-white;
   margin: 20px 0 0 0;
   display: block;
@@ -204,55 +123,6 @@ $cardPaddingSize: 16px;
   clear: both;
 }
 
-
-@mixin displayFlex {
-  display: flex;
-  /*display: -webkit-box;*/
-  /*display: -moz-box;*/
-  display: -ms-flexbox;
-  display: -webkit-flex;
-}
-
-.lmo-flex {
-  @include displayFlex;
-}
-
-.lmo-flex__grow {
-  flex-grow: 1;
-}
-
-.lmo-flex__no-shrink {
-  flex-shrink: 0;
-}
-
-@mixin flexRow {
-  flex-direction: row;
-  -webkit-flex-direction: row;
-}
-
-@mixin flexColumn {
-  flex-direction: column;
-  -webkit-flex-direction: column;
-}
-
-@mixin lmoRow {
-  @media (min-width: $tiny-max-px){
-    /* outer padding on all but tiny screens */
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-}
-
-@mixin lmoH1{
-  @include fontHelveticaBold;
-  @include fontGrande;
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-  outline: 0;
-}
-
-.lmo-version {
-  color: #666;
-  font-size: 11px;
+@mixin roundedCorners {
+  border-radius: 2px;
 }

@@ -3,12 +3,13 @@ angular.module('loomioApp').factory 'InvitationRecordsInterface', (BaseRecordsIn
     model: InvitationModel
 
     sendByEmail: (invitationForm) =>
-      @remote.create _.merge(invitationForm.serialize(), { group_id: invitationForm.groupId })
+      @remote.post 'bulk_create', _.merge(invitationForm.serialize(), { group_id: invitationForm.groupId })
 
     fetchPendingByGroup: (groupKey, options = {}) ->
       options['group_key'] = groupKey
       @remote.get('/pending', options)
 
     fetchShareableInvitationByGroupId: (groupId, options = {}) ->
+      return unless groupId
       options['group_id'] = groupId
       @remote.get('/shareable', options)
