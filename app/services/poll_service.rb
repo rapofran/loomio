@@ -45,6 +45,7 @@ class PollService
 
   def self.update(poll:, params:, actor:)
     actor.ability.authorize! :update, poll
+    is_new_group   = params.has_key?(:group_id) && params[:group_id] != poll.group_id
     poll.assign_attributes(params.except(:poll_type, :discussion_id))
     is_new_version = poll.is_new_version?
 
@@ -52,7 +53,8 @@ class PollService
     poll.save!
 
     EventBus.broadcast('poll_update', poll, actor)
-    Events::PollEdited.publish!(poll.versions.last, actor, poll.make_announcement) if is_new_version
+    EventBus.broadcast('poll_changed_group', poll, actor)                          if is_new_group
+    Events::PollEdited.publish!(poll, actor, poll.make_announcement) if is_new_version
   end
 
   def self.add_options(poll:, params:, actor:)
@@ -88,23 +90,7 @@ class PollService
     EventBus.broadcast('poll_toggle_subscription', poll, actor)
   end
 
-  def self.convert_visitors(poll: )
-    poll.create_guest_group
-    poll.visitors.each do |visitor|
-      if poll.stances.where(participant: visitor).any?
-        user = User.create(email: visitor.email, email_verified: false)
-        next unless user.valid?
-        poll.guest_group.add_member!(user)
-        poll.stances.where(participant: visitor).update_all(participant_type: 'User', participant_id: user.id)
-      elsif poll.active?
-        poll.guest_group.invitations.create!(recipient_email: visitor.email, token: visitor.participation_token, intent: 'join_poll')
-      end
-      visitor.destroy
-    end
-    do_closing_work(poll: poll) if poll.closed?
-  end
-
-  def self.create_visitors(poll:, emails:, actor:)
+  def self.invite_guests(poll:, emails:, actor:)
     actor.ability.authorize! :create_visitors, poll
 
     VisitorsBatchCreateJob.perform_later(emails, poll.id, actor.id)

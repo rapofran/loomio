@@ -1,5 +1,5 @@
-angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, MentionLinkService) ->
-  class PollModel extends DraftableModel
+angular.module('loomioApp').factory 'PollModel', (BaseModel, HasDocuments, HasDrafts, AppConfig, MentionLinkService) ->
+  class PollModel extends BaseModel
     @singular: 'poll'
     @plural: 'polls'
     @indices: ['discussionId', 'authorId']
@@ -7,11 +7,14 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
     @draftParent: 'draftParent'
     @draftPayloadAttributes: ['title', 'details']
 
+    afterConstruction: ->
+      HasDocuments.apply @, showTitle: true
+      HasDrafts.apply @
+
     draftParent: ->
       @discussion() or @author()
 
-    afterConstruction: ->
-      @newAttachmentIds = _.clone(@attachmentIds) or []
+    poll: -> @
 
     # the polls which haven't closed have the highest importance
     # (and so have the lowest value here)
@@ -32,11 +35,6 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       pollOptionIds: []
       customFields: {}
 
-    serialize: ->
-      data = @baseSerialize()
-      data.poll.attachment_ids = @newAttachmentIds
-      data
-
     relationships: ->
       @belongsTo 'author', from: 'users'
       @belongsTo 'discussion'
@@ -45,19 +43,12 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       @hasMany   'pollOptions'
       @hasMany   'stances', sortBy: 'createdAt', sortDesc: true
       @hasMany   'pollDidNotVotes'
-      @hasMany   'communities'
-      @hasMany   'visitors'
 
-    newAttachments: ->
-      @recordStore.attachments.find(@newAttachmentIds)
-
-    attachments: ->
-      @recordStore.attachments.find(attachableId: @id, attachableType: 'Poll')
-
-    hasAttachments: ->
-      _.some @attachments()
+    reactions: ->
+      @recordStore.reactions.find(reactableId: @id, reactableType: "Poll")
 
     announcementSize: (action) ->
+      return @group().announcementRecipientsCount if @group() and @isNew()
       switch action or @notifyAction()
         when 'publish' then @stancesCount + @undecidedUserCount
         when 'edit'    then @stancesCount
@@ -77,7 +68,7 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       if @guestGroup() then @guestGroup().memberIds() else []
 
     participantIds: ->
-      _.pluck(@latestStances(), 'userId')
+      _.pluck(@latestStances(), 'participantId')
 
     undecidedIds: ->
       _.pluck(@pollDidNotVotes(), 'userId')
@@ -99,7 +90,7 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       @stancesCount + @undecidedCount
 
     percentVoted: ->
-      return 0 if @undecidedUserCount == 0
+      return 0 if @membersCount() == 0
       (100 * @stancesCount / (@membersCount())).toFixed(0)
 
     outcome: ->
@@ -109,7 +100,7 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       existing = []
       _.each @latestStances('-createdAt'), (stance) ->
         if _.contains(existing, stance.participant())
-          stance.remove()
+          stance.latest = false
         else
           existing.push(stance.participant())
 
@@ -119,6 +110,12 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
     cookedDetails: ->
       MentionLinkService.cook(@mentionedUsernames, @details)
 
+    cookedDescription: ->
+      @cookedDetails()
+
+    hasDescription: ->
+      !!@details
+
     isActive: ->
       !@closedAt?
 
@@ -126,21 +123,17 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
       @closedAt?
 
     goal: ->
-      @customFields.goal or @membersCount().length
+      @customFields.goal or @membersCount()
 
     close: =>
       @remote.postMember(@key, 'close')
 
-    publish: (community, message) =>
-      @remote.postMember(@key, 'publish', community_id: community.id, message: message).then =>
-        @published = true
-
     addOptions: =>
       @remote.postMember(@key, 'add_options', poll_option_names: @pollOptionNames)
 
-    createVisitors: ->
+    inviteGuests: ->
       @processing = true
-      @remote.postMember(@key, 'create_visitors', emails: @customFields.pending_emails.join(',')).finally =>
+      @remote.postMember(@key, 'invite_guests', emails: @customFields.pending_emails.join(',')).finally =>
         @processing = false
 
     toggleSubscription: =>
@@ -151,3 +144,7 @@ angular.module('loomioApp').factory 'PollModel', (DraftableModel, AppConfig, Men
         'publish'
       else
         'edit'
+
+    removeOrphanOptions: ->
+      _.each @pollOptions(), (option) =>
+        option.remove() unless _.includes(@pollOptionNames, option.name)

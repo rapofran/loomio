@@ -1,8 +1,8 @@
-angular.module('loomioApp').factory 'FormService', ($rootScope, FlashService, DraftService, AbilityService, AttachmentService, $filter) ->
+angular.module('loomioApp').factory 'FormService', ($rootScope, $translate, $window, FlashService, AbilityService) ->
   new class FormService
 
     confirmDiscardChanges: (event, record) ->
-      if record.isModified() && !confirm($filter('translate')('common.confirm_discard_changes'))
+      if record.isModified() && !confirm($translate.instant('common.confirm_discard_changes'))
           return event.preventDefault()
 
     errorTypes =
@@ -15,14 +15,19 @@ angular.module('loomioApp').factory 'FormService', ($rootScope, FlashService, Dr
 
     prepare = (scope, model, options, prepareArgs) ->
       FlashService.loading(options.loadingMessage)
-      options.prepareFn(prepareArgs) if typeof options.prepareFn is 'function'
+      options.prepareFn(prepareArgs) if typeof options.prepareFn      is 'function'
+      scope.$emit 'processing'       if typeof scope.$emit            is 'function'
+      model.cancelDraftFetch()       if typeof model.cancelDraftFetch is 'function'
+      model.clearDrafts()            if typeof model.clearDrafts      is 'function'
       scope.isDisabled = true
       model.setErrors()
+
+    confirm = (confirmMessage) ->
+      if confirmMessage then $window.confirm(confirmMessage) else true
 
     success = (scope, model, options) ->
       (response) ->
         FlashService.dismiss()
-        model.resetDraft() if options.drafts and AbilityService.isLoggedIn()
         if options.flashSuccess?
           flashKey     = if typeof options.flashSuccess is 'function' then options.flashSuccess() else options.flashSuccess
           FlashService.success flashKey, calculateFlashOptions(options.flashOptions)
@@ -42,20 +47,29 @@ angular.module('loomioApp').factory 'FormService', ($rootScope, FlashService, Dr
     cleanup = (scope, model, options = {}) ->
       ->
         options.cleanupFn(scope, model) if typeof options.cleanupFn is 'function'
+        scope.$emit 'doneProcessing'    if typeof scope.$emit       is 'function'
         scope.isDisabled = false
 
     submit: (scope, model, options = {}) ->
-      DraftService.applyDrafting(scope, model) if options.drafts and AbilityService.isLoggedIn()
-      submitFn = options.submitFn or model.save
+      # fetch draft from server and listen for changes to it
+      if options.drafts and model.isNew() and AbilityService.isLoggedIn()
+        model.fetchAndRestoreDraft()
+        scope.$watch model.draftFields, model.planDraftFetch, true
+
+      submitFn  = options.submitFn  or model.save
+      confirmFn = options.confirmFn or (-> false)
       (prepareArgs) ->
         return if scope.isDisabled
         prepare(scope, model, options, prepareArgs)
-        submitFn(model).then(
-          success(scope, model, options),
-          failure(scope, model, options),
-        ).finally(
+        if confirm(confirmFn(model))
+          submitFn(model).then(
+            success(scope, model, options),
+            failure(scope, model, options),
+          ).finally(
+            cleanup(scope, model, options)
+          )
+        else
           cleanup(scope, model, options)
-        )
 
     upload: (scope, model, options = {}) ->
       submitFn = options.submitFn

@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include CustomCounterCache::Model
   include ReadableUnguessableUrls
   include MessageChannel
   include HasExperiences
@@ -17,10 +18,9 @@ class User < ActiveRecord::Base
   attr_accessor :recaptcha
   attr_accessor :restricted
   attr_accessor :token
+  attr_writer :has_password
 
   validates :email, presence: true, email: true, length: {maximum: 200}
-
-  has_many :stances, as: :participant
 
   has_attached_file :uploaded_avatar,
     styles: {
@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
     content_type: { content_type: /\Aimage/ },
     file_name: { matches: [/png\Z/i, /jpe?g\Z/i, /gif\Z/i] }
 
+  validates_uniqueness_of :email, conditions: -> { where(email_verified: true) }, if: :email_verified?
   validates_uniqueness_of :username
   validates_length_of :username, maximum: 30
   validates_length_of :short_bio, maximum: 500
@@ -57,7 +58,7 @@ class User < ActiveRecord::Base
            source: :group
 
   has_many :adminable_groups,
-           -> { where( archived_at: nil) },
+           -> { where(archived_at: nil, type: "FormalGroup") },
            through: :admin_memberships,
            class_name: 'Group',
            source: :group
@@ -89,15 +90,9 @@ class User < ActiveRecord::Base
   has_many :polls, foreign_key: :author_id
 
   has_many :identities, class_name: "Identities::Base", dependent: :destroy
-  has_many :communities, through: :identities, class_name: "Communities::Base"
-  has_many :email_communities,
-           -> { where(community_type: [:email, :public]) },
-           through: :polls,
-           source: :communities,
-           class_name: "Communities::Base"
 
-  has_many :comment_votes, dependent: :destroy
-  has_many :stances, as: :participant, dependent: :destroy
+  has_many :reactions, dependent: :destroy
+  has_many :stances, foreign_key: :participant_id, dependent: :destroy
   has_many :participated_polls, through: :stances, source: :poll
   has_many :group_polls, through: :groups, source: :polls
 
@@ -105,7 +100,7 @@ class User < ActiveRecord::Base
 
   has_many :notifications, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :attachments, dependent: :destroy
+  has_many :documents, foreign_key: :author_id, dependent: :destroy
   has_many :drafts, dependent: :destroy
   has_many :login_tokens, dependent: :destroy
 
@@ -129,6 +124,7 @@ class User < ActiveRecord::Base
   scope :mentioned_in, ->(model) { where(id: model.notifications.user_mentions.pluck(:user_id)) }
   scope :verified, -> { where(email_verified: true) }
   scope :unverified, -> { where(email_verified: false) }
+  scope :verified_first, -> { order(email_verified: :desc) }
 
   # move to ThreadMailerQuery
   scope :email_when_proposal_closing_soon, -> { active.where(email_when_proposal_closing_soon: true) }
@@ -138,6 +134,12 @@ class User < ActiveRecord::Base
     .joins(:memberships)
     .where('memberships.group_id': group.id)
   }
+
+  def self.email_status_for(email)
+    (verified_first.find_by(email: email) || LoggedOutUser.new).email_status
+  end
+
+  define_counter_cache(:memberships_count) {|user| user.memberships.formal.count }
 
   def associate_with_identity(identity)
     if existing = identities.find_by(user: self, uid: identity.uid, identity_type: identity.identity_type)
@@ -168,6 +170,10 @@ class User < ActiveRecord::Base
     true
   end
 
+  def has_password
+    self.encrypted_password.present?
+  end
+
   def email_status
     if deactivated_at.present? then :inactive else :active end
   end
@@ -178,7 +184,7 @@ class User < ActiveRecord::Base
 
   # Provide can? and cannot? as methods for checking permissions
   def ability
-    @ability ||= Ability.new(self)
+    @ability ||= Ability::Base.new(self)
   end
 
   delegate :can?, :cannot?, :to => :ability

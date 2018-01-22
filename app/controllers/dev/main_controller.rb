@@ -7,15 +7,92 @@ class Dev::MainController < Dev::BaseController
 
   def index
     @routes = self.class.action_methods.select do |action|
-      action.starts_with? 'setup'
+      action.starts_with?('setup') || action.starts_with?('view')
     end
     render layout: false
+  end
+
+  def setup_thread_mailer_new_discussion_email
+    @group = FormalGroup.create!(name: 'Dirty Dancing Shoes')
+    @group.add_admin!  patrick
+    @group.add_member! jennifer
+
+    @discussion = Discussion.create(title: 'What star sign are you?',
+                                     group: @group,
+                                     description: "Wow, what a __great__ day.",
+                                     make_announcement: true,
+                                     author: jennifer)
+    DiscussionService.create(discussion: @discussion, actor: @discussion.author)
+    last_email
+  end
+
+  def setup_thread_mailer_new_comment_email
+    @group = FormalGroup.create!(name: 'Dirty Dancing Shoes')
+    @group.add_admin!(patrick).set_volume!(:loud)
+    @group.add_member! jennifer
+
+    @discussion = Discussion.new(title: 'What star sign are you?',
+                                 group: @group,
+                                 description: "Wow, what a __great__ day.",
+                                 make_announcement: false,
+                                 author: jennifer)
+    DiscussionService.create(discussion: @discussion, actor: @discussion.author)
+    @comment = Comment.new(author: jennifer, body: "hello _patrick_.", discussion: @discussion)
+    CommentService.create(comment: @comment, actor: jennifer)
+    last_email
+  end
+
+  def setup_thread_mailer_user_mentioned_email
+    @group = FormalGroup.create!(name: 'Dirty Dancing Shoes')
+    @group.add_admin!(patrick)
+    @group.add_member! jennifer
+
+    @discussion = Discussion.new(title: 'What star sign are you?',
+                                 group: @group,
+                                 description: "hey @patrickswayze wanna dance?",
+                                 make_announcement: false,
+                                 author: jennifer)
+    DiscussionService.create(discussion: @discussion, actor: @discussion.author)
+    last_email
+  end
+
+  def setup_thread_mailer_comment_replied_to_email
+    @group = FormalGroup.create!(name: 'Dirty Dancing Shoes')
+    @group.add_admin!(patrick)
+    @group.add_member! jennifer
+
+    @discussion = Discussion.new(title: 'What star sign are you?',
+                                 group: @group,
+                                 description: "Wow, what a __great__ day.",
+                                 make_announcement: false,
+                                 author: jennifer)
+    DiscussionService.create(discussion: @discussion, actor: @discussion.author)
+    @comment = Comment.new(body: "hello _patrick.", discussion: @discussion)
+    CommentService.create(comment: @comment, actor: jennifer)
+    @reply_comment = Comment.new(body: "why, hello there jen", parent: @comment, discussion: @discussion)
+    CommentService.create(comment: @reply_comment, actor: patrick)
+    last_email
+  end
+
+  def setup_accounts_merged_email
+    UserMailer.accounts_merged(patrick).deliver_now
+    last_email
   end
 
   def accept_last_invitation
     invitation = Invitation.last
     InvitationService.redeem(invitation, max)
     redirect_to(group_url(invitation.group))
+  end
+
+  def setup_login_token
+    login_token = FactoryGirl.create(:login_token, user: patrick)
+    redirect_to(login_token_url(login_token.token))
+  end
+
+  def setup_used_login_token
+    login_token = FactoryGirl.create(:login_token, user: patrick, used: true)
+    redirect_to(login_token_url(login_token.token))
   end
 
   def use_last_login_token
@@ -25,6 +102,11 @@ class Dev::MainController < Dev::BaseController
   def setup_login
     patrick
     redirect_to new_user_session_url
+  end
+
+  def setup_deactivated_user
+    patrick.update(deactivated_at: 1.day.ago)
+    redirect_to dashboard_url
   end
 
   def setup_invitation_to_visitor
@@ -85,12 +167,10 @@ class Dev::MainController < Dev::BaseController
 
   def setup_dashboard
     sign_in patrick
-    starred_poll_discussion
-    starred_discussion
+    pinned_discussion
     poll_discussion
     recent_discussion
-    old_discussion
-    participating_discussion
+    # old_discussion
     muted_discussion
     muted_group_discussion
     redirect_to dashboard_url
@@ -110,8 +190,8 @@ class Dev::MainController < Dev::BaseController
 
   def setup_inbox
     sign_in patrick
-    starred_discussion; recent_discussion group: create_another_group
-    old_discussion; muted_discussion
+    recent_discussion group: create_another_group
+    old_discussion; muted_discussion; pinned_discussion
     redirect_to inbox_url
   end
 
@@ -128,6 +208,28 @@ class Dev::MainController < Dev::BaseController
     sign_in patrick
     create_group.add_member! emilio
     redirect_to group_url(create_group)
+  end
+
+  def setup_group_with_pinned_discussion
+    sign_in patrick
+    create_discussion.update(pinned: true)
+    redirect_to group_url(create_discussion.group)
+  end
+
+  def setup_group_with_restrictive_settings
+    sign_in jennifer
+    create_stance
+    create_discussion
+    create_group.update(
+      members_can_add_members:       false,
+      members_can_edit_discussions:  false,
+      members_can_edit_comments:     false,
+      members_can_raise_motions:     false,
+      members_can_vote:              false,
+      members_can_start_discussions: false,
+      members_can_create_subgroups:  false
+    )
+    redirect_to group_url create_group
   end
 
   def setup_subgroup
@@ -276,11 +378,10 @@ class Dev::MainController < Dev::BaseController
 
   def view_open_group_as_non_member
     sign_in patrick
-    @group = FormalGroup.create!(name: 'Open Dirty Dancing Shoes',
-    membership_granted_upon: 'request',
-    group_privacy: 'open')
+    @group = FormalGroup.create!(name: 'Open Dirty Dancing Shoes', membership_granted_upon: 'request', group_privacy: 'open')
     @group.add_admin! jennifer
-    @discussion = Discussion.create!(title: "I carried a watermelon", private: false, author: patrick, group: @group)
+    @discussion = Discussion.new(title: "I carried a watermelon", private: false, author: jennifer, group: @group)
+    DiscussionService.create(discussion: @discussion, actor: jennifer)
     CommentService.create(comment: Comment.new(body: "It was real seedy", discussion: @discussion), actor: jennifer)
     redirect_to group_url(create_group)
   end
@@ -296,6 +397,7 @@ class Dev::MainController < Dev::BaseController
   end
 
   def view_secret_group_as_non_member
+    patrick.update(is_admin: false)
     sign_in patrick
     @group = FormalGroup.create!(name: 'Secret Dirty Dancing Shoes',
                                 group_privacy: 'secret')
@@ -416,10 +518,41 @@ class Dev::MainController < Dev::BaseController
     redirect_to discussion_url(create_discussion)
   end
 
+  def setup_open_and_closed_discussions
+    create_discussion
+    create_closed_discussion
+    sign_in patrick
+    redirect_to group_url(create_group)
+  end
+
+  def setup_discussion_for_jennifer
+    sign_in jennifer
+    redirect_to discussion_url(create_discussion)
+  end
+
+  def setup_unread_discussion
+    read = Comment.new(discussion: create_discussion, body: "Here is some read content")
+    unread = Comment.new(discussion: create_discussion, body: "Here is some unread content")
+    another_unread = Comment.new(discussion: create_discussion, body: "Here is some more unread content")
+    sign_in patrick
+
+    CommentService.create(comment: read, actor: patrick)
+    CommentService.create(comment: unread, actor: jennifer)
+    CommentService.create(comment: another_unread, actor: jennifer)
+    redirect_to discussion_url(create_discussion)
+  end
+
   def setup_busy_discussion
     create_discussion
     sign_in patrick
     create_all_notifications
+    redirect_to discussion_url(create_discussion)
+  end
+
+  def setup_all_activity_items
+    create_discussion
+    sign_in patrick
+    create_all_activity_items
     redirect_to discussion_url(create_discussion)
   end
 

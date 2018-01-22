@@ -8,8 +8,8 @@ class PollEmailInfo
     "some reason"
   end
 
-  def login_token
-    @token ||= @recipient.login_tokens.create!(redirect: poll_path(@poll))
+  def login_token(redirect_path: poll_path(@poll))
+    @token ||= @recipient.login_tokens.create!(redirect: redirect_path)
   end
 
   def initialize(recipient:, event:, action_name:)
@@ -21,8 +21,8 @@ class PollEmailInfo
   end
 
   def actor
-    @actor ||= if @event.eventable.is_a?(Stance)
-      @event.eventable.participant
+    @actor ||= if @eventable.is_a?(Stance)
+      @eventable.participant_for_client
     else
       @event.user || LoggedOutUser.new
     end
@@ -33,11 +33,7 @@ class PollEmailInfo
   end
 
   def poll_options
-    if @poll.dates_as_options
-      @poll.poll_options.order(name: :asc)
-    else
-      @poll.poll_options
-    end
+    @poll.ordered_poll_options
   end
 
   def poll_type

@@ -25,11 +25,16 @@ class InvitationService
     emails = (recipient_emails - group.members.pluck(:email)).take(100)
     raise Invitation::AllInvitesAreMembers.new if emails.empty?
 
-    recent_pending_invitations_count = group.invitations.pending.where("created_at > ?", 2.weeks.ago).count
-    num_used = recent_pending_invitations_count + emails.length
+    recent_pending_invitations_count   = group.invitations.pending.where("created_at > ?", 2.weeks.ago).count
+    recent_cancelled_invitations_count = group.invitations.cancelled.where("created_at > ?", 2.weeks.ago).count
+
+    recent_pending   = recent_pending_invitations_count + emails.length
+    recent_cancelled = recent_cancelled_invitations_count + emails.length
+
     max_allowed = ENV.fetch('MAX_PENDING_INVITATIONS', 100).to_i + group.memberships_count
 
-    raise Invitation::TooManyPending.new if num_used > max_allowed
+    raise Invitation::TooManyPending.new   if recent_pending   > max_allowed
+    raise Invitation::TooManyCancelled.new if recent_cancelled > max_allowed
 
     emails.map do |recipient_email|
       invitation = create_invite_to_join_group(recipient_email: recipient_email,
@@ -53,10 +58,10 @@ class InvitationService
   end
 
   def self.redeem(invitation, user)
-    return true if invitation.group.members.include?(user) # feedback appreciated
-    raise Invitation::InvitationCancelled   if invitation.cancelled?
-    raise Invitation::InvitationAlreadyUsed if invitation.accepted?
-    invitation.accepted_at = DateTime.now   if invitation.single_use?
+    return true if invitation.group.members.include?(user)
+    raise Invitation::InvitationCancelled                   if invitation.cancelled?
+    raise Invitation::InvitationAlreadyUsed.new(invitation) if invitation.accepted?
+    invitation.accepted_at = DateTime.now                   if invitation.single_use?
 
     membership = invitation.group.add_member!(user, invitation: invitation)
     invitation.save!

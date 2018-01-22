@@ -5,6 +5,8 @@ class Attachment < ActiveRecord::Base
   has_attached_file :file, styles: lambda { |file| file.instance.is_an_image? ? { thumb: '100x100#', thread: '600x>' } : {} }
   do_not_validate_attachment_file_type :file
 
+  scope :unmigrated, -> { where(migrated_to_document: false) }
+
   validates :user_id, presence: true
 
   alias_method :author, :user
@@ -37,6 +39,10 @@ class Attachment < ActiveRecord::Base
   def location
     self[:location] || file.url(:original)
   end
-  alias :original :location
 
+  def url
+    location.starts_with?("/") ? "#{lmo_asset_host}#{location}" : location
+  end
+
+  alias :original :location
 end

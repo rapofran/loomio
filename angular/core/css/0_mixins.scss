@@ -1,44 +1,109 @@
-$navbar-height: 48px;
-$tiny-max:      480;
-$small-max:     768;
-$medium-max:    992;
-$tiny-max-px:   $tiny-max   + px;
-$small-max-px:  $small-max  + px;
-$medium-max-px: $medium-max + px;
-$max-container-size: 1120px;
+// NB: mixins are deprecated; please don't use them! We want to get rid of them in our app!
+@mixin md-headline {
+  font-size: $headline-font-size-base;
+  font-weight: 400;
+  line-height: rem(3.2);
+}
+
+@mixin md-caption {
+  font-size: $caption-font-size-base;
+  letter-spacing: 0.020em;
+}
+
+
+@mixin fontTiny {
+  font-size: $caption-font-size-base;
+  // font-size: 12px;
+  // line-height: 14px;
+}
+
+@mixin fontSmall {
+  @include md-body-1;
+  // font-size: 13px;
+  // line-height: 19px;
+}
+
+@mixin fontMedium {
+  @include md-body-1();
+  // font-size: 15px;
+  // line-height: 23px;
+}
+
+@mixin fontMedLarge {
+  @include md-subhead();
+  // font-size: 18px;
+  // line-height: 25px;
+}
+
+@mixin fontLarge {
+  @include md-title();
+  // font-size: 20px;
+  // line-height: 28px;
+}
+
+
+@mixin fontGrande {
+  @include md-headline();
+  // font-size: 24px;
+  // line-height: 32px;
+}
+
+
+@mixin truncateText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin lmoH1{
+  @include fontGrande;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+}
+
+@mixin lmoBtnLink {
+  background: none;
+  border: none;
+  padding: 0;
+  &:hover{ text-decoration: underline; }
+}
+
+@mixin lmoRow {
+  @media (min-width: $tiny-max-px){
+    /* outer padding on all but tiny screens */
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
 
 @mixin card{
-  @include md-body-1;
   @include cardNoPadding;
   @include cardPadding;
 }
 
 @mixin cardNoPadding {
+  @include md-body-1;
   @include roundedCorners;
-  @include box_shadow(1);
-  border: 1px solid $border-color;
-  background: #fff;
-  margin-bottom: 10px;
+  box-shadow: $whiteframe-shadow-1dp;
+  background: $card-background-color;
+  margin-bottom: 12px;
   max-width: 100%;
-  i.fa{ color: $grey-on-white; }
 }
 
-$thinPaddingSize: 8px;
-$cardPaddingSize: 16px;
+@mixin cardHeadingPadding {
+  padding: $cardPaddingSize $cardPaddingSize 0 $cardPaddingSize;
+}
 @mixin cardPadding {
   padding: $cardPaddingSize;
-}
-
-@mixin thinRoundedBorder {
-  border: 1px solid $border-color;
-  @include roundedCorners;
 }
 
 @mixin listTransition {
   transition: 0.25s background-color ease-in-out;
   color: $primary-text-color;
   &:hover {
-    background: $list-hover-color;
+    background: $background-color;
     text-decoration: none;
   }
 }
@@ -50,18 +115,14 @@ $cardPaddingSize: 16px;
   float: right;
 }
 
-@mixin box_shadow ($level) {
+@mixin cardMinorAction {
+  color: $grey-on-white;
+  margin: 20px 0 0 0;
+  display: block;
+  text-decoration: underline;
+  clear: both;
+}
 
-  @if $level == 1 {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  } @else if $level == 2 {
-    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
-  } @else if $level == 3 {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  } @else if $level == 4 {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-  } @else if $level == 5 {
-    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
-  }
-
+@mixin roundedCorners {
+  border-radius: 2px;
 }

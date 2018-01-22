@@ -1,4 +1,6 @@
 module Dev::NintiesMoviesHelper
+  include Dev::FakeDataHelper
+
   # try to just return objects here. Don't knit them together. Leave that for
   # the development controller action to do if possible
   def patrick
@@ -122,12 +124,24 @@ module Dev::NintiesMoviesHelper
   def create_discussion
     unless @discussion
       @discussion = Discussion.create(title: 'What star sign are you?',
-                                           private: false,
-                                           group: create_group,
-                                           author: jennifer)
+                                       private: false,
+                                       group: create_group,
+                                       author: jennifer)
       DiscussionService.create(discussion: @discussion, actor: @discussion.author)
     end
     @discussion
+  end
+
+  def create_closed_discussion
+    unless @closed_discussion
+      @closed_discussion = Discussion.create(title: 'This thread is old and closed',
+                                             private: false,
+                                             closed_at: Time.now,
+                                             group: create_group,
+                                             author: jennifer)
+      DiscussionService.create(discussion: @closed_discussion, actor: @closed_discussion.author)
+    end
+    @closed_discussion
   end
 
   def create_public_discussion
@@ -210,12 +224,83 @@ module Dev::NintiesMoviesHelper
     @empty_draft
   end
 
+  def create_comment
+    unless @create_comment
+      @create_comment ||= Comment.create!(
+        discussion: create_discussion,
+        author: patrick,
+        body: 'Hello world!'
+      )
+    end
+    @create_comment
+  end
+
+  def create_poll
+    @create_poll ||= Poll.create!(
+      discussion: create_discussion,
+      poll_type: :proposal,
+      poll_option_names: %w(agree abstain disagree block),
+      author: patrick,
+      title: "Let's go to the moon!"
+    )
+  end
+
+  def create_stance
+    @create_stance ||= Stance.create(
+      poll: create_poll,
+      participant: patrick,
+      choice: :agree,
+      reason: "I have unreasonably high expectations for how this will go!"
+    )
+  end
+
+  def create_outcome
+    @create_outcome ||= Outcome.create!(
+      poll: create_poll.tap { |p| p.update(closed_at: 1.day.ago) },
+      author: patrick,
+      statement: "Okay let's do it!"
+    )
+  end
+
+  def create_all_activity_items
+    # discussion_edited
+    create_discussion
+    create_discussion.update(title: "another discussion title")
+    Events::DiscussionEdited.publish!(create_discussion, patrick)
+
+    # discussion_moved
+    Events::DiscussionMoved.publish!(create_discussion, patrick, create_another_group)
+
+    # new_comment
+    Events::NewComment.publish!(create_comment)
+
+    # poll_created
+    Events::PollCreated.publish!(create_poll, patrick)
+
+    # poll_edited
+    create_poll.update(title: "Another poll title")
+    Events::PollEdited.publish!(create_poll, patrick)
+
+    # stance_created
+    Events::StanceCreated.publish!(create_stance)
+
+    # poll_expired
+    Events::PollExpired.publish!(create_poll)
+
+    # poll_closed_by_user
+    Events::PollClosedByUser.publish!(create_poll, patrick)
+
+    # outcome_created
+    Events::OutcomeCreated.publish!(create_outcome)
+  end
+
 
   def create_all_notifications
-    #'comment_liked'
+    #'reaction_created'
     comment = Comment.new(discussion: create_discussion, body: 'I\'m rather likeable')
+    reaction = Reaction.new(reactable: comment, reaction: ":heart:")
     new_comment_event = CommentService.create(comment: comment, actor: patrick)
-    comment_liked_event = CommentService.like(comment: comment, actor: jennifer)
+    reaction_created_event = ReactionService.update(reaction: reaction, params: {reaction: ':slight_smile:'}, actor: jennifer)
     create_another_group.add_member! jennifer
 
     #'comment_replied_to'
@@ -226,6 +311,14 @@ module Dev::NintiesMoviesHelper
     #'user_mentioned'
     comment = Comment.new(discussion: create_discussion, body: 'hey @patrickswayze you look great in that tuxeido')
     CommentService.create(comment: comment, actor: jennifer)
+
+    # lots of reactions to the comment.
+    [max, emilio, judd].each {|u| comment.group.add_member! u}
+    ReactionService.update(reaction: Reaction.new(reactable: comment), params: {reaction: ':slight_smile:'}, actor: jennifer)
+    ReactionService.update(reaction: Reaction.new(reactable: comment), params: {reaction: ':heart:'}, actor: patrick)
+    ReactionService.update(reaction: Reaction.new(reactable: comment), params: {reaction: ':laughing:'}, actor: max)
+    ReactionService.update(reaction: Reaction.new(reactable: comment), params: {reaction: ':cry:'}, actor: emilio)
+    ReactionService.update(reaction: Reaction.new(reactable: comment), params: {reaction: ':wave:'}, actor: judd)
 
     #'membership_requested',
     membership_request = MembershipRequest.new(name: 'The Ghost', email: 'boooooo@invisible.co', group: create_group)
@@ -262,7 +355,8 @@ module Dev::NintiesMoviesHelper
     PollService.publish_closing_soon
 
     #'outcome_created'
-    poll = FactoryGirl.create(:poll, discussion: create_discussion, author: jennifer, closed_at: 1.day.ago)
+    poll = FactoryGirl.build(:poll, discussion: create_discussion, author: jennifer, closed_at: 1.day.ago)
+    PollService.create(poll: poll, actor: jennifer)
     outcome = FactoryGirl.build(:outcome, poll: poll, make_announcement: true)
     OutcomeService.create(outcome: outcome, actor: jennifer)
 

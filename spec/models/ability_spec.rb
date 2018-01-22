@@ -7,7 +7,7 @@ describe "User abilities" do
   let(:non_member) { create(:user) }
   let(:group) { create(:formal_group) }
 
-  let(:ability) { Ability.new(user) }
+  let(:ability) { Ability::Base.new(user) }
   subject { ability }
 
   let(:own_invitation) { InvitationService.create_invite_to_join_group(recipient_email: "h@h.com",
@@ -183,41 +183,6 @@ describe "User abilities" do
     end
   end
 
-  context "suspended member" do
-    let(:group) { create(:formal_group) }
-    let(:admin_group) { create(:formal_group) }
-    let(:subgroup) { create(:formal_group, parent: group) }
-    let(:private_discussion) { create :discussion, group: group, private: true }
-
-
-    context "group is visible to public" do
-      let(:group) { create(:formal_group, is_visible_to_public: true) }
-
-      before do
-        membership = group.add_member!(user)
-        MembershipService.suspend_membership!(membership: membership)
-      end
-
-      it { should be_able_to(:show, group) }
-      it { should_not be_able_to(:show, private_discussion) }
-      it "is no longer a group member" do
-        group.reload
-        group.members.should_not include user
-      end
-    end
-
-    context "group is hidden from public" do
-      let(:group) { create(:formal_group, is_visible_to_public: false) }
-
-      before do
-        membership = group.add_member!(user)
-        MembershipService.suspend_membership!(membership: membership)
-      end
-
-      it { should_not be_able_to(:show, group) }
-    end
-  end
-
   context "member of a group" do
     let(:group) { create(:formal_group) }
     let(:subgroup) { build(:formal_group, parent: group) }
@@ -290,7 +255,6 @@ describe "User abilities" do
     it { should     be_able_to(:destroy, user_comment) }
     it { should_not be_able_to(:destroy, discussion) }
     it { should_not be_able_to(:destroy, another_user_comment) }
-    it { should     be_able_to(:like, Comment) }
     it { should     be_able_to(:create, new_discussion) }
     it { should_not be_able_to(:make_admin, @membership) }
     it { should_not be_able_to(:make_admin, @other_membership) }
@@ -341,7 +305,6 @@ describe "User abilities" do
 
     it { should     be_able_to(:update, group) }
     it { should     be_able_to(:email_members, group) }
-    it { should     be_able_to(:hide_next_steps, group) }
     it { should     be_able_to(:destroy, discussion) }
     it { should     be_able_to(:move, discussion) }
     it { should     be_able_to(:update, discussion) }
@@ -433,7 +396,6 @@ describe "User abilities" do
 
     it { should_not be_able_to(:destroy, another_user_comment) }
     it { should_not be_able_to(:like, another_user_comment) }
-    it { should_not be_able_to(:unlike, another_user_comment) }
   end
 
   context "Loomio admin deactivates other_user" do

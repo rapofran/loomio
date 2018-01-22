@@ -32,11 +32,39 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs "Details" do
       f.input :name
-      f.input :email
-      f.input :username
+      f.input :email, as: :string
+      f.input :username, as: :string
       f.input :is_admin
     end
     f.actions
+  end
+
+  collection_action :export_emails_deactivated do
+    emails = User.inactive.pluck :email
+    render text: emails.join("\n")
+  end
+
+  collection_action :export_emails_fr do
+    emails = User.active.where("detected_locale ilike 'fr%'").pluck(:email)
+    render text: emails.join("\n")
+  end
+
+  collection_action :export_emails_es do
+    query = %w[es ca an].map do |prefix|
+      "detected_locale ilike '#{prefix}%'"
+    end.join ' or '
+
+    emails = User.active.where(query).pluck(:email)
+    render text: emails.join("\n")
+  end
+
+  collection_action :export_emails_other do
+    query = %w[fr es ca an].map do |prefix|
+      "detected_locale ilike '#{prefix}%'"
+    end.join ' or '
+
+    emails = User.active.where.not(query).pluck(:email)
+    render text: emails.join("\n")
   end
 
   member_action :delete_spam, method: :post do
@@ -59,7 +87,7 @@ ActiveAdmin.register User do
   show do |user|
     if user.deactivated_at.nil?
       panel("Deactivate") do
-        if can? :deactivate, user
+        if user.ability.can? :deactivate, user
           button_to 'Deactivate User', deactivate_admin_user_path(user), method: :put, data: {confirm: 'Are you sure you want to deactivate this user?'}
         else
           div "This user can't be deactivated because they are the only coordinator of the following groups:"
@@ -95,6 +123,14 @@ ActiveAdmin.register User do
       button_to 'Get link to reset password', reset_password_admin_user_path(user), method: :post
     end
 
+    panel 'Merge into another user' do
+      form action: merge_admin_user_path(user), method: :post do |f|
+        f.label "Email address of final user account"
+        f.input name: :destination_email
+        f.input type: :submit, value: "Merge user"
+      end
+    end
+
     if user.deactivation_response.present?
       panel("Deactivation query response") do
         div "#{user.deactivation_response.body}"
@@ -103,10 +139,11 @@ ActiveAdmin.register User do
     active_admin_comments
   end
 
-  member_action :enable_communities, method: :put do
-    user = User.friendly.find(params[:id])
-    user.experiences['enable_communities'] = true
-    user.save
+  member_action :merge, method: :post do
+    source = User.friendly.find(params[:id])
+    destination = User.find_by!(email: params[:destination_email].strip)
+    MigrateUserService.delay.migrate!(source: source, destination: destination)
+    redirect_to admin_user_path(destination)
   end
 
   member_action :deactivate, method: :put do

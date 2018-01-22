@@ -10,8 +10,8 @@ angular.module('loomioApp').directive 'groupTheme', ->
     $scope.logoStyle = ->
       { 'background-image': "url(#{$scope.group.logoUrl()})" }
 
-    $scope.isMember = ->
-      Session.user().membershipFor($scope.group)?
+    $scope.canPerformActions = ->
+      AbilityService.isSiteAdmin() or AbilityService.canLeaveGroup($scope.group)
 
     $scope.canUploadPhotos = ->
       $scope.homePage and AbilityService.canAdministerGroup($scope.group)
@@ -21,15 +21,3 @@ angular.module('loomioApp').directive 'groupTheme', ->
 
     $scope.openUploadLogoForm = ->
       ModalService.open LogoPhotoForm, group: => $scope.group
-
-    $scope.themeHoverIn = ->
-      $scope.themeHover = true
-
-    $scope.themeHoverOut = ->
-      $scope.themeHover = false
-
-    $scope.logoHoverIn = ->
-      $scope.logoHover = true
-
-    $scope.logoHoverOut = ->
-      $scope.logoHover = false

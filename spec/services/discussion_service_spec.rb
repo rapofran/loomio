@@ -15,18 +15,12 @@ describe 'DiscussionService' do
                          discussion: discussion,
                          destroy: true,
                          author: user) }
-  let(:attachment) { create(:attachment) }
+  let(:document) { create(:document) }
   let(:discussion_params) { {title: "new title", description: "new description", private: true, uses_markdown: true} }
 
   describe 'create' do
     it 'authorizes the user can create the discussion' do
       user.ability.should_receive(:authorize!).with(:create, discussion)
-      DiscussionService.create(discussion: discussion,
-                               actor: user)
-    end
-
-    it 'saves the discussion' do
-      discussion.should_receive(:save!).and_return(true)
       DiscussionService.create(discussion: discussion,
                                actor: user)
     end
@@ -69,11 +63,6 @@ describe 'DiscussionService' do
         discussion.description = "A mention for @#{another_user.username}!"
         expect(Events::UserMentioned).to_not receive(:publish!).with(discussion, user, another_user)
         DiscussionService.create(discussion: discussion, actor: user)
-      end
-
-      it 'marks the discussion reader as participating' do
-        DiscussionService.create(discussion: discussion, actor: user)
-        expect(DiscussionReader.for(user: user, discussion: discussion).participating).to eq true
       end
 
       it 'sets the volume to loud if the user has set email_on_participation' do
@@ -181,34 +170,34 @@ describe 'DiscussionService' do
         expect(version.object_changes['description'][1]).to eq discussion_params[:description]
       end
 
-      it 'creates a version with updated attachment_ids' do
+      it 'creates a version with updated document_ids' do
         expect { DiscussionService.update discussion: discussion,
-                   params: { attachment_ids: [attachment.id] },
+                   params: { document_ids: [document.id] },
                    actor: user }.to change { discussion.versions.count }.by(1)
         version = PaperTrail::Version.last
-        expect(version.object_changes['attachment_ids'][0]).to eq []
-        expect(version.object_changes['attachment_ids'][1]).to eq [attachment.id]
+        expect(version.object_changes['document_ids'][0]).to eq []
+        expect(version.object_changes['document_ids'][1]).to eq [document.id]
       end
 
-      it 'updates the existing version with attachment_ids' do
-        discussion_params[:attachment_ids] = [attachment.id]
+      it 'updates the existing version with document_ids' do
+        discussion_params[:document_ids] = [document.id]
         expect { DiscussionService.update discussion: discussion,
                    params: discussion_params,
                    actor: user }.to change { discussion.versions.count }.by(1)
         version = PaperTrail::Version.last
         expect(version.object_changes['title'][1]).to eq discussion_params[:title]
-        expect(version.object_changes['attachment_ids'][0]).to eq []
-        expect(version.object_changes['attachment_ids'][1]).to eq [attachment.id]
+        expect(version.object_changes['document_ids'][0]).to eq []
+        expect(version.object_changes['document_ids'][1]).to eq [document.id]
       end
 
-      it 'removes attachments in the version' do
-        discussion.update(attachment_ids: [attachment.id])
+      it 'removes documents in the version' do
+        discussion.update(document_ids: [document.id])
         expect { DiscussionService.update discussion: discussion,
-                   params: { attachment_ids: [] },
+                   params: { document_ids: [] },
                    actor: user }.to change { discussion.versions.count }.by(1)
         version = PaperTrail::Version.last
-        expect(version.object_changes['attachment_ids'][0]).to eq [attachment.id]
-        expect(version.object_changes['attachment_ids'][1]).to eq []
+        expect(version.object_changes['document_ids'][0]).to eq [document.id]
+        expect(version.object_changes['document_ids'][1]).to eq []
       end
     end
 
@@ -226,16 +215,16 @@ describe 'DiscussionService' do
     context 'success' do
       it 'can save reader attributes' do
         DiscussionService.update_reader discussion: discussion,
-                                        params: { starred: true },
+                                        params: { volume: :mute },
                                         actor: user
-        expect(DiscussionReader.for(user: user, discussion: discussion).starred).to eq true
+        expect(DiscussionReader.for(user: user, discussion: discussion).volume).to eq "mute"
       end
     end
 
     it 'does not update if the user cannot update the reader' do
       another_discussion = create(:discussion)
-      expect { DiscussionService.update_reader discussion: another_discussion, params: { starred: true }, actor: user }.to raise_error CanCan::AccessDenied
-      expect(DiscussionReader.for(user: user, discussion: another_discussion).starred).to eq false
+      expect { DiscussionService.update_reader discussion: another_discussion, params: { volume: :mute }, actor: user }.to raise_error CanCan::AccessDenied
+      expect(DiscussionReader.for(user: user, discussion: another_discussion).volume).to_not eq "mute"
     end
   end
 

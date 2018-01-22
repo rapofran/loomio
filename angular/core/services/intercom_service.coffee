@@ -2,12 +2,12 @@ angular.module('loomioApp').factory 'IntercomService', ($rootScope, $window, App
   lastGroup = {}
 
   mapGroup = (group) ->
-    return null unless group?
+    return null unless group? && group.createdAt?
     id: group.id
     company_id: group.id
     key: group.key
     name: group.name
-    description: group.description.substring(0, 250)
+    description: (group.description || "").substring(0, 250)
     admin_link: LmoUrlService.group(group, {}, { noStub: true, absolute: true, namespace: 'admin/groups' })
     plan: group.subscriptionKind
     subscription_kind: group.subscriptionKind
@@ -33,9 +33,9 @@ angular.module('loomioApp').factory 'IntercomService', ($rootScope, $window, App
 
       $window.Intercom 'boot',
        admin_link: LmoUrlService.user(user, {}, { noStub: true, absolute: true, namespace: 'admin/users', key: 'id' })
-       app_id: AppConfig.intercomAppId
+       app_id: AppConfig.intercom.appId
        user_id: user.id
-       user_hash: AppConfig.intercomUserHash
+       user_hash: AppConfig.intercom.userHash
        email: user.email
        name: user.name
        username: user.username

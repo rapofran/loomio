@@ -1,14 +1,7 @@
 module AngularHelper
-
-  def boot_angular_ui
-    metadata if browser.bot? && respond_to?(:metadata, true)
-    app_config
-    render 'layouts/angular', layout: false
-  end
-
   def client_asset_path(filename)
     filename = filename.to_s.gsub(".min", '') if Rails.env.development?
-    ['', :client, angular_asset_folder, filename].join('/')
+    [angular_asset_folder, filename].join('/')
   end
 
   private
@@ -71,12 +64,7 @@ module AngularHelper
   end
 
   def angular_asset_folder
-    Rails.env.production? ? Loomio::Version.current : :development
-  end
-
-  def serialized_pending_identity
-    Pending::IdentitySerializer.new(pending_identity, root: false).as_json ||
-    Pending::InvitationSerializer.new(pending_invitation, root: false).as_json ||
-    Pending::UserSerializer.new(pending_user, root: false).as_json
+    version = Rails.env.production? ? Loomio::Version.current : :development
+    "/client/#{version}"
   end
 end

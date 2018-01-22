@@ -10,7 +10,7 @@ ActiveAdmin.register FormalGroup, as: 'Group' do
     end
   end
 
-  actions :index, :show, :edit, :update
+  actions :index, :show, :new, :edit, :update, :create
 
   filter :name
   filter :description
@@ -195,23 +195,17 @@ ActiveAdmin.register FormalGroup, as: 'Group' do
       end
     end
 
-    panel 'Data export' do
-      export_enabled = group.features['dataExport']
-      form action: toggle_export_admin_group_path(group), method: :post do |f|
-        f.label "Data Export is enabled. <a href=\"/g/#{group.key}/export.xls\">XLS</a> <a href=\"/g/#{group.key}/export.html\">HTML</a>".html_safe if export_enabled
-        f.label "Data Export is not enabled" unless export_enabled
-        f.input type: :submit, value: 'Toggle data export'
-      end
-    end
-
     active_admin_comments
   end
 
   form do |f|
     f.inputs "Details" do
-      f.input :id, :input_html => { :disabled => true }
-      f.input :name, :input_html => { :disabled => true }
+      if f.object.persisted?
+        f.input :id, :input_html => { :disabled => true }
+      end
+      f.input :name, :input_html => { :disabled => f.object.persisted? }
       f.input :description
+      f.input :parent_id, label: "Parent Id"
       f.input :subdomain, as: :string
       f.input :analytics_enabled
       f.input :enable_experiments
@@ -222,7 +216,7 @@ ActiveAdmin.register FormalGroup, as: 'Group' do
   member_action :move, method: :post do
     group = Group.friendly.find(params[:id])
     if parent = Group.find_by(key: params[:parent_id]) || Group.find_by(id: params[:parent_id].to_i)
-      group.subscription&.destroy if Plugins.const_defined?("LoomioBuyerExperience")
+      group.subscription&.destroy if Plugins.const_defined?("LoomioOrgPlugin")
       group.update(parent: parent)
     end
     redirect_to admin_group_path(group)
@@ -239,20 +233,6 @@ ActiveAdmin.register FormalGroup, as: 'Group' do
     group = Group.friendly.find(params[:id])
     group.unarchive!
     flash[:notice] = "Unarchived #{group.name}"
-    redirect_to [:admin, :groups]
-  end
-
-  member_action :toggle_export, :method => :post do
-    group = Group.friendly.find(params[:id])
-    export_enabled = group.features.fetch 'dataExport', false
-    if export_enabled
-      group.features['dataExport'] = false
-      flash[:notice] = "data export disabled for #{group.name}"
-    else
-      group.features['dataExport'] = true
-      flash[:notice] = "data export enabled for #{group.name}"
-    end
-    group.save
     redirect_to [:admin, :groups]
   end
 end

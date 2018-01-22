@@ -10,7 +10,7 @@ angular.module('loomioApp').factory 'Session', ($rootScope, $location, $translat
     return unless AppConfig.currentUserId = data.current_user_id
     user = @user()
 
-    $translate.use user.locale
+    @setLocale(user.locale)
     $rootScope.$broadcast 'loggedIn', user
 
     if user.timeZone != AppConfig.timeZone
@@ -19,9 +19,17 @@ angular.module('loomioApp').factory 'Session', ($rootScope, $location, $translat
 
     user
 
+  setLocale: (locale) ->
+    $translate.use(locale)
+    lc_locale = locale.toLowerCase().replace('_','-')
+    return if lc_locale == "en"
+    fetch("#{Loomio.assetRoot}/moment_locales/#{lc_locale}.js").then((resp) -> resp.text()).then (data) ->
+      eval(data)
+      moment.locale(lc_locale)
+
   logout: ->
     AppConfig.loggingOut = true
-    Records.sessions.remote.destroy('').then -> $window.location.href = '/dashboard'
+    Records.sessions.remote.destroy('').then -> $window.location.href = '/'
 
   user: ->
     Records.users.find(AppConfig.currentUserId) or Records.users.build()

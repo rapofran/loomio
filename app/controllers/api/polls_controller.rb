@@ -3,7 +3,7 @@ class API::PollsController < API::RestfulController
 
   def show
     self.resource = load_and_authorize(:poll)
-    respond_with_resource(scope: {current_user: current_user, invitation: invitation_from_token})
+    respond_with_resource(scope: default_scope.merge(invitation: invitation_from_token))
   end
 
   def index
@@ -41,11 +41,11 @@ class API::PollsController < API::RestfulController
 
   def toggle_subscription
     service.toggle_subscription(poll: load_resource, actor: current_user)
-    respond_with_resource(scope: {current_user: current_user})
+    respond_with_resource
   end
 
-  def create_visitors
-    service.create_visitors(poll: load_resource, emails: params.require(:emails).split(','), actor: current_user)
+  def invite_guests
+    service.invite_guests(poll: load_resource, emails: params.require(:emails).split(','), actor: current_user)
     respond_with_resource
   end
 

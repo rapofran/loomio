@@ -3,84 +3,72 @@
   @include listTransition;
   min-height: $boxMediumSize + ($thinPaddingSize * 2);
   border-bottom: 1px solid $border-color;
-  position: relative;
+  &:hover .thread-preview__actions { opacity: 1; }
   &.loading-content { padding: 10px; }
-  &:hover {
-    .thread-preview__actions { display: block; }
-  }
-}
-
-.thread-preview__star{
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin-right: $cardPaddingSize;
-  margin-top: $thinPaddingSize;
-}
-
-.thread-preview__actions{
-  position: absolute;
-  right: 40px;
-  top: -4px;
-  display: none;
-  margin-right: $thinPaddingSize;
-  margin-top: $thinPaddingSize;
-}
-
-.thread-preview__dismiss{
-  @include lmoBtnDefault;
-  @include lmoBtnSm;
-}
-
-.thread-preview__mute,
-.thread-preview__unmute {
-  @include lmoBtnDefault;
-  @include lmoBtnSm;
-  margin-left: 5px;
-  padding: 5px 13px;
-  .fa-volume-off{
-    padding-right: 9px;
-  }
-  .fa-times{
-    font-size: 70%;
-    position: relative;
-    right: 10px;
-    bottom: 1px;
-  }
-}
-
-.thread-preview__screen-only {
-  overflow: hidden;
+  position: relative;
 }
 
 .thread-preview__link {
-  display: block;
-  padding: $thinPaddingSize $cardPaddingSize;
+  display: flex;
+  justify-content: space-between;
+  padding: $thinPaddingSize;
   color: $primary-text-color;
   text-decoration: none;
-  @include displayFlex;
+
+  &.thread-preview__link--unread {
+    border-left: 2px solid;
+    padding-left: $thinPaddingSize - 2px;
+  }
 }
+
+.thread-preview__status-icon {
+  padding: 4px 8px;
+}
+
+.thread-preview__pin {
+  width: 32px;
+  font-size: 20px;
+  color: $grey-on-white;
+  text-align: center;
+}
+
+.thread-preview__actions {
+  position: absolute;
+  display: flex;
+  right: 40px;
+  transition: opacity 0.25s ease-in-out;
+  top: 0;
+  opacity: 0;
+  margin: $thinPaddingSize $cardPaddingSize;
+  .md-button {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-width: 40px;
+    .mdi { font-size: 16px; }
+  }
+}
+
+.thread-preview__mute,
+.thread-preview__unmute { margin-left: 8px }
+
 
 .thread-preview__link:hover {
   color: $primary-text-color;
   text-decoration: none;
 }
 
-.thread-preview__icon {
-  @include boxMedium;
-  .user-avatar {
-    pointer-events: none;
-  }
-}
-
-.thread-preview__pie-canvas {
-  @include boxMedium;
+.thread-preview__icon .user-avatar {
+  pointer-events: none;
 }
 
 .thread-preview__text-container{
-  @include displayFlex;
-  // line-height: 22px;
-  margin-right: 17px;
+  display: flex;
+}
+
+.thread-preview__details {
+  min-width: 0;
+  flex-grow: 1;
 }
 
 .thread-preview__title{
@@ -129,8 +117,4 @@
   font-size: 14px;
   line-height: 24px;
   text-align: center;
-}
-
-.thread-preview__actions button {
-  width: 40px;
 }

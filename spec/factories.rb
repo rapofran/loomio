@@ -72,13 +72,10 @@ FactoryGirl.define do
     group_privacy 'open'
     discussion_privacy_options 'public_or_private'
     members_can_add_members true
-    after(:create) do |group, evaluator|
-      user = FactoryGirl.create(:user)
-      if group.parent.present?
-        group.parent.admins << user
-      end
-      group.admins << user
-      group.save!
+    after(:create) do |group|
+      user = create(:user)
+      group.parent&.add_admin!(user)
+      group.add_admin!(user)
     end
   end
 
@@ -91,6 +88,14 @@ FactoryGirl.define do
     association :identity, factory: :slack_identity
   end
 
+  factory :event do
+    discussion
+    association :eventable, factory: :comment
+    user
+    sequence_id 1
+    kind :new_comment
+  end
+
   factory :discussion do
     association :author, :factory => :user
     association :group, :factory => :formal_group
@@ -99,12 +104,17 @@ FactoryGirl.define do
     uses_markdown false
     private true
     after(:build) do |discussion|
-      discussion.group.parent.add_member!(discussion.author) if discussion.group.parent
+      discussion.group.parent&.add_member!(discussion.author)
       discussion.group.add_member!(discussion.author)
     end
     after(:create) do |discussion|
       discussion.group.save
     end
+  end
+
+  factory :discussion_reader do
+    discussion
+    user
   end
 
   factory :comment do
@@ -121,9 +131,10 @@ FactoryGirl.define do
     end
   end
 
-  factory :comment_vote do
-    comment
+  factory :reaction do
+    association :reactable, factory: :comment
     user
+    reaction "+1"
   end
 
   factory :invitation do
@@ -131,6 +142,7 @@ FactoryGirl.define do
     single_use true
     intent {'join_group'}
     association :inviter, factory: :user
+    association :group, factory: :formal_group
   end
 
   factory :shareable_invitation, class: Invitation do
@@ -150,6 +162,13 @@ FactoryGirl.define do
     user
     filename { Faker::Name.name }
     location { Faker::Company.logo }
+  end
+
+  factory :document do
+    association :author, factory: :user
+    association :model, factory: :discussion
+    title { Faker::Name.name }
+    url { Faker::Internet.url }
   end
 
   factory :translation do
@@ -230,6 +249,16 @@ FactoryGirl.define do
     association :guest_group, factory: :guest_group
   end
 
+  factory :poll_ranked_choice, class: Poll do
+    poll_type "ranked_choice"
+    title "This is a ranked choice"
+    details "with a description"
+    association :author, factory: :user
+    poll_option_names %w(apple banana orange)
+    custom_fields minimum_stance_choices: 2
+    association :guest_group, factory: :guest_group
+  end
+
   factory :outcome do
     poll
     association :author, factory: :user
@@ -243,17 +272,6 @@ FactoryGirl.define do
 
   factory :stance_choice do
     poll_option
-  end
-
-  factory :public_community, class: Communities::Public
-  factory :email_community, class: Communities::Email
-  factory :facebook_community, class: Communities::Facebook
-  factory :slack_community, class: Communities::Slack
-
-  factory :visitor do
-    association :community, factory: :public_community
-    name "John Doe"
-    email "john@doe.com"
   end
 
   factory :received_email do

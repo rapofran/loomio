@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804043327) do
+ActiveRecord::Schema.define(version: 20171224040056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,16 +57,17 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   end
 
   add_index "ahoy_messages", ["sent_at"], name: "index_ahoy_messages_on_sent_at", using: :btree
+  add_index "ahoy_messages", ["to"], name: "index_ahoy_messages_on_to", using: :btree
   add_index "ahoy_messages", ["token"], name: "index_ahoy_messages_on_token", using: :btree
   add_index "ahoy_messages", ["user_id", "user_type"], name: "index_ahoy_messages_on_user_id_and_user_type", using: :btree
 
   create_table "attachments", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "filename"
+    t.string   "filename",             limit: 255
     t.text     "location"
     t.integer  "comment_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
     t.integer  "filesize"
     t.string   "file_file_name"
     t.string   "file_content_type"
@@ -74,6 +75,7 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.datetime "file_updated_at"
     t.integer  "attachable_id"
     t.string   "attachable_type"
+    t.boolean  "migrated_to_document",             default: false, null: false
   end
 
   add_index "attachments", ["attachable_id", "attachable_type"], name: "index_attachments_on_attachable_id_and_attachable_type", using: :btree
@@ -101,17 +103,6 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   add_index "comment_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "tag_anc_desc_udx", unique: true, using: :btree
   add_index "comment_hierarchies", ["descendant_id"], name: "tag_desc_idx", using: :btree
 
-  create_table "comment_votes", force: :cascade do |t|
-    t.integer  "comment_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "comment_votes", ["comment_id"], name: "index_comment_votes_on_comment_id", using: :btree
-  add_index "comment_votes", ["created_at"], name: "index_comment_votes_on_created_at", using: :btree
-  add_index "comment_votes", ["user_id"], name: "index_comment_votes_on_user_id", using: :btree
-
   create_table "comments", force: :cascade do |t|
     t.integer  "discussion_id",       default: 0
     t.text     "body",                default: ""
@@ -131,15 +122,6 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   add_index "comments", ["discussion_id"], name: "index_comments_on_discussion_id", using: :btree
   add_index "comments", ["parent_id"], name: "index_comments_on_parent_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
-
-  create_table "communities", force: :cascade do |t|
-    t.string   "community_type",              null: false
-    t.jsonb    "custom_fields",  default: {}, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "identity_id"
-    t.string   "identifier"
-  end
 
   create_table "contact_messages", force: :cascade do |t|
     t.string   "name"
@@ -200,14 +182,14 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.integer  "read_salient_items_count", default: 0,     null: false
     t.integer  "volume"
     t.boolean  "participating",            default: false, null: false
-    t.boolean  "starred",                  default: false, null: false
     t.datetime "dismissed_at"
+    t.string   "read_ranges_string"
   end
 
-  add_index "discussion_readers", ["discussion_id"], name: "index_discussion_readers_on_discussion_id", using: :btree
+  add_index "discussion_readers", ["discussion_id"], name: "index_motion_read_logs_on_discussion_id", using: :btree
+  add_index "discussion_readers", ["last_read_at"], name: "index_discussion_readers_on_last_read_at", using: :btree
   add_index "discussion_readers", ["participating"], name: "index_discussion_readers_on_participating", using: :btree
-  add_index "discussion_readers", ["starred"], name: "index_discussion_readers_on_starred", using: :btree
-  add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_readers_on_user_id_and_discussion_id", using: :btree
+  add_index "discussion_readers", ["user_id", "discussion_id"], name: "index_discussion_readers_on_user_id_and_discussion_id", unique: true, using: :btree
   add_index "discussion_readers", ["user_id", "volume"], name: "index_discussion_readers_on_user_id_and_volume", using: :btree
   add_index "discussion_readers", ["user_id"], name: "index_motion_read_logs_on_user_id", using: :btree
   add_index "discussion_readers", ["volume"], name: "index_discussion_readers_on_volume", using: :btree
@@ -235,30 +217,50 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.string   "title"
     t.datetime "last_comment_at"
     t.text     "description"
-    t.boolean  "uses_markdown",       default: false, null: false
-    t.boolean  "is_deleted",          default: false, null: false
-    t.integer  "items_count",         default: 0,     null: false
+    t.boolean  "uses_markdown",                   default: false, null: false
+    t.integer  "items_count",                     default: 0,     null: false
+    t.datetime "closed_at"
     t.boolean  "private"
     t.string   "key"
     t.datetime "archived_at"
     t.string   "iframe_src"
     t.datetime "last_activity_at"
-    t.integer  "last_sequence_id",    default: 0,     null: false
-    t.integer  "first_sequence_id",   default: 0,     null: false
-    t.integer  "salient_items_count", default: 0,     null: false
-    t.integer  "versions_count",      default: 0
-    t.integer  "closed_polls_count",  default: 0,     null: false
+    t.integer  "last_sequence_id",                default: 0,     null: false
+    t.integer  "first_sequence_id",               default: 0,     null: false
+    t.integer  "salient_items_count",             default: 0,     null: false
+    t.integer  "versions_count",                  default: 0
+    t.integer  "closed_polls_count",              default: 0,     null: false
+    t.boolean  "pinned",                          default: false, null: false
+    t.integer  "importance",                      default: 0,     null: false
+    t.integer  "seen_by_count",                   default: 0,     null: false
+    t.string   "ranges_string"
   end
 
   add_index "discussions", ["author_id"], name: "index_discussions_on_author_id", using: :btree
   add_index "discussions", ["created_at"], name: "index_discussions_on_created_at", using: :btree
   add_index "discussions", ["group_id"], name: "index_discussions_on_group_id", using: :btree
-  add_index "discussions", ["is_deleted", "archived_at", "private"], name: "index_discussions_visible", using: :btree
-  add_index "discussions", ["is_deleted", "archived_at"], name: "index_discussions_on_is_deleted_and_archived_at", using: :btree
-  add_index "discussions", ["is_deleted"], name: "index_discussions_on_is_deleted", using: :btree
   add_index "discussions", ["key"], name: "index_discussions_on_key", unique: true, using: :btree
   add_index "discussions", ["last_activity_at"], name: "index_discussions_on_last_activity_at", order: {"last_activity_at"=>:desc}, using: :btree
   add_index "discussions", ["private"], name: "index_discussions_on_private", using: :btree
+
+  create_table "documents", force: :cascade do |t|
+    t.integer  "model_id"
+    t.string   "model_type"
+    t.string   "title"
+    t.string   "url"
+    t.string   "doctype",        null: false
+    t.string   "color",          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "icon"
+    t.integer  "author_id",      null: false
+    t.string   "web_url"
+    t.string   "thumb_url"
+    t.string   "file_file_name"
+  end
+
+  add_index "documents", ["model_id"], name: "index_documents_on_model_id", using: :btree
+  add_index "documents", ["model_type"], name: "index_documents_on_model_type", using: :btree
 
   create_table "drafts", force: :cascade do |t|
     t.integer "user_id"
@@ -278,15 +280,20 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.integer  "user_id"
     t.integer  "discussion_id"
     t.integer  "sequence_id"
-    t.boolean  "announcement",   default: false, null: false
-    t.jsonb    "custom_fields",  default: {},    null: false
+    t.boolean  "announcement",               default: false, null: false
+    t.jsonb    "custom_fields",              default: {},    null: false
+    t.integer  "parent_id"
+    t.integer  "position",                   default: 0,     null: false
+    t.integer  "child_count",                default: 0,     null: false
+    t.integer  "depth",                      default: 0,     null: false
   end
 
   add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
   add_index "events", ["discussion_id", "sequence_id"], name: "index_events_on_discussion_id_and_sequence_id", unique: true, using: :btree
   add_index "events", ["discussion_id"], name: "index_events_on_discussion_id", using: :btree
   add_index "events", ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
-  add_index "events", ["sequence_id"], name: "index_events_on_sequence_id", using: :btree
+  add_index "events", ["parent_id", "position"], name: "index_events_on_parent_id_and_position", where: "(parent_id IS NOT NULL)", using: :btree
+  add_index "events", ["parent_id"], name: "index_events_on_parent_id", where: "(parent_id IS NOT NULL)", using: :btree
 
   create_table "group_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id",   null: false
@@ -368,20 +375,21 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.string   "country"
     t.string   "region"
     t.string   "city"
-    t.integer  "closed_motions_count",               default: 0,              null: false
-    t.boolean  "enable_experiments",                 default: false
-    t.boolean  "analytics_enabled",                  default: false,          null: false
-    t.integer  "proposal_outcomes_count",            default: 0,              null: false
-    t.jsonb    "experiences",                        default: {},             null: false
-    t.integer  "pending_invitations_count",          default: 0,              null: false
-    t.jsonb    "features",                           default: {},             null: false
-    t.integer  "recent_activity_count",              default: 0,              null: false
-    t.integer  "community_id"
-    t.integer  "closed_polls_count",                 default: 0,              null: false
-    t.integer  "announcement_recipients_count",      default: 0,              null: false
-    t.integer  "polls_count",                        default: 0,              null: false
-    t.string   "type",                               default: "FormalGroup",  null: false
-    t.integer  "subgroups_count",                    default: 0,              null: false
+    t.integer  "closed_motions_count",                           default: 0,              null: false
+    t.boolean  "enable_experiments",                             default: false
+    t.boolean  "analytics_enabled",                              default: false,          null: false
+    t.integer  "proposal_outcomes_count",                        default: 0,              null: false
+    t.jsonb    "experiences",                                    default: {},             null: false
+    t.integer  "pending_invitations_count",                      default: 0,              null: false
+    t.jsonb    "features",                                       default: {},             null: false
+    t.integer  "recent_activity_count",                          default: 0,              null: false
+    t.integer  "closed_polls_count",                             default: 0,              null: false
+    t.integer  "announcement_recipients_count",                  default: 0,              null: false
+    t.integer  "polls_count",                                    default: 0,              null: false
+    t.integer  "subgroups_count",                                default: 0,              null: false
+    t.string   "type",                                           default: "FormalGroup",  null: false
+    t.integer  "open_discussions_count",                         default: 0,              null: false
+    t.integer  "closed_discussions_count",                       default: 0,              null: false
   end
 
   add_index "groups", ["archived_at"], name: "index_groups_on_archived_at", using: :btree
@@ -419,6 +427,7 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   add_index "invitations", ["accepted_at"], name: "index_invitations_on_accepted_at", where: "(accepted_at IS NULL)", using: :btree
   add_index "invitations", ["cancelled_at"], name: "index_invitations_on_cancelled_at", using: :btree
   add_index "invitations", ["created_at"], name: "index_invitations_on_created_at", using: :btree
+  add_index "invitations", ["group_id"], name: "index_invitations_on_group_id", using: :btree
   add_index "invitations", ["recipient_email"], name: "index_invitations_on_recipient_email", using: :btree
   add_index "invitations", ["single_use"], name: "index_invitations_on_single_use", using: :btree
   add_index "invitations", ["token"], name: "index_invitations_on_token", using: :btree
@@ -470,6 +479,7 @@ ActiveRecord::Schema.define(version: 20170804043327) do
 
   add_index "memberships", ["created_at"], name: "index_memberships_on_created_at", using: :btree
   add_index "memberships", ["group_id", "user_id", "is_suspended", "archived_at"], name: "active_memberships", using: :btree
+  add_index "memberships", ["group_id", "user_id"], name: "index_memberships_on_group_id_and_user_id", unique: true, using: :btree
   add_index "memberships", ["group_id"], name: "index_memberships_on_group_id", using: :btree
   add_index "memberships", ["inviter_id"], name: "index_memberships_on_inviter_id", using: :btree
   add_index "memberships", ["user_id", "volume"], name: "index_memberships_on_user_id_and_volume", using: :btree
@@ -631,36 +641,48 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   add_index "poll_unsubscriptions", ["user_id"], name: "index_poll_unsubscriptions_on_user_id", using: :btree
 
   create_table "polls", force: :cascade do |t|
-    t.integer  "author_id",                               null: false
-    t.string   "title",                                   null: false
+    t.integer  "author_id",                             null: false
+    t.string   "title",                                 null: false
     t.text     "details"
     t.datetime "closing_at"
     t.datetime "closed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "discussion_id"
-    t.string   "key",                                     null: false
-    t.string   "poll_type",                               null: false
-    t.jsonb    "stance_data",             default: {}
-    t.integer  "stances_count",           default: 0,     null: false
-    t.boolean  "multiple_choice",         default: false, null: false
-    t.jsonb    "custom_fields",           default: {},    null: false
-    t.jsonb    "stance_counts",           default: [],    null: false
+    t.string   "key",                                   null: false
+    t.string   "poll_type",                             null: false
+    t.jsonb    "stance_data",           default: {}
+    t.integer  "stances_count",         default: 0,     null: false
+    t.boolean  "multiple_choice",       default: false, null: false
+    t.jsonb    "custom_fields",         default: {},    null: false
+    t.jsonb    "stance_counts",         default: [],    null: false
     t.integer  "group_id"
-    t.jsonb    "matrix_counts",           default: [],    null: false
-    t.boolean  "notify_on_participate",   default: false, null: false
-    t.integer  "visitors_count",          default: 0,     null: false
-    t.boolean  "example",                 default: false, null: false
-    t.integer  "undecided_user_count",    default: 0,     null: false
-    t.integer  "undecided_visitor_count", default: 0,     null: false
-    t.boolean  "voter_can_add_options",   default: false, null: false
+    t.jsonb    "matrix_counts",         default: [],    null: false
+    t.boolean  "notify_on_participate", default: false, null: false
+    t.boolean  "example",               default: false, null: false
+    t.integer  "undecided_user_count",  default: 0,     null: false
+    t.boolean  "voter_can_add_options", default: false, null: false
     t.integer  "guest_group_id"
+    t.boolean  "anonymous",             default: false, null: false
   end
 
   add_index "polls", ["author_id"], name: "index_polls_on_author_id", using: :btree
   add_index "polls", ["discussion_id"], name: "index_polls_on_discussion_id", using: :btree
   add_index "polls", ["group_id"], name: "index_polls_on_group_id", using: :btree
   add_index "polls", ["guest_group_id"], name: "index_polls_on_guest_group_id", unique: true, using: :btree
+
+  create_table "reactions", force: :cascade do |t|
+    t.integer  "reactable_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "reaction",       default: "+1",      null: false
+    t.string   "reactable_type", default: "Comment", null: false
+  end
+
+  add_index "reactions", ["created_at"], name: "index_reactions_on_created_at", using: :btree
+  add_index "reactions", ["reactable_id", "reactable_type"], name: "index_reactions_on_reactable_id_and_reactable_type", using: :btree
+  add_index "reactions", ["user_id"], name: "index_reactions_on_user_id", using: :btree
 
   create_table "stance_choices", force: :cascade do |t|
     t.integer  "stance_id"
@@ -674,16 +696,15 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   add_index "stance_choices", ["stance_id"], name: "index_stance_choices_on_stance_id", using: :btree
 
   create_table "stances", force: :cascade do |t|
-    t.integer  "poll_id",                         null: false
-    t.integer  "participant_id",                  null: false
-    t.string   "participant_type",                null: false
+    t.integer  "poll_id",                       null: false
+    t.integer  "participant_id",                null: false
     t.string   "reason"
-    t.boolean  "latest",           default: true, null: false
+    t.boolean  "latest",         default: true, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "stances", ["participant_id", "participant_type"], name: "index_stances_on_participant_id_and_participant_type", using: :btree
+  add_index "stances", ["participant_id"], name: "index_stances_on_participant_id", using: :btree
   add_index "stances", ["poll_id"], name: "index_stances_on_poll_id", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
@@ -722,6 +743,33 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.datetime "app_logo_updated_at"
     t.text     "javascript"
   end
+
+  create_table "translations", force: :cascade do |t|
+    t.integer  "translatable_id"
+    t.string   "translatable_type", limit: 255
+    t.hstore   "fields"
+    t.string   "language",          limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "translations", ["translatable_type", "translatable_id"], name: "index_translations_on_translatable_type_and_translatable_id", using: :btree
+
+  create_table "usage_reports", force: :cascade do |t|
+    t.integer  "groups_count"
+    t.integer  "users_count"
+    t.integer  "discussions_count"
+    t.integer  "polls_count"
+    t.integer  "comments_count"
+    t.integer  "stances_count"
+    t.integer  "visits_count"
+    t.string   "canonical_host"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "version"
+  end
+
+  add_index "usage_reports", ["canonical_host"], name: "index_usage_reports_on_canonical_host", using: :btree
 
   create_table "user_deactivation_responses", force: :cascade do |t|
     t.integer "user_id"
@@ -770,8 +818,10 @@ ActiveRecord::Schema.define(version: 20170804043327) do
     t.integer  "facebook_community_id"
     t.integer  "slack_community_id"
     t.string   "remember_token"
-    t.string   "short_bio",                        default: "",         null: false
-    t.boolean  "email_verified",                   default: false,      null: false
+    t.string   "short_bio",                                    default: "",         null: false
+    t.boolean  "email_verified",                               default: false,      null: false
+    t.string   "location",                                     default: "",         null: false
+    t.datetime "last_seen_at",                                 default: "now()",    null: false
   end
 
   add_index "users", ["deactivated_at"], name: "index_users_on_deactivated_at", using: :btree
@@ -793,18 +843,7 @@ ActiveRecord::Schema.define(version: 20170804043327) do
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
-
-  create_table "visitors", force: :cascade do |t|
-    t.string   "participation_token"
-    t.string   "name"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "avatar_kind",         default: "initials", null: false
-    t.string   "avatar_initials"
-    t.integer  "community_id",                             null: false
-    t.boolean  "revoked",             default: false,      null: false
-  end
+  add_index "versions", ["whodunnit"], name: "index_versions_on_whodunnit", using: :btree
 
   create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
     t.uuid     "visitor_id"

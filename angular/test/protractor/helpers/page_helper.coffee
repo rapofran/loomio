@@ -13,7 +13,7 @@ module.exports = new class PageHelper
   loadPath: (path, timeout = jasmine.DEFAULT_TIMEOUT_INTERVAL) ->
     browser.get('dev/'+path, timeout)
 
-  waitForReload: (time=5000)->
+  waitForReload: (time=2000)->
     browser.driver.sleep(time)
     browser.waitForAngular()
 
@@ -34,13 +34,16 @@ module.exports = new class PageHelper
       element(By.css(selector)).click()
 
   clickFirst: (selector) ->
-    element.all(By.css(selector)).first().click()
+    @findFirst(selector).click()
 
   clickLast: (selector) ->
-    element.all(By.css(selector)).last().click()
+    @findLast(selector).click()
 
   findFirst: (selector) ->
     element.all(By.css(selector)).first()
+
+  findLast: (selector) ->
+    element.all(By.css(selector)).last()
 
   fillIn: (selector, value) ->
     element(By.css(selector)).clear().sendKeys(value)
@@ -50,7 +53,7 @@ module.exports = new class PageHelper
 
   selectOption: (selector, option) ->
     @click selector
-    element(By.cssContainingText('option', option)).click()
+    element(By.cssContainingText('md-option', option)).click()
 
   expectInputValue: (selector, value) ->
     expect(element(By.css(selector)).getAttribute('value')).toContain(value)
@@ -72,7 +75,7 @@ module.exports = new class PageHelper
 
   expectSelected: ->
     _.each given(arguments), (selector) ->
-      element(By.css(selector)).isSelected().then (selected) ->
+      element(By.css("#{selector}.md-checked")).isSelected().then (selected) ->
         if !selected
           console.log "unexpected not selected", selector, selected
         expect(selected).toBe(true)
@@ -91,8 +94,9 @@ module.exports = new class PageHelper
     @click '.auth-signin-form__submit'
 
   signInViaEmail: (email) ->
-    @fillIn '.md-input', 'new@account.com'
+    @fillIn '.auth-email-form__email input', 'new@account.com'
     @click '.auth-email-form__submit'
-    @fillIn '.md-input', 'New Account'
+    @fillIn '.auth-form input', 'New Account'
     @click '.auth-signup-form__submit'
     @loadPath 'use_last_login_token'
+    @click '.auth-signin-form__submit'

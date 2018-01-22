@@ -33,6 +33,7 @@ describe Event do
   before do
     ActionMailer::Base.deliveries = []
     parent_comment
+    DiscussionService.create(discussion: discussion, actor: discussion.author)
     discussion.group.add_member!(mentioned_user)
     discussion.group.add_member!(parent_comment.author)
 
@@ -174,7 +175,7 @@ describe Event do
   describe 'poll_edited' do
     it 'makes an announcement to participants' do
       FactoryGirl.create(:stance, poll: poll, choice: poll.poll_options.first.name, participant: user_thread_loud)
-      expect { Events::PollEdited.publish!(poll.versions.last, poll.author, true) }.to change { emails_sent }
+      expect { Events::PollEdited.publish!(poll, poll.author, true) }.to change { emails_sent }
       email_users = Events::PollEdited.last.send(:email_recipients)
       email_users.should      include user_thread_loud
       email_users.should_not  include user_membership_loud
@@ -206,7 +207,7 @@ describe Event do
     end
 
     it 'notifies mentioned users' do
-      expect { Events::PollEdited.publish!(poll.versions.last, poll.author) }.to change { emails_sent }
+      expect { Events::PollEdited.publish!(poll, poll.author) }.to change { emails_sent }
       email_users = Events::PollEdited.last.send(:email_recipients)
       expect(email_users.length).to eq 1
       expect(email_users).to include user_mentioned
@@ -218,7 +219,6 @@ describe Event do
   end
 
   describe 'poll_closing_soon' do
-    let(:visitor) { poll.community_of_type(:email, build: true).tap(&:save!).visitors.create(name: 'jimbo', email: 'helllloo@example.com')}
     describe 'voters_review_responses', focus: true do
       it 'true' do
         poll = FactoryGirl.build(:poll_proposal, discussion: discussion, make_announcement: true)
@@ -247,18 +247,6 @@ describe Event do
         emailed_users = Events::PollClosingSoon.last.send(:email_recipients)
         emailed_users.should_not include user_thread_loud
         emailed_users.should include user_thread_normal
-      end
-
-      it 'deals with visitors' do
-        poll = FactoryGirl.create(:poll, discussion: discussion)
-        Event.create(kind: 'poll_created', announcement: true, eventable: poll)
-        FactoryGirl.create(:stance, poll: poll, choice: poll.poll_options.first.name, participant: visitor)
-        FactoryGirl.create(:stance, poll: poll, choice: poll.poll_options.first.name, participant: user_thread_loud)
-        Events::PollClosingSoon.publish!(poll)
-
-        notified_users = Events::PollClosingSoon.last.send(:notification_recipients)
-        notified_users.should_not include user_thread_loud
-        notified_users.should include user_thread_normal
       end
     end
 
@@ -332,8 +320,7 @@ describe Event do
     it 'notifies everyone if announcement' do
       poll.make_announcement = true
       Events::PollCreated.publish!(poll, poll.author)
-      Events::PollExpired.publish!(poll)
-      event = Events::PollExpired.last
+      event = Events::PollExpired.publish!(poll)
 
       expect(event.announcement).to eq true
       email_users = event.send(:email_recipients)
@@ -496,6 +483,24 @@ describe Event do
     end
   end
 
+  describe 'invitation_accepted' do
+    let(:poll) { create :poll }
+    let(:guest_membership) { create :membership, group: poll.guest_group }
+    let(:formal_membership) { create :membership, group: create(:formal_group) }
+
+    it 'links to a group for a formal group invitation' do
+      event = Events::InvitationAccepted.publish!(guest_membership)
+      expect(event.send(:notification_url)).to match "p/#{poll.key}"
+      expect(event.send(:notification_translation_title)).to eq poll.title
+    end
+
+    it 'links to an invitation target for a guest group invitation' do
+      event = Events::InvitationAccepted.publish!(formal_membership)
+      expect(event.send(:notification_url)).to match "g/#{formal_membership.group.key}"
+      expect(event.send(:notification_translation_title)).to eq formal_membership.group.full_name
+    end
+  end
+
   describe 'stance_created' do
     let(:stance) { build :stance, poll: poll }
 
@@ -523,6 +528,13 @@ describe Event do
       expect { Events::StanceCreated.publish!(stance) }.to_not change { emails_sent }
       expect(Events::StanceCreated.last.send(:email_recipients)).to be_empty
       expect(Events::StanceCreated.last.send(:notification_recipients)).to be_empty
+    end
+
+    it 'does not notify deactivated users' do
+      poll.author.update(deactivated_at: 1.day.ago)
+      expect { Events::StanceCreated.publish!(stance) }.to_not change { emails_sent }
+      email_users = Events::StanceCreated.last.send(:email_recipients)
+      expect(email_users).to be_empty
     end
   end
 end

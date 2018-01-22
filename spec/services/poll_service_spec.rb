@@ -7,7 +7,6 @@ describe PollService do
   let(:poll) { create :poll, discussion: discussion }
   let(:user) { create :user }
   let(:another_user) { create :user }
-  let(:visitor) { LoggedOutUser.new }
   let(:group) { create :formal_group }
   let(:another_group) { create :formal_group }
 
@@ -16,36 +15,6 @@ describe PollService do
   let(:identity) { create :slack_identity }
 
   before { group.add_member!(user) }
-
-  describe '#convert_visitors' do
-    # convert visitors with stances to unverified users
-    # convert visitors without stances to invitaitons for open polls
-    it 'converts visitors with stances to unverified users' do
-      visitor = Visitor.new(name: "joe", email: 'joe@example.com')
-      community = poll.community_of_type(:email, build: true)
-      community.visitors << visitor
-      community.save
-      visitor.reload
-      stance = create :stance, poll: poll, participant: visitor
-      expect { PollService.convert_visitors(poll: poll)}.to change {poll.guest_group.members.count}.by(1)
-      expect(poll.guest_group.members.count).to eq 1
-      user = poll.guest_group.members.first
-      expect(stance.reload.participant).to eq user
-    end
-
-    it 'converts visitors without stances to invitations' do
-      visitor = Visitor.new(name: "joe", email: 'joe@example.com')
-      community = poll.community_of_type(:email, build: true)
-      community.visitors << visitor
-      community.save
-      visitor.reload
-      poll.save
-      expect { PollService.convert_visitors(poll: poll)}.to_not change {poll.guest_group.members.count}
-      expect(poll.guest_group.reload.invitations.count).to eq 1
-      invitation = poll.guest_group.invitations.first
-      expect(invitation.recipient_email).to eq visitor.email
-    end
-  end
 
   describe '#create' do
     it 'creates a new poll' do
@@ -118,11 +87,32 @@ describe PollService do
       expect(poll_created.reload.title).to eq old_title
     end
 
-    it 'makes an announcement to participants if make_announcement is true' do
-      stance
-      expect {
-        PollService.update(poll: poll_created, params: { details: "A new description", make_announcement: true }, actor: user)
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    describe 'announcements' do
+      it 'creates a new poll_created event when changing groups' do
+        expect {
+          PollService.update(poll: poll_created, params: { group_id: another_group.id }, actor: user)
+        }.to change { Event.where(kind: :poll_created).count }.by(1)
+        expect(Event.where(kind: :poll_created).last.announcement).to eq true
+      end
+
+      it 'does not create a poll_created event when not changing groups' do
+        expect {
+          PollService.update(poll: poll_created, params: { details: "A new description" }, actor: user)
+        }.to_not change { Event.where(kind: :poll_created).count }
+      end
+
+      it 'does not create a poll_created event for trivial updates' do
+        expect {
+          PollService.update(poll: poll_created, params: { anyone_can_participate: true }, actor: user)
+        }.to_not change { Event.where(kind: :poll_created).count }
+      end
+
+      it 'makes an announcement to participants if make_announcement is true' do
+        stance
+        expect {
+          PollService.update(poll: poll_created, params: { details: "A new description", make_announcement: true }, actor: user)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
     end
 
     it 'creates a new poll edited event for poll option changes' do

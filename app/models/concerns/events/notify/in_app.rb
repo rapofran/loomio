@@ -8,7 +8,7 @@ module Events::Notify::InApp
 
   # send event notifications
   def notify_users!
-    notifications.import(notification_recipients.without(user).map { |recipient| notification_for(recipient) })
+    notifications.import(notification_recipients.active.without(user).map { |recipient| notification_for(recipient) })
   end
   handle_asynchronously :notify_users!
 
@@ -52,10 +52,17 @@ module Events::Notify::InApp
 
   def notification_translation_title
     case eventable
-    when PaperTrail::Version              then eventable.item.title
-    when Comment, CommentVote, Discussion then eventable.discussion.title
-    when Group, Membership                then eventable.group.full_name
-    when Poll, Outcome                    then eventable.poll.title
+    when PaperTrail::Version then eventable.item.title
+    when Comment, Discussion then eventable.discussion.title
+    when Poll, Outcome       then eventable.poll.title
+    # TODO: deal with polymorphic reactions here
+    when Reaction            then eventable.reactable.discussion.title
+    when Group, Membership
+      if eventable.group.is_a?(FormalGroup)
+        eventable.group.full_name
+      else
+        eventable.group.invitation_target.title
+      end
     end
   end
 end

@@ -1,14 +1,22 @@
-angular.module('loomioApp').factory 'AbilityService', (AppConfig, Session) ->
+angular.module('loomioApp').factory 'AbilityService', (AppConfig, Records, Session) ->
   new class AbilityService
 
-    isLoggedIn: =>
+    isLoggedIn: ->
       @isUser() and !Session.user().restricted?
 
-    isEmailVerified: =>
+    isSiteAdmin: ->
+      @isLoggedIn() and Session.user().isAdmin
+
+    isEmailVerified: ->
       @isLoggedIn() && Session.user().emailVerified
 
     isUser: ->
       AppConfig.currentUserId?
+
+    canContactUser: (user) ->
+      @isLoggedIn() &&
+      Session.user().id != user.id &&
+      _.intersection(Session.user().groupIds(), user.groupIds()).length
 
     canAddComment: (thread) ->
       Session.user().isMemberOf(thread.group())
@@ -20,10 +28,38 @@ angular.module('loomioApp').factory 'AbilityService', (AppConfig, Session) ->
       group and
       (@canAdministerGroup(group) or Session.user().isMemberOf(group) and group.membersCanRaiseMotions)
 
+    canParticipateInPoll: (poll) ->
+      return false unless poll
+      @canAdministerPoll(poll) or
+      !poll.group() or
+      Session.user().isMemberOf(poll.guestGroup()) or
+      (Session.user().isMemberOf(poll.group()) and poll.group().membersCanVote)
+
+    canReactToPoll: (poll) ->
+      @isEmailVerified() and @canParticipateInPoll(poll)
+
+    canEditStance: (stance) ->
+      Session.user() == stance.author()
+
     canEditThread: (thread) ->
       @canAdministerGroup(thread.group()) or
       Session.user().isMemberOf(thread.group()) and
       (Session.user().isAuthorOf(thread) or thread.group().membersCanEditDiscussions)
+
+    canRemoveEventFromThread: (event) ->
+      event.kind == 'discussion_edited' && @canAdministerDiscussion(event.discussion())
+
+    canCloseThread: (thread) ->
+      @canAdministerDiscussion(thread)
+
+    canReopenThread: (thread) ->
+      @canAdministerDiscussion(thread)
+
+    canPinThread: (thread) ->
+      !thread.closedAt && !thread.pinned && @canAdministerGroup(thread.group())
+
+    canUnpinThread: (thread) ->
+      !thread.closedAt && thread.pinned && @canAdministerGroup(thread.group())
 
     canMoveThread: (thread) ->
       @canAdministerGroup(thread.group()) or
@@ -39,8 +75,21 @@ angular.module('loomioApp').factory 'AbilityService', (AppConfig, Session) ->
     canChangeGroupVolume: (group) ->
       Session.user().isMemberOf(group)
 
+    canAdminister: (model) ->
+      switch model.constructor.singular
+        when 'group'                     then @canAdministerGroup(model.group())
+        when 'discussion', 'comment'     then @canAdministerDiscussion(model.discussion())
+        when 'outcome', 'stance', 'poll' then @canAdministerPoll(model.poll())
+
     canAdministerGroup: (group) ->
       Session.user().isAdminOf(group)
+
+    canAdministerDiscussion: (discussion) ->
+      Session.user().isAuthorOf(discussion) or
+      @canAdministerGroup(discussion.group())
+
+    canChangeVolume: (discussion) ->
+      Session.user().isMemberOf(discussion.group())
 
     canManageGroupSubscription: (group) ->
       group.isParent() and
@@ -60,13 +109,22 @@ angular.module('loomioApp').factory 'AbilityService', (AppConfig, Session) ->
       @canAdministerGroup(group) or
       (Session.user().isMemberOf(group) and group.membersCanAddMembers)
 
+    canAddDocuments: (group) ->
+      @canAdministerGroup(group)
+
+    canEditDocument: (group) ->
+      @canAdministerGroup(group)
+
     canCreateSubgroups: (group) ->
       group.isParent() and
       (@canAdministerGroup(group) or
       (Session.user().isMemberOf(group) and group.membersCanCreateSubgroups))
 
     canEditGroup: (group) ->
-      @canAdministerGroup(group)
+      @canAdministerGroup(group) or @isSiteAdmin()
+
+    canLeaveGroup: (group) ->
+      Session.user().membershipFor(group)?
 
     canArchiveGroup: (group) ->
       @canAdministerGroup(group)
@@ -92,6 +150,12 @@ angular.module('loomioApp').factory 'AbilityService', (AppConfig, Session) ->
 
     canManageMembershipRequests: (group) ->
       (group.membersCanAddMembers and Session.user().isMemberOf(group)) or @canAdministerGroup(group)
+
+    canViewPublicGroups: ->
+      AppConfig.features.app.public_groups
+
+    canStartGroups: ->
+      AppConfig.features.app.create_group || Session.user().isAdmin
 
     canViewGroup: (group) ->
       !group.privacyIsSecret() or
@@ -132,6 +196,9 @@ angular.module('loomioApp').factory 'AbilityService', (AppConfig, Session) ->
 
     canSharePoll: (poll) ->
       @canEditPoll(poll)
+
+    canRemovePollOptions: (poll) ->
+      poll.isNew() || (poll.isActive() && poll.stancesCount == 0)
 
     canEditPoll: (poll) ->
       poll.isActive() and @canAdministerPoll(poll)

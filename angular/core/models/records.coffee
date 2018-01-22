@@ -1,6 +1,5 @@
 angular.module('loomioApp').factory 'Records', (RecordStore,
                                                 RecordStoreDatabaseName,
-                                                AttachmentRecordsInterface,
                                                 CommentRecordsInterface,
                                                 DiscussionRecordsInterface,
                                                 EventRecordsInterface,
@@ -25,15 +24,14 @@ angular.module('loomioApp').factory 'Records', (RecordStore,
                                                 StanceChoiceRecordsInterface,
                                                 OutcomeRecordsInterface,
                                                 PollDidNotVoteRecordsInterface,
-                                                VisitorRecordsInterface,
                                                 IdentityRecordsInterface,
-                                                CommunityRecordsInterface,
-                                                PollCommunityRecordsInterface,
                                                 ContactMessageRecordsInterface,
-                                                GroupIdentityRecordsInterface) ->
+                                                GroupIdentityRecordsInterface,
+                                                ReactionRecordsInterface,
+                                                ContactRequestRecordsInterface,
+                                                DocumentRecordsInterface) ->
   db = new loki(RecordStoreDatabaseName)
   recordStore = new RecordStore(db)
-  recordStore.addRecordsInterface(AttachmentRecordsInterface)
   recordStore.addRecordsInterface(CommentRecordsInterface)
   recordStore.addRecordsInterface(DiscussionRecordsInterface)
   recordStore.addRecordsInterface(EventRecordsInterface)
@@ -58,10 +56,10 @@ angular.module('loomioApp').factory 'Records', (RecordStore,
   recordStore.addRecordsInterface(StanceChoiceRecordsInterface)
   recordStore.addRecordsInterface(OutcomeRecordsInterface)
   recordStore.addRecordsInterface(PollDidNotVoteRecordsInterface)
-  recordStore.addRecordsInterface(VisitorRecordsInterface)
   recordStore.addRecordsInterface(IdentityRecordsInterface)
-  recordStore.addRecordsInterface(CommunityRecordsInterface)
-  recordStore.addRecordsInterface(PollCommunityRecordsInterface)
   recordStore.addRecordsInterface(ContactMessageRecordsInterface)
   recordStore.addRecordsInterface(GroupIdentityRecordsInterface)
+  recordStore.addRecordsInterface(ReactionRecordsInterface)
+  recordStore.addRecordsInterface(ContactRequestRecordsInterface)
+  recordStore.addRecordsInterface(DocumentRecordsInterface)
   recordStore

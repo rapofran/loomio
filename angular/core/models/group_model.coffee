@@ -1,5 +1,5 @@
-angular.module('loomioApp').factory 'GroupModel', (DraftableModel, AppConfig) ->
-  class GroupModel extends DraftableModel
+angular.module('loomioApp').factory 'GroupModel', (BaseModel, HasDrafts, HasDocuments, AppConfig) ->
+  class GroupModel extends BaseModel
     @singular: 'group'
     @plural: 'groups'
     @uniqueIndices: ['id', 'key']
@@ -27,14 +27,25 @@ angular.module('loomioApp').factory 'GroupModel', (DraftableModel, AppConfig) ->
       membersCanCreateSubgroups: false
       motionsCanBeEdited: false
 
+    afterConstruction: ->
+      if @privacyIsClosed()
+        @allowPublicThreads = @discussionPrivacyOptions == 'public_or_private'
+      HasDrafts.apply @
+      HasDocuments.apply @, showTitle: true
+
     relationships: ->
       @hasMany 'discussions'
       @hasMany 'polls'
       @hasMany 'membershipRequests'
       @hasMany 'memberships'
       @hasMany 'invitations'
+      @hasMany 'groupIdentities'
+      @hasMany 'allDocuments', from: 'documents', with: 'groupId', of: 'id'
       @hasMany 'subgroups', from: 'groups', with: 'parentId', of: 'id'
       @belongsTo 'parent', from: 'groups'
+
+    hasRelatedDocuments: ->
+      @hasDocuments() or @allDocuments().length > 0
 
     parentOrSelf: ->
       if @isParent() then @ else @parent()
@@ -126,12 +137,6 @@ angular.module('loomioApp').factory 'GroupModel', (DraftableModel, AppConfig) ->
     privacyIsSecret: ->
       @groupPrivacy == 'secret'
 
-    allowPublicDiscussions: ->
-      if @privacyIsClosed() && @isNew()
-        true
-      else
-        @discussionPrivacyOptions != 'private_only'
-
     isSubgroup: ->
       @parentId?
 
@@ -147,7 +152,7 @@ angular.module('loomioApp').factory 'GroupModel', (DraftableModel, AppConfig) ->
       else if @isSubgroup()
         @parent().logoUrl()
       else
-        '/img/default-logo-medium.png'
+        AppConfig.theme.default_group_logo_src
 
     coverUrl: (size) ->
       if @isSubgroup() && !@hasCustomCover
@@ -168,3 +173,7 @@ angular.module('loomioApp').factory 'GroupModel', (DraftableModel, AppConfig) ->
 
     isSubgroupOfSecretParent: ->
       @isSubgroup() && @parent().privacyIsSecret()
+
+    groupIdentityFor: (type) ->
+      _.find @groupIdentities(), (gi) ->
+        gi.userIdentity().identityType == type

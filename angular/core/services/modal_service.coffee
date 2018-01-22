@@ -1,30 +1,38 @@
-angular.module('loomioApp').factory 'ModalService', ($mdDialog, $rootScope, $timeout, $translate, AppConfig) ->
+angular.module('loomioApp').factory 'ModalService', ($mdDialog, $rootScope, $timeout, $translate, AppConfig, LoadingService) ->
   new class ModalService
-    open: (modal, resolve = {}, opts = {}) ->
-      $rootScope.$broadcast 'modalOpened', modal
+
+    open: (modal, resolve) ->
+      AppConfig.currentModal = buildModal(modal, resolve)
+      $mdDialog.show(AppConfig.currentModal)
+        .then    -> $rootScope.$broadcast 'modalOpened', modal
+        .finally -> delete AppConfig.currentModal
+
+    buildModal = (modal, resolve = {}) ->
+      resolve = _.merge (preventClose: -> false), resolve
       $scope = $rootScope.$new(true)
-      $scope.$close = $mdDialog.cancel
-      $scope.focus = -> $timeout(->
+      $scope.$close      = $mdDialog.cancel
+      $scope.$on '$close', $mdDialog.cancel
+      $scope.$on 'focus',  focusElement
+      LoadingService.listenForLoading $scope
+
+      $mdDialog.alert
+        role:           'dialog'
+        backdrop:       'static'
+        scope:          $scope
+        templateUrl:    modal.templateUrl
+        controller:     modal.controller
+        size:           modal.size or ''
+        resolve:        resolve
+        escapeToClose:  !resolve.preventClose()
+        ariaLabel:      $translate.instant("#{modal.templateUrl.split('/').pop().replace('.html', '')}.aria_label")
+        onComplete:     focusElement
+
+    focusElement = ->
+      $timeout(->
         elementToFocus = document.querySelector('md-dialog [md-autofocus]') || document.querySelector('md-dialog h1')
         elementToFocus.focus()
+        angular.element(window).triggerHandler('checkInView')
       , 400)
 
-      $scope.$on 'focus',  $scope.focus
-      $scope.$on '$close', $scope.close
-
-      resolve.preventClose = resolve.preventClose or (-> false)
-      modalType = opts.type || 'alert'
-      snakeCaseName =   modal.templateUrl.split('/').pop().replace('.html', '')
-      AppConfig.currentModal = $mdDialog[modalType](
-        scope:          $scope
-        onComplete:     $scope.focus
-        templateUrl:    modal.templateUrl
-        role:           'dialog'
-        ariaLabel:      $translate.instant(snakeCaseName + ".aria_label")
-        controller:     modal.controller
-        resolve:        resolve
-        size:           (modal.size || '')
-        backdrop:       'static'
-        escapeToClose:  !resolve.preventClose()
-      )
-      $mdDialog.show(AppConfig.currentModal).finally -> AppConfig.currentModal = undefined
+    ariaLabel = (modal) ->
+      $translate.instant "#{modal.templateUrl.split('/').pop().replace('.html', '')}.aria_label"

@@ -19,9 +19,11 @@ PollGenerator = Struct.new(:poll_type) do
       author:                  User.helper_bot,
       title:                   I18n.t(:"poll_generator.#{poll_type}.title"),
       details:                 I18n.t(:"poll_generator.#{poll_type}.details"),
-      poll_options_attributes: AppConfig.poll_templates.dig(poll_type, 'poll_options_attributes'),
       closing_at:              1.day.from_now,
-      example:                 true
+      example:                 true,
+      poll_option_names:       AppConfig.poll_templates.dig(poll_type, 'poll_options_attributes').map do |attr|
+        attr['name']
+      end
     }.merge(send(:"#{poll_type}_params"))
   end
 
@@ -69,7 +71,7 @@ PollGenerator = Struct.new(:poll_type) do
 
   def dot_vote_params
     {
-      poll_option_names: ["Product development", "Customer acquisition", "Customer support", "Enterprise Sales", "Team growth"],
+      poll_option_names: ["Product Development", "Invest in our team", "Marketing", "Growing our Consulting Business", "Community / Customer Engagement"],
       custom_fields: { dots_per_person: 8 }
     }
   end
@@ -124,6 +126,41 @@ PollGenerator = Struct.new(:poll_type) do
     generate_stance_for(poll, index: 4, reason: "", stance_choices_attributes: [
       { poll_option_id: poll.poll_option_ids[0] },
       { poll_option_id: poll.poll_option_ids[1] }
+    ])
+  end
+
+  def ranked_choice_params
+    {
+      poll_option_names: participant_names,
+      custom_fields: { minimum_stance_choices: 3 }
+    }
+  end
+
+  def ranked_choice_stances_for(poll)
+    generate_stance_for(poll, index: 0, reason: "", stance_choices_attributes: [
+      { poll_option_id: poll.poll_option_ids[0], score: 1 },
+      { poll_option_id: poll.poll_option_ids[1], score: 2 },
+      { poll_option_id: poll.poll_option_ids[2], score: 3 }
+    ])
+    generate_stance_for(poll, index: 1, reason: "", stance_choices_attributes: [
+      { poll_option_id: poll.poll_option_ids[3], score: 1 },
+      { poll_option_id: poll.poll_option_ids[4], score: 2 },
+      { poll_option_id: poll.poll_option_ids[5], score: 3 }
+    ])
+    generate_stance_for(poll, index: 2, reason: "", stance_choices_attributes: [
+      { poll_option_id: poll.poll_option_ids[4], score: 1 },
+      { poll_option_id: poll.poll_option_ids[1], score: 2 },
+      { poll_option_id: poll.poll_option_ids[5], score: 3 }
+    ])
+    generate_stance_for(poll, index: 3, reason: "", stance_choices_attributes: [
+      { poll_option_id: poll.poll_option_ids[2], score: 1 },
+      { poll_option_id: poll.poll_option_ids[1], score: 2 },
+      { poll_option_id: poll.poll_option_ids[3], score: 3 }
+    ])
+    generate_stance_for(poll, index: 4, reason: "", stance_choices_attributes: [
+      { poll_option_id: poll.poll_option_ids[5], score: 1 },
+      { poll_option_id: poll.poll_option_ids[0], score: 2 },
+      { poll_option_id: poll.poll_option_ids[2], score: 3 }
     ])
   end
 

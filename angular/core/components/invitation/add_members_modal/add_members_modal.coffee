@@ -13,6 +13,15 @@ angular.module('loomioApp').factory 'AddMembersModal', ->
       _.filter group.parent().members(), (user)->
         !user.isMemberOf(group)
 
+    $scope.select = (member) ->
+      if $scope.isSelected(member)
+        _.pull $scope.selectedIds, member.id
+      else
+        $scope.selectedIds.push member.id
+
+    $scope.isSelected = (member) ->
+      _.contains $scope.selectedIds, member.id
+
     $scope.canAddMembers = ->
       $scope.members().length > 0
 
@@ -29,7 +38,8 @@ angular.module('loomioApp').factory 'AddMembersModal', ->
         userIds: $scope.selectedIds
       .then (data) ->
         if data.memberships.length == 1
-          FlashService.success('add_members_modal.user_added_to_subgroup', name: data.users[0].name)
+          user = Records.users.find(_.first($scope.selectedIds))
+          FlashService.success('add_members_modal.user_added_to_subgroup', name: user.name)
         else
           FlashService.success('add_members_modal.users_added_to_subgroup', count: data.memberships.length)
         $scope.$close()

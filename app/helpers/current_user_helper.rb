@@ -1,13 +1,13 @@
 module CurrentUserHelper
   include PendingActionsHelper
-  
+
   def sign_in(user, verified_sign_in_method: true)
     user = UserService.verify(user: user) if verified_sign_in_method
     super(user) && handle_pending_actions(user)
   end
 
   def current_user
-    @current_user ||= token_user || super || restricted_user || LoggedOutUser.new
+    @current_user ||= token_user || super || restricted_user || LoggedOutUser.new(locale: logged_out_preferred_locale)
   end
 
   private
@@ -20,6 +20,10 @@ module CurrentUserHelper
 
   def restricted_user
     User.find_by!(params.slice(:unsubscribe_token)).tap { |user| user.restricted = true } if params[:unsubscribe_token]
+  end
+
+  def set_last_seen_at
+    current_user.update_attribute :last_seen_at, Time.now
   end
 
   def set_invitation_token

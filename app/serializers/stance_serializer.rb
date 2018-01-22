@@ -3,10 +3,14 @@ class StanceSerializer < ActiveModel::Serializer
   attributes :id, :reason, :latest, :mentioned_usernames, :created_at, :locale
 
   has_one :poll, serializer: PollSerializer
-  has_one :user, serializer: UserSerializer, root: :users
+  has_one :participant, serializer: UserSerializer, root: :users
   has_many :stance_choices, serializer: StanceChoiceSerializer, root: :stance_choices
 
-  def user
-    object.participant
+  def participant
+    object.participant_for_client(user: scope[:current_user]).presence
+  end
+
+  def include_participant?
+    participant.present?
   end
 end

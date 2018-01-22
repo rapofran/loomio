@@ -1,68 +1,27 @@
-angular.module('loomioApp').directive 'groupForm', ->
-  scope: {group: '='}
+angular.module('loomioApp').directive 'groupForm', (AppConfig, PrivacyString, AbilityService) ->
+  scope: {group: '=', modal: '=?'}
   templateUrl: 'generated/components/group/form/group_form.html'
-  controller: ($scope, $location, KeyEventService, LmoUrlService, FormService, Records, PrivacyString) ->
+  controller: ($scope) ->
 
-    $scope.i18n = do ->
-      groupMessaging = {}
+    $scope.titleLabel = ->
       if $scope.group.isParent()
-        groupMessaging.group_name = 'group_form.group_name'
-        if $scope.group.isNew()
-          groupMessaging.submit = 'group_form.submit_start_group'
-        else
-          groupMessaging.submit = 'common.action.update_settings'
+        "group_form.group_name"
       else
-        groupMessaging.group_name = 'group_form.subgroup_name'
-        if $scope.group.isNew()
-          groupMessaging.heading = 'group_form.start_subgroup_heading'
-          groupMessaging.submit = 'group_form.submit_start_subgroup'
-        else
-          groupMessaging.heading = 'group_form.edit_subgroup_heading'
-          groupMessaging.submit = 'common.action.update_settings'
-      groupMessaging
+        "group_form.subgroup_name"
 
-    submitForm = FormService.submit $scope, $scope.group,
-      drafts: true
-      skipClose: true
-      flashSuccess: ->
-        if $scope.group.isNew()
-          'group_form.messages.group_created'
-        else
-          'group_form.messages.group_updated'
-      successCallback: (response) ->
-        group = Records.groups.find(response.groups[0].key)
-        $scope.$emit 'createComplete', group
-        $location.path LmoUrlService.group(group)
-
-    $scope.submit = ->
-      if message = PrivacyString.confirmGroupPrivacyChange($scope.group)
-        submitForm() if window.confirm(message)
+    $scope.privacyOptions = ->
+      if $scope.group.isSubgroup() && $scope.group.parent().groupPrivacy == 'secret'
+        ['closed', 'secret']
       else
-        submitForm()
-
-    $scope.expandForm = ->
-      $scope.expanded = true
+        ['open', 'closed', 'secret']
 
     $scope.privacyStatement = ->
       PrivacyString.groupPrivacyStatement($scope.group)
 
-    $scope.privacyStringFor = (state) ->
-      PrivacyString.group($scope.group, state)
+    $scope.privacyStringFor = (privacy) ->
+      PrivacyString.group($scope.group, privacy)
 
-    $scope.buh = {}
-    $scope.buh.allowPublicThreads = $scope.group.allowPublicDiscussions()
+    $scope.showGroupFeatures = ->
+      AbilityService.isSiteAdmin() and _.any($scope.featureNames)
 
-    $scope.allowPublicThreadsClicked = ->
-      if $scope.buh.allowPublicThreads
-        $scope.group.discussionPrivacyOptions = 'public_or_private'
-      else
-        $scope.group.discussionPrivacyOptions = 'private_only'
-
-    $scope.groupPrivacyChanged = ->
-      $scope.group.parentMembersCanSeeDiscussions = !$scope.group.privacyIsSecret()
-      switch $scope.group.groupPrivacy
-        when 'open'   then $scope.group.discussionPrivacyOptions = 'public_only'
-        when 'closed' then $scope.allowPublicThreadsClicked()
-        when 'secret' then $scope.group.discussionPrivacyOptions = 'private_only'
-
-    KeyEventService.submitOnEnter $scope
+    $scope.featureNames = AppConfig.features.group

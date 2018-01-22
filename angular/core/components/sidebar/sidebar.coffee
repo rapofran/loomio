@@ -1,11 +1,12 @@
-angular.module('loomioApp').directive 'sidebar', ->
+angular.module('loomioApp').directive 'sidebar', ($rootScope, $mdMedia, $mdSidenav, $window, Session, InboxService, RestfulClient, UserHelpService, AppConfig, IntercomService, LmoUrlService, Records, ModalService, GroupModal, DiscussionModal, AbilityService)->
   scope: false
   restrict: 'E'
   templateUrl: 'generated/components/sidebar/sidebar.html'
   replace: true
-  controller: ($scope, Session, $rootScope, $window, RestfulClient, ThreadQueryService, UserHelpService, AppConfig, IntercomService, $mdMedia, $mdSidenav, LmoUrlService, Records, ModalService, GroupModal, DiscussionForm, AbilityService) ->
+  controller: ($scope) ->
     $scope.currentState = ""
     $scope.showSidebar = true
+    InboxService.load()
 
     $scope.hasAnyGroups = ->
       Session.user().hasAnyGroups()
@@ -17,7 +18,6 @@ angular.module('loomioApp').directive 'sidebar', ->
     $scope.currentGroup = ->
       return _.first(availableGroups()) if availableGroups().length == 1
       _.find(availableGroups(), (g) -> g.id == Session.currentGroupId()) || Records.groups.build()
-
 
     $scope.$on 'toggleSidebar', (event, show) ->
       if !_.isUndefined(show)
@@ -37,21 +37,8 @@ angular.module('loomioApp').directive 'sidebar', ->
     $scope.groupUrl = (group) ->
       LmoUrlService.group(group)
 
-    $scope.signOut = ->
-      Session.logout()
-
-    $scope.helpLink = ->
-      UserHelpService.helpLink()
-
     $scope.unreadThreadCount = ->
-      ThreadQueryService.filterQuery(['show_unread', 'only_threads_in_my_groups'], queryType: 'inbox').length()
-
-    $scope.showContactUs = ->
-      # TODO: use loomio_org plugin to determine official site or not
-      AppConfig.baseUrl == 'https://www.loomio.org/'
-
-    $scope.contactUs = ->
-      IntercomService.contactUs()
+      InboxService.unreadCount()
 
     $scope.sidebarItemSelected = ->
       if !$mdMedia("gt-md")
@@ -63,8 +50,11 @@ angular.module('loomioApp').directive 'sidebar', ->
     $scope.currentUser = ->
       Session.user()
 
+    $scope.canStartGroup = -> AbilityService.canStartGroups()
+    $scope.canViewPublicGroups = -> AbilityService.canViewPublicGroups()
+
     $scope.startGroup = ->
       ModalService.open GroupModal, group: -> Records.groups.build()
 
     $scope.startThread = ->
-      ModalService.open DiscussionForm, discussion: -> Records.discussions.build(groupId: $scope.currentGroup().id)
+      ModalService.open DiscussionModal, discussion: -> Records.discussions.build(groupId: $scope.currentGroup().id)

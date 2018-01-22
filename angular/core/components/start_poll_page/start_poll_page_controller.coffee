@@ -4,16 +4,16 @@ angular.module('loomioApp').controller 'StartPollPageController', ($scope, $loca
     title:       $location.search().title
     pollType:    $routeParams.poll_type
     groupId:     $location.search().group_id
-    communityId: $location.search().community_id
     customFields:
       pending_emails: _.compact(($location.search().pending_emails || "").split(','))
 
   @icon = ->
     PollService.iconFor(@poll)
 
-  $scope.$on 'saveComplete', (event, poll) ->
-    ModalService.open PollCommonShareModal, poll: -> poll
-
   LoadingService.listenForLoading $scope
+  PollService.applyPollStartSequence @,
+    emitter: $scope
+    afterSaveComplete: (poll) ->
+      ModalService.open PollCommonShareModal, poll: -> poll
 
   return

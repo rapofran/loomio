@@ -1,6 +1,6 @@
 if (bowser.safari and bowser.version < 9) or
    (bowser.ie and bowser.version < 10)
-  window.location.href = "/browser_not_supported"
+  window.location.href = "/417.html"
 
 angular.module('loomioApp', [
   'ngNewRouter',
@@ -14,13 +14,12 @@ angular.module('loomioApp', [
   'ui.gravatar',
   'duScroll',
   'angular-clipboard',
-  'checklist-model',
-  'monospaced.elastic',
   'angularMoment',
   'offClick',
   'ngMaterial',
   'angulartics',
   'angulartics.google.tagmanager',
   'vcRecaptcha',
-  'ngAnimate'
+  'ngAnimate',
+  'angular-sortable-view'
 ])

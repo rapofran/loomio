@@ -27,22 +27,21 @@ describe Comment do
   end
 
   describe "#destroy" do
+    let(:reaction) { build :reaction, reactable: comment }
     it "destroys comment votes" do
-      CommentService.like(comment: comment, actor: user)
-      expect(CommentVote.where(comment_id: comment.id,
-                               user_id: user.id).exists?).to be true
+      ReactionService.update(reaction: reaction, params: {reaction: 'smiley'}, actor: user)
+      expect(Reaction.where(reactable: comment, user_id: user.id).exists?).to be true
       comment.destroy
-      expect(CommentVote.where(comment_id: comment.id,
-                               user_id: user.id).exists?).to be false
+      expect(Reaction.where(reactable: comment, user_id: user.id).exists?).to be false
     end
   end
 
-  describe "validate attachments_owned_by_author" do
-    it "raises error if author does not own attachments" do
-      attachment = create(:attachment)
-      comment.attachments << attachment
+  describe "validate documents_owned_by_author" do
+    it "raises error if author does not own documents" do
+      document = create(:document)
+      comment.documents << document
       comment.save
-      comment.should have(1).errors_on(:attachments)
+      comment.should have(1).errors_on(:documents)
     end
   end
 

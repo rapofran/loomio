@@ -8,12 +8,12 @@ describe 'Polls', ->
       page.loadPath 'polls/test_discussion'
       page.click ".decision-tools-card__poll-type--#{poll_type}"
       page.click ".poll-common-tool-tip__collapse"
-      page.fillIn ".poll-#{_.kebabCase(poll_type)}-form__title", "A new #{poll_type}"
-      page.fillIn ".poll-#{_.kebabCase(poll_type)}-form__details", "Some details for #{poll_type}"
+      page.fillIn ".poll-common-form-fields__title", "A new #{poll_type}"
+      page.fillIn ".poll-common-form-fields textarea", "Some details for #{poll_type}"
       optionsFn() if optionsFn?
       page.click ".poll-common-form__submit"
-      page.expectText '.poll-common-summary-panel', "A new #{poll_type}"
-      page.expectText '.poll-common-summary-panel', "Some details for #{poll_type}"
+      page.expectText '.poll-common-card', "A new #{poll_type}"
+      page.expectText '.poll-common-card', "Some details for #{poll_type}"
 
   describe 'start, vote for each poll type', ->
     it 'starts a proposal', startPollTest('proposal')
@@ -36,15 +36,15 @@ describe 'Polls', ->
     page.loadPath 'polls/test_discussion'
     page.click '.decision-tools-card__poll-type--proposal'
     page.click ".poll-common-tool-tip__collapse"
-    page.fillIn '.poll-proposal-form__title', 'A new proposal'
-    page.fillIn '.poll-proposal-form__details', 'Some details'
+    page.fillIn '.poll-common-form-fields__title', 'A new proposal'
+    page.fillIn '.poll-common-form-fields textarea', 'Some details'
     page.click '.poll-common-form__submit'
-    page.expectText '.poll-common-summary-panel__title', 'A new proposal'
-    page.expectText '.poll-common-summary-panel__details', 'Some details'
+    page.expectText '.poll-common-card__title', 'A new proposal'
+    page.expectText '.poll-common-details-panel', 'Some details'
 
     page.click '.poll-common-vote-form__radio-button--agree'
     page.fillIn '.poll-common-vote-form__reason textarea', 'A reason'
-    page.click '.poll-proposal-vote-form__submit'
+    page.click '.poll-common-vote-form__submit'
 
     page.expectText '.poll-common-votes-panel__stance-name-and-option', 'Agree'
     page.expectText '.poll-common-votes-panel__stance-reason', 'A reason'
@@ -53,16 +53,22 @@ describe 'Polls', ->
     page.loadPath 'polls/test_proposal_poll_closed'
     page.click '.poll-common-set-outcome-panel__submit'
 
-    page.fillIn '.poll-common-outcome-form__statement', 'This is an outcome'
+    page.fillIn '.poll-common-outcome-form__statement textarea', 'This is an outcome'
     page.click  '.poll-common-outcome-form__submit'
 
     page.expectText '.poll-common-outcome-panel', 'This is an outcome'
+
+  it 'can start an anonymous poll', ->
+    page.loadPath 'polls/test_proposal_poll_anonymous'
+    page.click '.show-results-button'
+    page.expectText '.poll-common-votes-panel__stance-content', 'Anonymous'
+    page.expectNoElement '.poll-common-undecided-panel__button'
 
   it 'can send a calendar invite', ->
     page.loadPath 'polls/test_meeting_poll_closed'
     page.click '.poll-common-set-outcome-panel__submit'
 
-    page.fillIn '.poll-common-outcome-form__statement', 'Here is a statement'
+    page.fillIn '.poll-common-outcome-form__statement textarea', 'Here is a statement'
     page.fillIn '.poll-common-calendar-invite__summary', 'This is a meeting title'
     page.fillIn '.poll-common-calendar-invite__location', '123 Any St, USA'
     page.fillIn '.poll-common-calendar-invite__description', 'Here is a meeting agenda'
@@ -75,28 +81,28 @@ describe 'Polls', ->
     page.loadPath 'polls/start_poll'
     page.click '.poll-common-choose-type__poll-type--proposal'
     page.click ".poll-common-tool-tip__collapse"
-    page.fillIn '.poll-proposal-form__title', 'A new proposal'
-    page.fillIn '.poll-proposal-form__details', 'Some details'
+    page.fillIn '.poll-common-form-fields__title', 'A new proposal'
+    page.fillIn '.poll-common-form-fields textarea', 'Some details'
     page.click '.poll-common-form__submit'
 
     page.click '.modal-cancel'
-    page.expectText '.poll-common-summary-panel__title', 'A new proposal'
-    page.expectText '.poll-common-summary-panel__details', 'Some details'
+    page.expectText '.poll-common-card__title', 'A new proposal'
+    page.expectText '.poll-common-details-panel', 'Some details'
 
     page.click '.poll-common-vote-form__radio-button--agree'
     page.fillIn '.poll-common-vote-form__reason textarea', 'A reason'
-    page.click '.poll-proposal-vote-form__submit'
+    page.click '.poll-common-vote-form__submit'
 
     page.expectText '.poll-common-votes-panel__stance-name-and-option', 'Agree'
     page.expectText '.poll-common-votes-panel__stance-reason', 'A reason'
 
-    page.click '.poll-actions-dropdown'
+    page.click '.poll-actions-dropdown__button'
     page.click '.poll-actions-dropdown__close'
     page.click '.poll-common-close-form__submit'
 
     page.click '.poll-common-set-outcome-panel__submit'
 
-    page.fillIn '.poll-common-outcome-form__statement', 'This is an outcome'
+    page.fillIn '.poll-common-outcome-form__statement textarea', 'This is an outcome'
     page.click  '.poll-common-outcome-form__submit'
 
     page.expectText '.poll-common-outcome-panel', 'This is an outcome'
@@ -104,9 +110,9 @@ describe 'Polls', ->
   it 'can vote as a visitor', ->
     page.loadPath 'polls/test_proposal_poll_created_as_visitor'
     page.click '.poll-common-vote-form__radio-button--agree'
-    page.fillIn '.poll-proposal-vote-form__reason', 'This is a reason'
+    page.fillIn '.poll-common-vote-form__reason textarea', 'This is a reason'
     page.fillIn '.poll-common-participant-form__name', 'Big Baloo'
-    page.click '.poll-proposal-vote-form__submit'
+    page.click '.poll-common-vote-form__submit'
 
     page.expectFlash 'Vote created'
     page.expectText '.poll-common-votes-panel__stance-name-and-option', 'Big Baloo'
@@ -114,10 +120,10 @@ describe 'Polls', ->
   it 'can vote as a logged out user', ->
     page.loadPath 'polls/test_proposal_poll_created_as_logged_out'
     page.click '.poll-common-vote-form__radio-button--agree'
-    page.fillIn '.poll-proposal-vote-form__reason', 'This is a reason'
+    page.fillIn '.poll-common-vote-form__reason textarea', 'This is a reason'
     page.fillIn '.poll-common-participant-form__name', 'Big Baloo'
     page.fillIn '.poll-common-participant-form__email', 'big@baloo.ninja'
-    page.click '.poll-proposal-vote-form__submit'
+    page.click '.poll-common-vote-form__submit'
 
     page.expectFlash 'Vote created'
     page.expectText '.poll-common-votes-panel__stance-name-and-option', 'Big Baloo'

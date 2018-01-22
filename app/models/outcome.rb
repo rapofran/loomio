@@ -2,14 +2,18 @@ class Outcome < ActiveRecord::Base
   extend  HasCustomFields
   include MakesAnnouncements
   include HasMentions
+  include Reactable
+  include Translatable
+  include HasCreatedEvent
+
   set_custom_fields :calendar_invite, :event_summary, :event_description, :event_location
 
   belongs_to :poll, required: true
   belongs_to :poll_option, required: false
   belongs_to :author, class_name: 'User', required: true
-  has_many :communities, through: :poll, class_name: "Communities::Base"
   has_many :stances, through: :poll
   has_many :events, as: :eventable
+  has_many :documents, as: :model, dependent: :destroy
 
   delegate :title, to: :poll
   delegate :dates_as_options, to: :poll
@@ -17,16 +21,22 @@ class Outcome < ActiveRecord::Base
   delegate :group_id, to: :poll
   delegate :discussion, to: :poll
   delegate :discussion_id, to: :poll
+  delegate :locale, to: :poll
 
   is_mentionable on: :statement
+  is_translatable on: :statement
 
   validates :statement, presence: true, length: { maximum: Rails.application.secrets.max_message_length }
   validate :has_valid_poll_option
 
+  def parent_event
+    poll.created_event
+  end
+
   def attendee_emails
-     self.stances.join_participants.joins(:stance_choices)
+     self.stances.joins(:participant).joins(:stance_choices)
     .where("stance_choices.poll_option_id": self.poll_option_id)
-    .pluck(:"visitors.email", :"users.email").flatten.compact.uniq
+    .pluck(:"users.email").flatten.compact.uniq
   end
 
   def store_calendar_invite
