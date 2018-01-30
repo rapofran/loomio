@@ -401,7 +401,6 @@ es:
     privacy_organisation: 'Los hilos serán visibles para miembros de {{parent}} y miembros de {{group}}.'
     make_announcement: Anuncio
     notified_count: '{{count}} personas recibirán un correo electrónico'
-<<<<<<< HEAD
   proposal_expanded:
     collapse: Contraer
     current_votes: Votos actuales
@@ -430,7 +429,6 @@ es:
     member_info: "Mira éste vídeo para tener una idea de como funciona Loomio. Luego, pruébalo haciendo un comentario en un hilo de discusión, o inicia un hilo nuevo."
     creator_footer: "Cuando estés listo, <strong>invita gente</strong> a sumarse. "
     ok_got_it: "Bien, ¡lo tengo!"
-=======
   action_dock:
     react: 'Añadir reacción '
     add_resource: Agregar archivo adjunto
@@ -452,7 +450,6 @@ es:
     show_history: Ver historial de revisión
     pin_thread: Fijar hilo
     unpin_thread: Soltar hilo
->>>>>>> master
   cover_photo_form:
     aria_label: 'Formulario de carga para la foto de portada '
     heading: 'Nueva foto de portada '
@@ -1004,7 +1001,6 @@ es:
     message_label: 'Tu mensaje'
     message_placeholder: 'Tu mensaje...'
     send_message: 'Enviar mensaje'
-<<<<<<< HEAD
     new_contact_message: 'Gracias por tu mensaje; ¡pronto nos pondremos en contacto contigo!'
   help_page:
     coordinating: 'Coordinando tu grupo en Loomio'
@@ -1092,9 +1088,7 @@ es:
     video_id: "67765444"
     video_tutorial: "Vídeo tutorial"
     video_tutorial_description: "Mira el vídeo para una demostración rápida."
-=======
     new_contact_message: "Gracias por contactarnos, te responderemos en breve"
->>>>>>> master
   hint:
     context: 'Consejos para usar el panel de contexto'
     discussion: 'Consejos para empezar una discusión participativa'
